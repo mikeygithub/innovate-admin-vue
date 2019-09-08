@@ -28,6 +28,7 @@ http.interceptors.request.use(config => {
  */
 http.interceptors.response.use(response => {
   if (response.data && response.data.code === 401) { // 401, token失效
+    console.log('token失效')
     clearLoginInfo()
     router.push({ name: 'index' })
   }

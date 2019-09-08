@@ -10,58 +10,40 @@
           <el-form>
             <el-form-item>
               <el-row :gutter="38">
-                <el-col :span="8">
+                <el-col :span="6">
                   <el-button class="login-btn-submit" type="primary" @click="loginSubmit()">登录</el-button>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
+                  <el-button class="login-btn-submit" type="primary" @click="logoutHandle()">退出登录</el-button>
+                </el-col>
+                <el-col :span="6">
                   <el-button class="login-btn-submit" type="primary" @click="registerSubmit()">注册</el-button>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                   <el-button class="login-btn-submit" type="primary" @click="openMainPage">后台管理系统</el-button>
                 </el-col>
               </el-row>
             </el-form-item>
           </el-form>
         </div>
-        <!--<div class="login-main">-->
-          <!--<h3 class="login-title">管理员登录</h3>-->
-          <!--<el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>-->
-            <!--<el-form-item prop="userName">-->
-              <!--<el-input v-model="dataForm.userName" placeholder="帐号"></el-input>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item prop="password">-->
-              <!--<el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item prop="captcha">-->
-              <!--<el-row :gutter="20">-->
-                <!--<el-col :span="14">-->
-                  <!--<el-input v-model="dataForm.captcha" placeholder="验证码">-->
-                  <!--</el-input>-->
-                <!--</el-col>-->
-                <!--<el-col :span="10" class="login-captcha">-->
-                  <!--<img :src="captchaPath" @click="getCaptcha()" alt="">-->
-                <!--</el-col>-->
-              <!--</el-row>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item>-->
-              <!--<el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()">登录</el-button>-->
-            <!--</el-form-item>-->
-          <!--</el-form>-->
-        <!--</div>-->
       </div>
     </div>
     <Register v-if="registerVisible" ref="register" @refreshDataList="getCaptcha"></Register>
+    <Login v-if="loginVisible" ref="login" @refreshDataList="getCaptcha"></Login>
   </div>
 
 </template>
 
 <script>
-  import { getUUID } from '@/utils'
+  import {getUUID, clearLoginInfo} from '@/utils'
   import Register from './register'
+  import Login from './login'
+
   export default {
     data () {
       return {
         registerVisible: false,
+        loginVisible: false,
         dataForm: {
           userName: '',
           password: '',
@@ -70,13 +52,13 @@
         },
         dataRule: {
           userName: [
-            { required: true, message: '帐号不能为空', trigger: 'blur' }
+            {required: true, message: '帐号不能为空', trigger: 'blur'}
           ],
           password: [
-            { required: true, message: '密码不能为空', trigger: 'blur' }
+            {required: true, message: '密码不能为空', trigger: 'blur'}
           ],
           captcha: [
-            { required: true, message: '验证码不能为空', trigger: 'blur' }
+            {required: true, message: '验证码不能为空', trigger: 'blur'}
           ]
         },
         captchaPath: ''
@@ -86,7 +68,8 @@
       this.getCaptcha()
     },
     components: {
-      Register
+      Register,
+      Login
     },
     methods: {
       // 提交表单
@@ -105,7 +88,7 @@
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.$cookie.set('token', data.token)
-                this.$router.replace({ name: 'home' })
+                this.$router.replace({name: 'home'})
               } else {
                 this.getCaptcha()
                 this.$message.error(data.msg)
@@ -115,12 +98,22 @@
         })
       },
       loginSubmit () {
-        this.$router.push({ name: 'login' })
+        // 未登入
+        if (this.$cookie.get('token') === null) {
+          this.loginVisible = true
+          this.$nextTick(() => {
+            this.$refs.login.init()
+          })
+        } else {
+          this.$message.error('您已登入,无需重复登入！')
+        }
       },
       openMainPage () {
-        // 判断是否已经登入
-        this.$message.error('请先登入')
-        this.$router.replace({ name: 'home' })
+        if (this.$cookie.get('token') === null) {
+          this.$message.error('请先登入')
+        } else {
+          this.$router.replace({name: 'home'})
+        }
       },
       registerSubmit () {
         this.registerVisible = true
@@ -132,6 +125,30 @@
       getCaptcha () {
         this.dataForm.uuid = getUUID()
         this.captchaPath = this.$http.adornUrl(`/captcha.jpg?uuid=${this.dataForm.uuid}`)
+      },
+      // 退出
+      logoutHandle () {
+        if (this.$cookie.get('token') === null) {
+          this.$message.info('您还未登入')
+          return
+        }
+        this.$confirm(`确定进行[退出]操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/sys/logout'),
+            method: 'post',
+            data: this.$http.adornData()
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              clearLoginInfo()
+              this.$message.success('账号已退出')
+              this.$router.push({ name: 'index' })
+            }
+          })
+        }).catch(() => {})
       }
     }
   }
@@ -146,6 +163,7 @@
     left: 0;
     background-color: rgba(38, 50, 56, .6);
     overflow: hidden;
+
     &:before {
       position: fixed;
       top: 0;
@@ -157,6 +175,7 @@
       background-image: url(~@/assets/img/login_bg.jpg);
       background-size: cover;
     }
+
     .site-content__wrapper {
       position: absolute;
       top: 0;
@@ -169,26 +188,31 @@
       overflow-y: auto;
       background-color: transparent;
     }
+
     .site-content {
       min-height: 100%;
       padding: 30px 500px 30px 30px;
     }
+
     .brand-info {
       margin: 220px 100px 0 90px;
       color: #fff;
     }
+
     .brand-info__text {
-      margin:  0 0 22px 0;
+      margin: 0 0 22px 0;
       font-size: 48px;
       font-weight: 400;
-      text-transform : uppercase;
+      text-transform: uppercase;
     }
+
     .brand-info__intro {
       margin: 10px 0;
       font-size: 16px;
       line-height: 1.58;
       opacity: .6;
     }
+
     .login-main {
       position: absolute;
       top: 0;
@@ -198,16 +222,20 @@
       min-height: 100%;
       background-color: #fff;
     }
+
     .login-title {
       font-size: 16px;
     }
+
     .login-captcha {
       overflow: hidden;
+
       > img {
         width: 100%;
         cursor: pointer;
       }
     }
+
     .login-btn-submit {
       width: 100%;
       margin-top: 38px;

@@ -3,7 +3,7 @@
     :title="'注册'"
     @close="closeRegister"
     :close-on-click-modal="false"
-    width="26rem"
+    width="50rem"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
       <el-form-item prop="username">
@@ -25,8 +25,9 @@
         <el-input v-model="dataForm.surePassword" type="password" placeholder="确认密码"></el-input>
       </el-form-item>
       <el-form-item prop="instituteId">
-        <el-select v-model="dataForm.instituteId"  placeholder="请选择所属部门">
-          <el-option v-for="item in instituteList" :key="item.instituteId" :label="item.instituteName" :value="item.instituteId">
+        <el-select v-model="dataForm.instituteId" placeholder="请选择所属部门">
+          <el-option v-for="item in instituteList" :key="item.instituteId" :label="item.instituteName"
+                     :value="item.instituteId">
           </el-option>
         </el-select>
       </el-form-item>
@@ -35,8 +36,9 @@
           <el-col :span="14">
             <el-input v-model="dataForm.captcha" placeholder="请输入验证码"></el-input>
           </el-col>
-          <el-col :span="10">
-            <el-button @click="getCaptchaSubmit()" type="success" :loading="loading">获取短信验证码</el-button>
+          <el-col :span="8">
+            <el-button @click="getCaptchaSubmit()" type="success" :disabled="codeDisable" v-if="codeDisable==false">获取验证码</el-button>
+            <el-button @click="getCaptchaSubmit()" type="success" :disabled="codeDisable" v-if="codeDisable==true">{{codeSendMsg}}</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -61,7 +63,8 @@
 </template>
 
 <script>
-  import { isEmail, isMobile } from '@/utils/validate'
+  import {isEmail, isMobile} from '@/utils/validate'
+
   export default {
     data () {
       var validateMobile = (rule, value, callback) => {
@@ -86,8 +89,11 @@
         }
       }
       return {
+        codeSendMsg: '重新发送',
+        time: 0,
         visible: false,
         loading: false,
+        codeDisable: false,
         registerLoading: false,
         instituteList: this.$store.state.user.institute,
         dataForm: {
@@ -104,34 +110,34 @@
         },
         dataRule: {
           username: [
-            { required: true, message: '账号不能为空', trigger: 'blur' }
+            {required: true, message: '账号不能为空', trigger: 'blur'}
           ],
           name: [
-            { required: true, message: '姓名不能为空', trigger: 'blur' }
+            {required: true, message: '姓名不能为空', trigger: 'blur'}
           ],
           userEmail: [
-            { required: true, message: '邮箱不能为空', trigger: 'blur' },
-            { validator: validateEmail, trigger: 'blur' }
+            {required: true, message: '邮箱不能为空', trigger: 'blur'},
+            {validator: validateEmail, trigger: 'blur'}
           ],
           instituteId: [
-            { required: true, message: '所属部门不能为空', trigger: 'blur' }
+            {required: true, message: '所属部门不能为空', trigger: 'blur'}
           ],
           userPhone: [
-            { required: true, message: '手机号不能为空', trigger: 'blur' },
-            { validator: validateMobile, trigger: 'blur' }
+            {required: true, message: '手机号不能为空', trigger: 'blur'},
+            {validator: validateMobile, trigger: 'blur'}
           ],
           userPassword: [
-            { required: true, message: '密码不能为空', trigger: 'blur' }
+            {required: true, message: '密码不能为空', trigger: 'blur'}
           ],
           surePassword: [
-            { required: true, message: '确认密码不能为空', trigger: 'blur' },
-            { validator: validateSurePassword, trigger: 'blur' }
+            {required: true, message: '确认密码不能为空', trigger: 'blur'},
+            {validator: validateSurePassword, trigger: 'blur'}
           ],
           type: [
-            { required: true, message: '角色不能为空', trigger: 'blur' }
+            {required: true, message: '角色不能为空', trigger: 'blur'}
           ],
           captcha: [
-            { required: true, message: '验证码不能为空', trigger: 'blur' }
+            {required: true, message: '验证码不能为空', trigger: 'blur'}
           ]
         }
       }
@@ -141,11 +147,10 @@
         this.visible = true
       },
       getCaptchaSubmit () {
-        this.loading = true
-        window.setInterval(() => {
-          this.loading = false
-        }, 30000)
         if (isMobile(this.dataForm.userPhone)) {
+          this.codeDisable = true
+          this.time = 60
+          this.timer()
           this.$http({
             url: this.$http.adornUrl(`/sys/message`),
             method: 'post',
@@ -153,10 +158,23 @@
               'mobile': this.dataForm.userPhone
             })
           }).then(({data}) => {
+            this.$message.success('发送短信成功')
             console.info(data)
           })
         } else {
           this.$message.error('请输入正确的手机号！')
+        }
+      },
+      // 60S倒计时
+      timer () {
+        if (this.time > 0) {
+          this.time--
+          this.codeSendMsg = this.time + 's后重新获取'
+          setTimeout(this.timer, 1000)
+        } else {
+          this.time = 0
+          this.codeSendMsg = '获取验证码'
+          this.codeDisable = false
         }
       },
       // 表单提交

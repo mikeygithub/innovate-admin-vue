@@ -1,0 +1,32 @@
+POST http://localhost:8080/innovate_admin/sys/login?=&token=e0638e2c0b942d1ebe0349edd362a53b
+Accept: */*
+Cache-Control: no-cache
+token: e0638e2c0b942d1ebe0349edd362a53b
+
+###
+
+POST http://localhost:8080/innovate_admin/sys?=
+Accept: */*
+Cache-Control: no-cache
+token: e0638e2c0b942d1ebe0349edd362a53b
+
+###
+
+POST http://localhost:8080/innovate_admin/sys?token=e0638e2c0b942d1ebe0349edd362a53b
+Accept: */*
+Cache-Control: no-cache
+
+###
+
+GET http://localhost:8080/innovate_admin/sys?token=e0638e2c0b942d1ebe0349edd362a53b
+Accept: */*
+Cache-Control: no-cache
+
+###
+
+GET http://localhost:8080/innovate_admin?token=11111111111111111
+Accept: */*
+Cache-Control: no-cache
+
+###
+
