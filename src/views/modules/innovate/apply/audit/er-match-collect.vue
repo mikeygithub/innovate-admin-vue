@@ -6,6 +6,18 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
+        <!--年度 start-->
+        <template>
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in declareYears"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+        <!--年度 end-->
         <el-button type="primary" @click="allErMatchCollectDetail()">查看全部学院项目汇总</el-button>
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>
@@ -77,6 +89,7 @@
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
+        declareYears: [],
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,

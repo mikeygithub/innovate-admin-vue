@@ -124,7 +124,7 @@
             </td>
             <td>
               <!--项目所属一级学科-->
-              <span v-for="subject in subjectList" v-if="subject.subjectId === item.declareInfoEntity.subjectId" v-text="subject.subjectNum"></span>
+              <span v-for="subject in subjectList" v-if="subject.subjectId === item.declareInfoEntity.subjectId" v-text="subject.subjectName"></span>
             </td>
             <td>
               <!--总经费(元)-->
@@ -289,7 +289,7 @@
             // 'username': this.dataForm.userName,
             // 'startPage': 0,
             'currPage': 1,
-            'pageSize': 99999,
+            'pageSize': 100000,
             'userId': this.$store.state.user.id,
             'hasApply': 2,
             'noPass': 'audit_no_pass',
@@ -311,21 +311,6 @@
           }
           this.dataListLoading = false
         })
-          // this.$http({
-          //   url: this.$http.adornUrl(`/innovate/declare/info/erCollect`),
-          //   method: 'get',
-          //   params: this.$http.adornParams({
-          //     'instituteId': this.dataForm.id
-          //   })
-          // }).then(({data}) => {
-          //   if (data && data.code === 0) {
-          //     this.declareInfoList = data.declareInfoList
-          //     this.dataListLoading = false
-          //   }
-          // })
-        // } else {
-        //   this.dataListLoading = false
-        // }
       },
       // 导出
       exportDeclare () {

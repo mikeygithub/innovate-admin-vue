@@ -12,9 +12,8 @@
           <td colspan="20" style="height: 1.2rem"></td>
         </tr>
         <tr class="contents" align="center">
-          <th colspan="20">
-            梧州学院2019“互联网+”大学生创新创业大创项目汇总表
-          </th>
+          <th colspan="20">梧州学院2019“互联网+”大学生创新创业大创项目汇总表</th>
+          <!--<th colspan="20">梧州学院{{declareYear}}“互联网+”大学生创新创业大创项目汇总表</th>-->
         </tr>
         <tr align='center' style="height: 3.0rem">
           <th>二级学院名称(盖章)：</th>
@@ -124,7 +123,7 @@
             </td>
             <td>
               <!--项目所属一级学科-->
-              <span v-for="subject in subjectList" v-if="subject.subjectId === item.declareInfoEntity.subjectId" v-text="subject.subjectNum"></span>
+              <span v-for="subject in subjectList" v-if="subject.subjectId === item.declareInfoEntity.subjectId" v-text="subject.subjectName"></span>
             </td>
             <td>
               <!--总经费(元)-->
@@ -138,7 +137,7 @@
               <!-- 校拨(元)-->
               <span v-if="item.declareAwardEntities.length > 0" v-text="item.declareAwardEntities[0].awardMoneySchool"></span>
             </td>
-            <td colspan="2">
+            <td colspan="2" class="info-content">
               <!-- 项目简介-->
               <span v-text="item.declareInfoEntity.declareDescribe"></span>
             </td>
@@ -289,7 +288,6 @@
               'instituteId': this.dataForm.id,
               'project_audit_apply_status_more': 2,
               'noPassStatus': 0,
-              // 'isTeacher': true,
               'noPass': 'audit_no_pass',
               'isDel': 0,
               'pageSize': 1000000,
@@ -298,7 +296,7 @@
           }).then(({data}) => {
             if (data && data.code === 0) {
               console.log(data)
-              // this.declareInfoList = data.declareInfoList
+              this.declareInfoList = data.page.list
               this.dataListLoading = false
             }
           })
@@ -369,5 +367,11 @@
     word-break: break-word;
     /*设置宽度*/
     width: 80%;
+  }
+  .info-content{
+    width: 20px;    /*根据自己项目进行定义宽度*/
+    overflow: hidden;     /*设置超出的部分进行影藏*/
+    text-overflow: ellipsis;     /*设置超出部分使用省略号*/
+    white-space:nowrap ;    /*设置为单行*/
   }
 </style>

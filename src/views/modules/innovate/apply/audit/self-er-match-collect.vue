@@ -1,14 +1,29 @@
 <template>
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <!--<el-form-item>-->
-        <!--<el-input v-model="dataForm.userName" placeholder="二级学院" clearable></el-input>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item>-->
-        <!--<el-button @click="getDataList()">查询</el-button>-->
+      <el-form-item>
+        <el-select v-model="instituteId" placeholder="请选择二级学院">
+          <el-option
+            v-for="inst in instituteList"
+            :key="inst.instituteName"
+            :label="inst.instituteName"
+            :value="inst.instituteId">
+          </el-option>
+        </el-select>
         <!--<el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>-->
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
-      <!--</el-form-item>-->
+        <!--年度 start-->
+          <el-select v-model="declareYear" placeholder="请选择年度">
+            <el-option
+              v-for="item in declareYears"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        <!--年度 end-->
+        <el-button @click="getDataList()">查询</el-button>
+      </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
@@ -68,12 +83,18 @@
       return {
         dataForm: {
           userName: '',
+          instituteId: '',
+          declareYear: '',
           institute: {}
         },
+        instituteId: '',
+        declareYear: '',
+        declareYears: [],
+        instituteList: this.$store.state.user.institute,
         dataList: [],
-        // pageIndex: 1,
-        // pageSize: 10,
-        // totalPage: 0,
+        pageIndex: 1,
+        pageSize: 10,
+        totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false
@@ -110,27 +131,20 @@
         })
       },
       // 每页数
-      // sizeChangeHandle (val) {
-      //   this.pageSize = val
-      //   this.pageIndex = 1
-      //   this.getDataList()
-      // },
-      // // 当前页
-      // currentChangeHandle (val) {
-      //   this.pageIndex = val
-      //   this.getDataList()
-      // },
-      // // 多选
-      // selectionChangeHandle (val) {
-      //   this.dataListSelections = val
-      // },
-      // 新增 / 修改
-      // collectDetail (id) {
-      //   this.addOrUpdateVisible = true
-      //   this.$nextTick(() => {
-      //     this.$refs.addOrUpdate.init(id)
-      //   })
-      // },
+      sizeChangeHandle (val) {
+        this.pageSize = val
+        this.pageIndex = 1
+        this.getDataList()
+      },
+      // 当前页
+      currentChangeHandle (val) {
+        this.pageIndex = val
+        this.getDataList()
+      },
+      // 多选
+      selectionChangeHandle (val) {
+        this.dataListSelections = val
+      },
       // 新增 / 修改
       collectDetail (id) {
         this.addOrUpdateVisible = true
@@ -138,6 +152,13 @@
           this.$refs.addOrUpdate.init(id)
         })
       }
+      // // 新增 / 修改
+      // collectDetail (id) {
+      //   this.addOrUpdateVisible = true
+      //   this.$nextTick(() => {
+      //     this.$refs.addOrUpdate.init(id)
+      //   })
+      // }
       // ,
       // 删除
       // deleteHandle (id) {
