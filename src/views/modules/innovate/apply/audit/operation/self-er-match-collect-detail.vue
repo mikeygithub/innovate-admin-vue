@@ -283,15 +283,22 @@
         this.dataForm.id = id || 0
         if (this.dataForm.id) {
           this.$http({
-            url: this.$http.adornUrl(`/innovate/declare/info/erCollect`),
+            url: this.$http.adornUrl(`/innovate/declare/info/list`),
             method: 'get',
             params: this.$http.adornParams({
-              'instituteId': this.dataForm.id
+              'instituteId': this.dataForm.id,
+              'project_audit_apply_status_more': 2,
+              'noPassStatus': 0,
+              // 'isTeacher': true,
+              'noPass': 'audit_no_pass',
+              'isDel': 0,
+              'pageSize': 1000000,
+              'currPage': 1
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              // console.log(data)
-              this.declareInfoList = data.declareInfoList
+              console.log(data)
+              // this.declareInfoList = data.declareInfoList
               this.dataListLoading = false
             }
           })

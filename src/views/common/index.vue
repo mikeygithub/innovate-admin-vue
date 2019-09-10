@@ -153,7 +153,10 @@
     }
   }
 </script>
-
+<!--引入自定义css-->
+<style>
+  @import "../../assets/css/b-index-css.css";
+</style>
 <style lang="scss">
   .site-wrapper.site-page--login {
     position: absolute;
