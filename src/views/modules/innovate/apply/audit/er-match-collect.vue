@@ -5,10 +5,9 @@
         <el-input v-model="dataForm.projectName" placeholder="二级学院" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
         <!--年度 start-->
         <template>
-          <el-select v-model="declareYear" placeholder="请选择">
+          <el-select v-model="declareYear" placeholder="请选择年度">
             <el-option
               v-for="item in declareYears"
               :key="item.value"
@@ -18,6 +17,9 @@
           </el-select>
         </template>
         <!--年度 end-->
+        <el-form-item>
+          <el-button @click="getDataList()">查询</el-button>
+        </el-form-item>
         <el-button type="primary" @click="allErMatchCollectDetail()">查看全部学院项目汇总</el-button>
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>

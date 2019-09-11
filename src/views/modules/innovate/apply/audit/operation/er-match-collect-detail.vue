@@ -124,11 +124,12 @@
             </td>
             <td>
               <!--项目所属一级学科-->
-              <span v-for="subject in subjectList" v-if="subject.subjectId === item.declareInfoEntity.subjectId" v-text="subject.subjectNum"></span>
+              <span v-for="subject in subjectList" v-if="subject.subjectId === item.declareInfoEntity.subjectId" v-text="subject.subjectName"></span>
             </td>
             <td>
               <!--总经费(元)-->
               <span v-if="item.declareAwardEntities.length > 0" v-text="item.declareAwardEntities[0].awardMoneyAll"></span>
+              <!--<span v-for="temp in item.declareAwardEntities" v-text="temp.awardMoneyAll"></span>-->
             </td>
             <td>
               <!--区财政(元)-->
@@ -138,7 +139,7 @@
               <!-- 校拨(元)-->
               <span v-if="item.declareAwardEntities.length > 0" v-text="item.declareAwardEntities[0].awardMoneySchool"></span>
             </td>
-            <td colspan="2">
+            <td colspan="2"class="info-content">
               <!-- 项目简介-->
               <span v-text="item.declareInfoEntity.declareDescribe"></span>
             </td>
@@ -147,38 +148,6 @@
             </td>
           </tr>
         </template>
-          <!--<template>-->
-            <!--<tr v-for="(item,index) in declareInfoList" align="center"-->
-                <!--v-if="item.declareInfoEntity.projectAuditApplyStatus !==0 && item.declareInfoEntity.auditNoPass === 0">-->
-              <!--<td v-text="index+1"></td>-->
-              <!--<td v-text="item.declareInfoEntity.declareName"></td>-->
-              <!--<td>-->
-                <!--<span v-for="user in item.userPersonInfoEntities" >-->
-                  <!--<span v-text="user.sysUserEntity.name"></span>-->
-                <!--</span>-->
-              <!--</td>-->
-              <!--<td>-->
-                <!--<span v-for="temp in declareGroupTypeList" v-if="temp.value === item.declareInfoEntity.declareGroupType" v-text="temp.label"></span>-->
-              <!--</td>-->
-              <!--<td>-->
-                <!--<span v-for="temp in declareType" v-if="temp.value === item.declareInfoEntity.declareType" v-text="temp.label"/>-->
-              <!--</td>-->
-              <!--<td v-text="item.declareStaffInfoEntities.length+1"></td>-->
-              <!--<td colspan="3">-->
-                <!--<span v-for="staff in item.declareStaffInfoEntities" v-text="staff.staffName+'  '" align="center"></span>-->
-              <!--</td>-->
-              <!--<td>-->
-                <!--<span v-for="teacher in userTeacherInfoEntities">-->
-                  <!--<span v-for="teacher2 in item.declareTeacherEntities"-->
-                      <!--v-if="teacher.userId === teacher2.userId"-->
-                      <!--v-text="teacher.sysUserEntity.name+'  '" align="center">-->
-                  <!--</span>-->
-                <!--</span>-->
-              <!--</td>-->
-              <!--<td><span v-text="item.declareInfoEntity.declareScoreAvg"></span></td>-->
-            <!--</tr>-->
-          <!--</template>-->
-          <!--员工信息结束-->
           <tr align='center'  style="height: 3.0rem">
             <th>备注：</th>
             <td colspan="9" style="height: 1.5rem">已核实所有参赛队员学籍信息，均符合参赛要求</td>
@@ -283,14 +252,20 @@
         this.dataForm.id = id || 0
         if (this.dataForm.id) {
           this.$http({
-            url: this.$http.adornUrl(`/innovate/declare/info/erCollect`),
+            url: this.$http.adornUrl(`/innovate/declare/info/list`),
             method: 'get',
             params: this.$http.adornParams({
-              'instituteId': this.dataForm.id
+              'instituteId': this.dataForm.id,
+              'project_audit_apply_status_more': 2,
+              'noPassStatus': 0,
+              'noPass': 'audit_no_pass',
+              'isDel': 0,
+              'pageSize': 1000000,
+              'currPage': 1
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.declareInfoList = data.declareInfoList
+              this.declareInfoList = data.page.list
               this.dataListLoading = false
             }
           })
@@ -362,4 +337,11 @@
     /*设置宽度*/
     width: 80%;
   }
+  .info-content{
+    width: 20px;    /*根据自己项目进行定义宽度*/
+    overflow: hidden;     /*设置超出的部分进行影藏*/
+    text-overflow: ellipsis;     /*设置超出部分使用省略号*/
+    white-space:nowrap ;    /*设置为单行*/
+  }
+
 </style>

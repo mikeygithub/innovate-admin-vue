@@ -199,17 +199,6 @@
         this.detailVisible = false
         this.isUpdateVisible = false
         this.isHistoyVisible = false
-        // this.$http({
-        //   url: this.$http.adornUrl(`/innovate/match/event/event`),
-        //   method: 'get',
-        //   params: this.$http.adornParams({
-        //   })
-        // }).then(({data}) => {
-        //   if (data && data.code === 0) {
-        //     this.eventLists = data.matchEventEntityList
-        //     this.$store.state.eventLists = data.matchEventEntityList
-        //   }
-        // })
         this.$http({
           url: this.$http.adornUrl('/innovate/declare/info/list'),
           method: 'get',

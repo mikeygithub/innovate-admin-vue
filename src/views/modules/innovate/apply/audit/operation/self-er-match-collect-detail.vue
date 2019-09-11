@@ -295,7 +295,6 @@
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              console.log(data)
               this.declareInfoList = data.page.list
               this.dataListLoading = false
             }

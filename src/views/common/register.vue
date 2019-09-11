@@ -144,7 +144,18 @@
     },
     methods: {
       init () {
-        this.visible = true
+        this.$http({
+          url: this.$http.adornUrl('/innovate/sys/institute/all'),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.$store.state.user.institute = data.institute
+            this.visible = true
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       },
       getCaptchaSubmit () {
         if (isMobile(this.dataForm.userPhone)) {

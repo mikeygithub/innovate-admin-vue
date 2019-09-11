@@ -138,7 +138,7 @@
               <!-- 校拨(元)-->
               <span v-if="item.declareAwardEntities.length > 0" v-text="item.declareAwardEntities[0].awardMoneySchool"></span>
             </td>
-            <td colspan="2">
+            <td colspan="2" class="info-content">
               <!-- 项目简介-->
               <span v-text="item.declareInfoEntity.declareDescribe"></span>
             </td>
@@ -375,5 +375,11 @@
     word-break: break-word;
     /*设置宽度*/
     width: 80%;
+  }
+  .info-content{
+    width: 20px;    /*根据自己项目进行定义宽度*/
+    overflow: hidden;     /*设置超出的部分进行影藏*/
+    text-overflow: ellipsis;     /*设置超出部分使用省略号*/
+    white-space:nowrap ;    /*设置为单行*/
   }
 </style>

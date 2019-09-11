@@ -52,7 +52,9 @@
         <el-menu-item class="site-navbar__avatar" index="3">
           <el-dropdown :show-timeout="0" placement="bottom">
             <span class="el-dropdown-link">
-              <img src="~@/assets/img/user.png" :alt="userName">{{ this.$store.state.user.name }}
+              <!--<img src="~@/assets/img/user.png" :alt="userName">-->
+              <icon-svg name="admin" class="el-icon-setting"></icon-svg>
+              {{ this.$store.state.user.name }}
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="isStudent()" @click.native="studentAddOrUpdateHandle()">负责人信息</el-dropdown-item>

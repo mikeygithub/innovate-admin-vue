@@ -73,12 +73,7 @@
                 <span v-for="staff in item.matchStaffInfoEntities" v-text="staff.staffName+'  '" align="center"></span>
               </td>
               <td>
-                <span v-for="teacher in userTeacherInfoEntities">
-                  <span v-for="teacher2 in item.matchTeacherEntities"
-                      v-if="teacher.userId === teacher2.userId"
-                      v-text="teacher.sysUserEntity.name+'  '" align="center">
-                  </span>
-                </span>
+                <span v-for="teacher in item.userTeacherInfoEntities" v-text="teacher.sysUserEntity.name+' '"></span>
               </td>
               <td><span v-text="item.matchInfoEntity.matchScoreAvg"></span></td>
             </tr>
@@ -188,16 +183,26 @@
         this.dataForm.id = id || 0
         if (this.dataForm.id) {
           this.$http({
-            url: this.$http.adornUrl(`/innovate/match/info/erCollect`),
+            url: this.$http.adornUrl(`/innovate/match/info/list`),
             method: 'get',
             params: this.$http.adornParams({
-              'instituteId': this.dataForm.id
+              'instituteId': this.dataForm.id,
+              'project_audit_apply_status_more': 2,
+              'noPassStatus': 0,
+              'noPass': 'match_no_pass',
+              'isEr': true,
+              'isDel': 0,
+              'pageSize': 1000000,
+              'currPage': 1
             })
           }).then(({data}) => {
-            // console.log(data)
+            console.log(data)
             if (data && data.code === 0) {
-              this.matchInfoList = data.matchInfoList
+              this.matchInfoList = data.page.list
               this.userTeacherInfoEntities = data.userTeacherInfoEntities
+              this.dataListLoading = false
+            } else {
+              this.$message.error(data.msg)
               this.dataListLoading = false
             }
           })

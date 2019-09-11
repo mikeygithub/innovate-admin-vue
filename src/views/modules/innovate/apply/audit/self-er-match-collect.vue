@@ -47,12 +47,14 @@
         prop="declareInfoEntity.declareName"
         header-align="center"
         align="center"
+        width="200"
         label="项目名称">
       </el-table-column>
       <el-table-column
         prop="userPersonInfoEntities[0].sysUserEntity.name"
         header-align="center"
         align="center"
+        width="80"
         label="负责人">
       </el-table-column>
       <el-table-column
@@ -90,6 +92,7 @@
         prop="declareUserTeacherInfoEntities"
         header-align="center"
         align="center"
+        width="80"
         label="指导老师">
         <template slot-scope="scope">
           <span v-for="teacher in scope.row.declareUserTeacherInfoEntities" v-text="teacher.sysUserEntity.name+' '"></span>
@@ -99,6 +102,7 @@
         prop="declareUserTeacherInfoEntities"
         header-align="center"
         align="center"
+        width="100"
         label="职称">
         <template slot-scope="scope">
           <span v-for="teacher in scope.row.declareUserTeacherInfoEntities">
@@ -119,6 +123,7 @@
         prop="declareInfoEntity.declareScoreAvg"
         header-align="center"
         align="center"
+        width="80"
         label="平均分">
       </el-table-column>
       <el-table-column
@@ -193,18 +198,20 @@
           method: 'get',
           params: this.$http.adornParams({
             'instituteId': this.dataForm.instituteId,
+            'declareYear': this.declareYear,
             'project_audit_apply_status_more': 2,
             'noPassStatus': 0,
             'noPass': 'audit_no_pass',
             'isDel': 0,
-            'pageSize': 1000000,
-            'currPage': 1,
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
             'isEr': true
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
             console.log(data)
             this.dataList = data.page.list
+            this.totalPage = data.page.totalCount
             this.dataListLoading = false
           } else {
             this.$message.error(data.msg)
