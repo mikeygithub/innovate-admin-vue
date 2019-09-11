@@ -8,7 +8,7 @@
         <el-button @click="getDataList()">查询</el-button>
         <!--年度 start-->
         <template>
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="declareYear" placeholder="请选择">
             <el-option
               v-for="item in declareYears"
               :key="item.value"
