@@ -19,7 +19,7 @@
                 </el-input>
               </el-col>
               <el-col :span="10" class="login-captcha">
-                <img :src="captchaPath" @click="getCaptcha()" alt="">
+                <img style="display: block;width: 100%;" :src="captchaPath" @click="getCaptcha()" alt="">
               </el-col>
             </el-row>
           </el-form-item>
@@ -104,6 +104,7 @@
                 this.$message.success('登入成功')
                 this.$router.replace({ name: 'index' })
                 this.visible = false
+                this.$router.go(0)
               } else {
                 this.getCaptcha()
                 this.$message.error(data.msg)

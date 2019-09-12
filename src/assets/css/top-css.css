@@ -140,8 +140,8 @@
     margin: 0 10px;
     line-height: 50px;
 }
-.user-nav li > a{color: #fff;transition: .5s;}
-.user-nav li > a:hover{color: #00d7c6;}
+.user-nav li > a{color: #fff;transition: .5s;text-decoration: none;}
+.user-nav li > a:hover > span{color: #00d7c6;}
 .label-text{margin-right: 15px;}
 .nav-figure img {
     width: 26px;
@@ -204,6 +204,7 @@
     color: #eeeff3;
     font-size: 12px;
     margin-top: 20px;
+    text-align: center;
 }
 .footer-about dl dt {
     height: 30px;

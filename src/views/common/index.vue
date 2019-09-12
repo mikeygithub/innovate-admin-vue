@@ -1,35 +1,69 @@
 <template>
-  <div class="site-wrapper site-page--login">
-    <div class="site-content__wrapper">
-      <div class="site-content">
-        <div class="brand-info">
-          <h2 class="brand-info__text">校企合作及创新创业管理平台</h2>
-          <p class="brand-info__intro">校企合作及创新创业管理平台基于element-ui构建开发，实现后台管理前端功能，提供一套更优的前端解决方案。</p>
-        </div>
-        <div>
-          <el-form>
-            <el-form-item>
-              <el-row :gutter="38">
-                <el-col :span="6">
-                  <el-button class="login-btn-submit" type="primary" @click="loginSubmit()">登录</el-button>
-                </el-col>
-                <el-col :span="6">
-                  <el-button class="login-btn-submit" type="primary" @click="logoutHandle()">退出登录</el-button>
-                </el-col>
-                <el-col :span="6">
-                  <el-button class="login-btn-submit" type="primary" @click="registerSubmit()">注册</el-button>
-                </el-col>
-                <el-col :span="6">
-                  <el-button class="login-btn-submit" type="primary" @click="openMainPage">后台管理系统</el-button>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-form>
+
+  <div>
+    <div id="data-app"></div>
+    <!-- 首页模块 -->
+    <div class="site-wrapper site-page--login" style="display: none;">
+      <div class="site-content__wrapper">
+        <div class="site-content">
+          <div class="brand-info">
+            <h2 class="brand-info__text">校企合作及创新创业管理平台</h2>
+            <p class="brand-info__intro">校企合作及创新创业管理平台基于element-ui构建开发，实现后台管理前端功能，提供一套更优的前端解决方案。</p>
+          </div>
+          <div>
+            <el-form>
+              <el-form-item>
+                <el-row :gutter="38">
+                  <el-col :span="6">
+                    <el-button class="login-btn-submit" type="primary" @click="loginSubmit()">登录</el-button>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-button class="login-btn-submit" type="primary" @click="logoutHandle()">退出登录</el-button>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-button class="login-btn-submit" type="primary" @click="registerSubmit()">注册</el-button>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-button class="login-btn-submit" type="primary" @click="openMainPage">后台管理系统</el-button>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+            </el-form>
+          </div>
         </div>
       </div>
     </div>
-    <Register v-if="registerVisible" ref="register" @refreshDataList="getCaptcha"></Register>
+
     <Login v-if="loginVisible" ref="login" @refreshDataList="getCaptcha"></Login>
+    <Register v-if="registerVisible" ref="register" @refreshDataList="getCaptcha"></Register>
+
+    <!-- 公共区域-->
+    <top-bar :hide="false" :login="loginSubmit" :register="registerSubmit" :logout="logoutHandle" :manager="openMainPage"/>
+
+    <!-- 顶部消息通知 -->
+    <resume-tip :hide="false" />
+
+    <!-- 搜索信息区域 -->
+    <public-seach :hide="hideScrollSeach" />
+
+    <!-- 搜索框 -->
+    <boss-seach :hide="false"/>
+
+    <!-- 快捷菜单 -->
+    <boss-menu :hide="false" />
+
+    <!-- 招聘信息 -->
+    <info-recruitment :hide="false"/>
+
+    <!-- 企业信息 -->
+    <hot-company :hide="false"/>
+
+    <!-- 城市热招 -->
+    <hot-recruitment :hide="false"/>
+
+    <!-- 版权信息 -->
+    <copyright :hide="false"/>
+
   </div>
 
 </template>
@@ -38,10 +72,20 @@
   import {getUUID, clearLoginInfo} from '@/utils'
   import Register from './register'
   import Login from './login'
+  import TopBar from '@/views/modules/boss/top-bar'
+  import ResumeTip from '@/views/modules/boss/resume-tip'
+  import PublicSeach from '@/views/modules/boss/public-seach'
+  import BossSeach from '@/views/modules/boss/boss-seach'
+  import BossMenu from '@/views/modules/boss/boss-menu'
+  import InfoRecruitment from '@/views/modules/boss/info-recruitment'
+  import HotCompany from '@/views/modules/boss/hot-company'
+  import HotRecruitment from '@/views/modules/boss/hot-recruitment'
+  import Copyright from '@/views/modules/boss/copyright'
 
   export default {
     data () {
       return {
+        hideScrollSeach: true,
         registerVisible: false,
         loginVisible: false,
         dataForm: {
@@ -69,9 +113,34 @@
     },
     components: {
       Register,
-      Login
+      Login,
+      TopBar,
+      ResumeTip,
+      PublicSeach,
+      BossSeach,
+      BossMenu,
+      InfoRecruitment,
+      HotCompany,
+      HotRecruitment,
+      Copyright
+    },
+    mounted () {
+      this.handleScroll()
     },
     methods: {
+      // 获取滚动条高度
+      handleScroll: function () {
+        var nav = document.getElementById('data-app')
+        // console.log(nav)
+        let that = this
+        window.onscroll = function () {
+          if (nav.getBoundingClientRect().top < 0) {
+            that.hideScrollSeach = false
+          } else if (nav.getBoundingClientRect().top > 0) {
+            that.hideScrollSeach = true
+          }
+        }
+      },
       // 提交表单
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
@@ -112,7 +181,13 @@
         if (this.$cookie.get('token') === null) {
           this.$message.error('请先登入')
         } else {
-          this.$router.replace({name: 'home'})
+          let routeData = this.$router.resolve({
+            path: '/home',
+            name: 'home'
+          })
+          window.open(routeData.href, '_blank')
+
+          // this.$router.replace({name: 'home'})
         }
       },
       registerSubmit () {
@@ -146,6 +221,7 @@
               clearLoginInfo()
               this.$message.success('账号已退出')
               this.$router.push({ name: 'index' })
+              this.$router.go(0)
             }
           })
         }).catch(() => {})
@@ -156,6 +232,16 @@
 <!--引入自定义css-->
 <style>
   @import "../../assets/css/b-index-css.css";
+  @import "../../assets/css/public-css.css";
+  @import "../../assets/css/top-css.css";
+</style>
+<style>
+  .nav-city .icon-poi {
+    background: url("../../assets/img/icon-poi.png");
+  }
+  .app-tright{
+    background-image: url("../../assets/img/icons.png");
+  }
 </style>
 <style lang="scss">
   .site-wrapper.site-page--login {

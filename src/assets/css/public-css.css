@@ -61,6 +61,20 @@ scrollbar[orient="vertical"]{min-width:8px !important;}
     -o-box-sizing: border-box;
     -ms-box-sizing: border-box;
 }
+.app-wrap *, .app-wrap *:before, .app-wrap *:after {
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -o-box-sizing: content-box;
+  -ms-box-sizing: content-box;
+}
+.user-select{
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+}
 
 /** 显示隐藏 **/
 .show{display: block;}
