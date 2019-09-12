@@ -2,25 +2,28 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.projectName" placeholder="二级学院" clearable></el-input>
+        <el-select v-model="dataForm.instituteId" placeholder="请选择二级学院">
+          <el-option
+            v-for="inst in instituteList"
+            :key="inst.instituteName"
+            :label="inst.instituteName"
+            :value="inst.instituteId">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <!--年度 start-->
-        <template>
-          <el-select v-model="declareYear" placeholder="请选择年度">
-            <el-option
-              v-for="item in declareYears"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </template>
+        <el-date-picker
+          v-model="dataForm.declareTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
         <!--年度 end-->
         <el-form-item>
           <el-button @click="getDataList()">查询</el-button>
         </el-form-item>
-        <el-button type="primary" @click="allErMatchCollectDetail()">查看全部学院项目汇总</el-button>
+        <el-button type="primary" @click="allErMatchCollectDetail(dataForm.instituteId,dataForm.declareTime)">导出</el-button>
         <!--<el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>-->
       </el-form-item>
     </el-form>
@@ -28,37 +31,111 @@
       :data="dataList"
       border
       v-loading="dataListLoading"
-      @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
         type="selection"
         header-align="center"
         align="center"
-        width="50">
+        width="40">
       </el-table-column>
       <el-table-column
-        prop="instituteId"
+        header-align="center"
+        align="center"
+        width="60"
+        type="index"
+        label="序号">
+      </el-table-column>
+      <el-table-column
+        prop="declareInfoEntity.declareName"
+        header-align="center"
+        align="center"
+        width="200"
+        label="项目名称">
+      </el-table-column>
+      <el-table-column
+        prop="userPersonInfoEntities[0].sysUserEntity.name"
         header-align="center"
         align="center"
         width="80"
-        label="ID">
+        label="负责人">
       </el-table-column>
       <el-table-column
-        prop="instituteName"
+        prop="userPersonInfoEntities[0].perStuNo"
         header-align="center"
         align="center"
-        label="二级学院">
+        label="学号">
+      </el-table-column>
+      <el-table-column
+        prop="declareInfoEntity.declareType"
+        header-align="center"
+        align="center"
+        label="类型">
+        <template slot-scope="scope">
+          <span v-for="temp in declareTypeList" v-if="temp.value === scope.row.declareInfoEntity.declareType" v-text="temp.label"></span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="declareStaffInfoEntities.length"
+        header-align="center"
+        align="center"
+        width="60"
+        label="学生人数">
+      </el-table-column>
+      <el-table-column
+        prop="declareStaffInfoEntities"
+        header-align="center"
+        align="center"
+        label="成员信息">
+        <template slot="" slot-scope="scope">
+          <span v-for="stu in scope.row.declareStaffInfoEntities" v-text="stu.staffName+' '"></span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="declareUserTeacherInfoEntities"
+        header-align="center"
+        align="center"
+        width="80"
+        label="指导老师">
+        <template slot-scope="scope">
+          <span v-for="teacher in scope.row.declareUserTeacherInfoEntities" v-text="teacher.sysUserEntity.name+' '"></span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="declareUserTeacherInfoEntities"
+        header-align="center"
+        align="center"
+        width="100"
+        label="职称">
+        <template slot-scope="scope">
+          <span v-for="teacher in scope.row.declareUserTeacherInfoEntities">
+              <span v-for="temp in teacherTitleList" v-if="temp.titleId === teacher.teacherTitle" v-text="temp.titleName"></span>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="declareInfoEntity.subjectId"
+        header-align="center"
+        align="center"
+        label="一级学科">
+        <template slot-scope="scope">
+          <span v-for="subject in subjectList" v-if="subject.subjectId === scope.row.declareInfoEntity.subjectId" v-text="subject.subjectName"></span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="declareInfoEntity.declareScoreAvg"
+        header-align="center"
+        align="center"
+        width="80"
+        label="平均分">
       </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="60"
         label="操作">
         <template slot-scope="scope">
-          <!--<el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.instituteId)">修改</el-button>-->
-          <!--<el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.instituteId)">删除</el-button>-->
-          <el-button  type="text" size="small" @click="collectDetail(scope.row.instituteId)">查看</el-button>
+          <el-button  type="text" size="small" @click="openDeclareInfoDetail(scope.row.declareInfoEntity.declareId)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -74,18 +151,22 @@
     <!-- 弹窗, 新增 / 修改 -->
     <er-match-collect-detail v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></er-match-collect-detail>
     <all-er-match-collect-detail v-if="allErMatchCollectDetailVisible" ref="allErMatchCollectDetail" @refreshDataList="getDataList"></all-er-match-collect-detail>
+    <DeclareInfoDetail v-if="declareInfoDetailVisible" ref="detail" @refreshDataList="getDataList" ></DeclareInfoDetail>
   </div>
 </template>
 
 <script>
   import ErMatchCollectDetail from './operation/er-match-collect-detail'
   import AllErMatchCollectDetail from './operation/all-er-match-collect-detail'
+  import DeclareInfoDetail from './operation/info-detail'
 
   export default {
     data () {
       return {
         dataForm: {
-          projectName: ''
+          projectName: '',
+          instituteId: '',
+          declareTime: new Date()
         },
         dataList: [],
         pageIndex: 1,
@@ -93,14 +174,22 @@
         totalPage: 0,
         declareYears: [],
         dataListLoading: false,
+        declareInfoDetailVisible: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
-        allErMatchCollectDetailVisible: false
+        allErMatchCollectDetailVisible: false,
+        instituteList: this.$store.state.user.institute,
+        teacherTitleList: this.$store.state.user.title,
+        subjectList: this.$store.state.user.subject,
+        declareTypeList: [
+          {value: 1, label: '创新训练项目'}, {value: 2, label: '创业训练项目'}, {value: 3, label: '创业实践项目'}
+        ]
       }
     },
     components: {
       ErMatchCollectDetail,
-      AllErMatchCollectDetail
+      AllErMatchCollectDetail,
+      DeclareInfoDetail
     },
     activated () {
       this.getDataList()
@@ -110,22 +199,29 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/innovate/sys/institute/list'),
+          url: this.$http.adornUrl(`/innovate/declare/info/list`),
           method: 'get',
           params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'projectName': this.dataForm.projectName
+            'instituteId': this.dataForm.instituteId,
+            'declareTime': this.dataForm.declareTime.getFullYear(),
+            'project_audit_apply_status_more': 2,
+            'noPassStatus': 0,
+            'noPass': 'audit_no_pass',
+            'isDel': 0,
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize
+            // 'isEr': true
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
+            console.log(data)
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
+            this.dataListLoading = false
           } else {
-            this.dataList = []
-            this.totalPage = 0
+            this.$message.error(data.msg)
+            this.dataListLoading = false
           }
-          this.dataListLoading = false
         })
       },
       // 每页数
@@ -150,10 +246,10 @@
           this.$refs.addOrUpdate.init(id)
         })
       },
-      allErMatchCollectDetail (id) {
+      allErMatchCollectDetail (instituteId, declareTime) {
         this.allErMatchCollectDetailVisible = true
         this.$nextTick(() => {
-          this.$refs.allErMatchCollectDetail.init()
+          this.$refs.allErMatchCollectDetail.init(instituteId, declareTime)
         })
       },
       // 新增 / 修改
@@ -163,7 +259,14 @@
           this.$refs.addOrUpdate.init(id)
         })
       },
-      // 删除
+      // 打开详情
+      openDeclareInfoDetail (id) {
+        this.declareInfoDetailVisible = true
+        this.$nextTick(() => {
+          this.$refs.detail.init(id)
+        })
+      },
+        // 删除
       deleteHandle (id) {
         var instituteIds = id ? [id] : this.dataListSelections.map(item => {
           return item.instituteId

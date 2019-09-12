@@ -277,7 +277,7 @@
       }
     },
     methods: {
-      init (id) {
+      init (instituteId, declareTime) {
         this.visible = true
         this.dataListLoading = true
         // this.dataForm.id = id || 0
@@ -286,19 +286,17 @@
           url: this.$http.adornUrl('/innovate/declare/info/list'),
           method: 'get',
           params: this.$http.adornParams({
-            // 'username': this.dataForm.userName,
-            // 'startPage': 0,
             'currPage': 1,
             'pageSize': 100000,
             'userId': this.$store.state.user.id,
             'hasApply': 2,
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
-            // 'isStudent': true,
             'apply': 'project_audit_apply_status',
             'project_audit_apply_status_more': 2,
-            // 'applyStatus': 5,
-            'isDel': 0
+            'isDel': 0,
+            'declareTime': declareTime.getFullYear(),
+            'instituteId': instituteId
           })
         }).then(({data}) => {
           // console.info(data)
