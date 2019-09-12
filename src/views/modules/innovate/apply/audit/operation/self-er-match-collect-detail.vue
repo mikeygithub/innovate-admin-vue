@@ -276,7 +276,7 @@
       }
     },
     methods: {
-      init (id) {
+      init (id, time) {
         this.visible = true
         this.dataListLoading = true
         this.dataForm.id = id || 0
@@ -291,7 +291,8 @@
               'noPass': 'audit_no_pass',
               'isDel': 0,
               'pageSize': 1000000,
-              'currPage': 1
+              'currPage': 1,
+              'declareTime': time.getFullYear()
             })
           }).then(({data}) => {
             if (data && data.code === 0) {

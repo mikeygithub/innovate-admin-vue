@@ -167,7 +167,8 @@
           teacherPhone: '',
           teacherJob: '',
           teacherInstinct: '',
-          baseId: ''
+          baseId: '',
+          matchTime: ''
         },
         staticList: [
           '在驻',
@@ -177,7 +178,7 @@
       }
     },
     methods: {
-      init (id) {
+      init (id, time) {
         this.visible = true
         this.dataListLoading = true
         this.dataForm.id = id || 0
@@ -190,6 +191,7 @@
               'project_audit_apply_status_more': 2,
               'noPassStatus': 0,
               'noPass': 'match_no_pass',
+              'matchTime': time.getFullYear(),
               'isEr': true,
               'isDel': 0,
               'pageSize': 1000000,

@@ -2,7 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-select v-model="dataForm.instituteId" placeholder="请选择二级学院">
+        <el-select v-model="dataForm.instituteId" placeholder="请选择二级学院" disabled="">
           <el-option
             v-for="inst in instituteList"
             :key="inst.instituteName"
@@ -12,17 +12,15 @@
         </el-select>
         <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <!--年度 start-->
-          <el-select v-model="declareYear" placeholder="请选择年度">
-            <el-option
-              v-for="item in declareYears"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+        <el-date-picker
+          v-model="dataForm.declareTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
         <!--年度 end-->
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" @click="collectDetail(dataForm.instituteId)">导出</el-button>
+        <el-button type="primary" @click="collectDetail(dataForm.instituteId,dataForm.declareTime)">导出</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -161,12 +159,10 @@
         dataForm: {
           userName: '',
           instituteId: this.$store.state.user.instituteId,
-          declareYear: '',
+          declareTime: new Date(),
           institute: {}
         },
         instituteId: '',
-        declareYear: '',
-        declareYears: [],
         instituteList: this.$store.state.user.institute,
         teacherTitleList: this.$store.state.user.title,
         subjectList: this.$store.state.user.subject,
@@ -198,7 +194,7 @@
           method: 'get',
           params: this.$http.adornParams({
             'instituteId': this.dataForm.instituteId,
-            'declareYear': this.declareYear,
+            'declareTime': this.dataForm.declareTime.getFullYear(),
             'project_audit_apply_status_more': 2,
             'noPassStatus': 0,
             'noPass': 'audit_no_pass',
@@ -234,10 +230,10 @@
         this.dataListSelections = val
       },
       // 新增 / 修改
-      collectDetail (id) {
+      collectDetail (id, time) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.init(id, time)
         })
       },
       // 打开详情
