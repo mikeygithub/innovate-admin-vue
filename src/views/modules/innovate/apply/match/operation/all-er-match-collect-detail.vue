@@ -181,51 +181,27 @@
       }
     },
     methods: {
-      init () {
+      init (instituteId, matchTime) {
         this.visible = true
         this.dataListLoading = true
-      //   this.dataForm.id = id || 0
-      //   if (this.dataForm.id) {
-      //     this.$http({
-      //       url: this.$http.adornUrl(`/innovate/match/info/erCollect`),
-      //       method: 'get',
-      //       params: this.$http.adornParams({
-      //         'instituteId': this.dataForm.id
-      //       })
-      //     }).then(({data}) => {
-      //       console.log(data)
-      //       if (data && data.code === 0) {
-      //         this.matchInfoList = data.matchInfoList
-      //         this.userTeacherInfoEntities = data.userTeacherInfoEntities
-      //         this.dataListLoading = false
-      //       }
-      //     })
-      //   } else {
-      //     this.dataListLoading = false
-      //   }
-      // },
         this.$http({
           url: this.$http.adornUrl('/innovate/match/info/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'username': this.dataForm.userName,
+            'instituteId': instituteId,
+            'matchTime': matchTime.getFullYear(),
             'currPage': 1,
-            'pageSize': 99999,
-            'userId': this.$store.state.user.id,
-            'hasApply': 2,
-            'noPass': 'match_no_pass',
+            'pageSize': 100000,
+            'project_audit_apply_status_more': 2,
             'noPassStatus': 0,
-            // 'isStudent': true,
-            'apply': 'project_match_apply_status',
-            // 'applyStatus': 2,
+            'noPass': 'match_no_pass',
+            'isInstitute': true,
             'isDel': 0
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.matchInfoList = data.page.list
             this.totalPage = data.page.totalCount
-            // console.log(this.matchInfoList)
-            // console.log(this.userTeacherInfoEntities)
             this.dataListLoading = false
           } else {
             this.matchInfoList = []

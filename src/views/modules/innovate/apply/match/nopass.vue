@@ -2,6 +2,14 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
+        <el-date-picker
+          v-model="dataForm.matchTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
         <el-input v-model="dataForm.projectName" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
@@ -130,10 +138,12 @@
         matchList: [],
         eventLists: this.$store.state.eventLists,
         noPass: 'audit_no_pass',
+        matchTime: new Date(),
         sysTeacherEntities: [],
         dataForm: {
           baseId: '',
-          projectName: ''
+          projectName: '',
+          matchTime: new Date()
         },
         statusList: [
           {value: 1, label: '农、林、牧、渔业'}, {value: 2, label: '采矿业'},
@@ -189,6 +199,7 @@
           method: 'get',
           params: this.$http.adornParams({
             'projectName': this.dataForm.projectName,
+            'matchTime': this.dataForm.matchTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,

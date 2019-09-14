@@ -83,7 +83,7 @@
       if (this.$cookie.get('token') === null) {
         this.isLogin = false
         this.$nextTick(() => {
-          // this.$refs.login.init()
+          this.$refs.login.init()
         })
       } else {
         this.isLogin = true

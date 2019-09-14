@@ -2,6 +2,14 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
+        <el-date-picker
+          v-model="dataForm.declareTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
         <el-input v-model="dataForm.projectName" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
@@ -153,6 +161,7 @@
         dataForm: {
           projectName: '',
           baseId: '',
+          declareTime: new Date(),
           idDel: 0
         },
         statusList: [
@@ -202,22 +211,12 @@
         this.detailVisible = false
         this.isUpdateVisible = false
         this.isHistoyVisible = false
-        // this.$http({
-        //   url: this.$http.adornUrl(`/innovate/match/event/event`),
-        //   method: 'get',
-        //   params: this.$http.adornParams({
-        //   })
-        // }).then(({data}) => {
-        //   if (data && data.code === 0) {
-        //     this.eventLists = data.matchEventEntityList
-        //     this.$store.state.eventLists = data.matchEventEntityList
-        //   }
-        // })
         this.$http({
           url: this.$http.adornUrl('/innovate/declare/info/list'),
           method: 'get',
           params: this.$http.adornParams({
             'projectName': this.dataForm.projectName,
+            'declareTime': this.dataForm.declareTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,
