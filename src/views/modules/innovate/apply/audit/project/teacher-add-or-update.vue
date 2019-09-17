@@ -5,6 +5,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
+      <!--           -->
       <el-form-item label="教师姓名" prop="userId">
         <el-select
           v-model="dataForm.userId"
@@ -22,6 +23,7 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <!--                 -->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>

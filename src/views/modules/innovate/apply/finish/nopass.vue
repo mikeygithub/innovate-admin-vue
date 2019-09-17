@@ -2,7 +2,15 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.userName" placeholder="项目名" clearable></el-input>
+        <el-date-picker
+          v-model="dataForm.finishTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.projectName" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -134,7 +142,9 @@
         noPass: 'finish_no_pass',
         sysTeacherEntities: [],
         dataForm: {
-          baseId: ''
+          projectName: '',
+          baseId: '',
+          finishTime: new Date()
         },
         statusList: [
           {value: 1, label: '农、林、牧、渔业'}, {value: 2, label: '采矿业'},
@@ -174,18 +184,6 @@
         this.dataListLoading = true
         this.addOrUpdateVisible = false
         this.detailVisible = false
-        this.$http({
-          url: this.$http.adornUrl(`/innovate/use/teacher/teacher`),
-          method: 'get',
-          params: this.$http.adornParams({
-          })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.sysTeacherEntities = data.sysTeacherEntities
-            this.$store.state.sysTeacherEntities = data.sysTeacherEntities
-            this.$store.state.userTeacherInfoEntities = data.userTeacherInfoEntities
-          }
-        })
         // this.$http({
         //   url: this.$http.adornUrl(`/innovate/finish/event/event`),
         //   method: 'get',
@@ -201,7 +199,8 @@
           url: this.$http.adornUrl('/innovate/finish/info/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'username': this.dataForm.userName,
+            'projectName': this.dataForm.projectName,
+            'finishTime': this.dataForm.finishTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,

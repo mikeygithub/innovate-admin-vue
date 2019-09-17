@@ -23,7 +23,7 @@
       <template v-for="item in groupList" v-if="item.groupId === dataForm.finishInfoEntity.groupId">
         <template v-for="groupUser in item.innovateReviewGroupUserEntities">
           <template v-for="user in sysUserEntities" v-if="groupUser.userId === user.userId">
-            {{user.username}}
+            {{user.name}}
             <el-tag v-for="teacher in dataForm.finishTeacherEntities"
                     :key="teacher.finishTeacherId"
                     v-if="groupUser.userId === teacher.userId"

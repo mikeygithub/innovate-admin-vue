@@ -17,7 +17,7 @@
           <el-option
             v-for="item in userList"
             :key="item.userId"
-            :label="item.username"
+            :label="item.name"
             :value="item.userId">
           </el-option>
         </el-select>
