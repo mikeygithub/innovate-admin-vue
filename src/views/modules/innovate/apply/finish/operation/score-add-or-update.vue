@@ -58,7 +58,7 @@
             { validator: validateFloatNumber, trigger: 'blur' }
           ],
           opinion: [
-            { required: true, message: '意见反馈不能为空', trigger: 'blur' }
+            { required: true, message: '反馈意见不能为空', trigger: 'blur' }
           ]
         }
       }

@@ -222,7 +222,7 @@
             </td>
             <td v-text="item.teacherPost"></td>
             <td colspan="1">
-              <span v-for="teacherTitle in teacherTitleList" v-if="item.teacherTitle === teacherTitle.value" v-text="teacherTitle.label"></span>
+              <span v-for="teacherTitle in teacherTitleList" v-if="item.teacherTitle === teacherTitle.titleId" v-text="teacherTitle.titleName"></span>
             </td>
             <td colspan="2">{{item.sysUserEntity.email}}</td>
             <td colspan="2">{{item.sysUserEntity.mobile}}</td>
@@ -407,22 +407,23 @@
         sexList: [
           {value: 1, label: '男'}, {value: 2, label: '女'}
         ],
-        teacherTitleList: [{
-          value: '1',
-          label: '正高级'
-        }, {
-          value: '2',
-          label: '副高级'
-        }, {
-          value: '3',
-          label: '中级'
-        }, {
-          value: '4',
-          label: '初级'
-        }, {
-          value: '5',
-          label: '无职称'
-        }],
+        teacherTitleList: this.$store.state.user.title,
+        // teacherTitleList: [{
+        //   value: '1',
+        //   label: '正高级'
+        // }, {
+        //   value: '2',
+        //   label: '副高级'
+        // }, {
+        //   value: '3',
+        //   label: '中级'
+        // }, {
+        //   value: '4',
+        //   label: '初级'
+        // }, {
+        //   value: '5',
+        //   label: '无职称'
+        // }],
         // awardTypeList: [
         //   {value: 1, label: '国际级'}, {value: 2, label: '国家级'},
         //   {value: 3, label: '省级'}, {value: 4, label: '市厅级'},

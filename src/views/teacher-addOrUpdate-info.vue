@@ -31,7 +31,14 @@
         <el-input  v-model="dataForm.teacherPost"></el-input>
       </el-form-item>
       <el-form-item label="职称" prop="teacherTitle">
-        <el-select v-model="dataForm.teacherTitle" placeholder="请选择">
+        <el-select
+          v-model="dataForm.teacherTitle"
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入关键词"
+          :remote-method="selectTitle"
+          :loading="loadingTitle">
           <el-option
             v-for="item in teacherTitleList"
             :key="item.titleId"
@@ -86,6 +93,7 @@
       return {
         visible: false,
         addLoading: false,
+        loadingTitle: false,
         dataForm: {
           userTeacherId: '',
           userId: '',
@@ -206,6 +214,28 @@
             })
           }
         })
+      },
+      selectTitle (query) {
+        if (query !== '') {
+          this.loadingTitle = true
+          setTimeout(() => {
+            this.loadingTitle = false
+            console.info(query)
+            this.$http({
+              url: this.$http.adornUrl(`/innovate/sys/title/title`),
+              method: 'get',
+              params: this.$http.adornParams({
+                'like': query
+              })
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.teacherTitleList = data.innovateTitleEntities
+              }
+            })
+          }, 200)
+        } else {
+          this.teacherTitleList = []
+        }
       }
     }
   }

@@ -2,12 +2,20 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.userName" placeholder="项目名" clearable></el-input>
+        <el-date-picker
+          v-model="dataForm.finishTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.projectName" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('innovate:project:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('innovate:project:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('innovate:finish:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('innovate:finish:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-card>
@@ -150,10 +158,12 @@
     data () {
       return {
         projectList: [],
-        userTeacherInfoEntities: [],
+        userTeacherInfoEntities: this.$store.state.userTeacherInfoEntities,
         hasApply: '1',
         dataForm: {
+          projectName: '',
           baseId: '',
+          finishTime: new Date(),
           idDel: 0
         },
         statusList: [
@@ -205,21 +215,11 @@
         this.isUpdateVisible = false
         this.isHistoyVisible = false
         this.$http({
-          url: this.$http.adornUrl(`/innovate/use/teacher/teacher`),
-          method: 'get',
-          params: this.$http.adornParams({
-            'like': ''
-          })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.userTeacherInfoEntities = data.userTeacherInfoEntities
-          }
-        })
-        this.$http({
           url: this.$http.adornUrl('/innovate/finish/info/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'username': this.dataForm.userName,
+            'projectName': this.dataForm.projectName,
+            'finishTime': this.dataForm.finishTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,

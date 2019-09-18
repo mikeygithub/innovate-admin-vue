@@ -32,7 +32,7 @@
                         v-for="user in userTeacherInfoEntities"
                         :key="user.userId"
                         v-if="user.userId === item.userId"
-                        v-text="'姓名：' + user.sysUserEntity.username">
+                        v-text="'姓名：' + user.name">
                 </el-tag>
                 <el-button size="mini" type="primary" plain @click="addTeacher()">添加</el-button>
                 <el-button size="mini" type="primary" plain @click="addTeacher(item, index)">修改</el-button>
@@ -230,7 +230,7 @@
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.userTeacherInfoEntities = data.userTeacherInfoEntities
+              this.userTeacherInfoEntities = data.sysTeacherEntities
             }
           })
           this.$refs['dataForm'].resetFields()
@@ -338,6 +338,7 @@
       isTeacherInfoNull () {
         this.isTeacherInfoNullVisible = false
         var teacherNum = 0
+        // 被选中的老师数量
         var teacherLength = 0
         for (let item in this.teacherLists) {
           for (let teacher in this.userTeacherInfoEntities) {

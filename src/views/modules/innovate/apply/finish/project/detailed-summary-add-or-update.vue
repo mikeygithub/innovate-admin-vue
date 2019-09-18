@@ -45,7 +45,7 @@
                         v-for="user in userTeacherInfoEntities"
                         :key="user.userId"
                         v-if="user.userId === item.userId"
-                        v-text="'姓名：' + user.sysUserEntity.username">
+                        v-text="'姓名：' + user.name">
                 </el-tag>
                 <el-button size="mini" type="primary" plain @click="addTeacher()">添加</el-button>
                 <el-button size="mini" type="primary" plain @click="addTeacher(item, index)">修改</el-button>
@@ -221,11 +221,10 @@
           this.$http({
             url: this.$http.adornUrl(`/innovate/use/teacher/teacher`),
             method: 'get',
-            params: this.$http.adornParams({
-            })
+            params: this.$http.adornParams()
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.userTeacherInfoEntities = data.userTeacherInfoEntities
+              this.userTeacherInfoEntities = data.sysTeacherEntities
             }
           })
           this.$refs['dataForm'].resetFields()
