@@ -95,7 +95,8 @@
         loading: false,
         codeDisable: false,
         registerLoading: false,
-        instituteList: this.$store.state.user.institute,
+        // instituteList: this.$store.state.user.institute,
+        instituteList: [],
         dataForm: {
           id: 0,
           username: '',
@@ -142,15 +143,21 @@
         }
       }
     },
+    activated () {
+      this.getDataList()
+    },
     methods: {
       init () {
+        this.getDataList()
+      },
+      getDataList () {
         this.$http({
           url: this.$http.adornUrl('/innovate/sys/institute/all'),
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.$store.state.user.institute = data.institute
+            this.instituteList = data.institute
             this.visible = true
           } else {
             this.$message.error(data.msg)
