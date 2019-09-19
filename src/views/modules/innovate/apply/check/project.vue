@@ -1,34 +1,30 @@
-<!--二级学院大创汇总表-->
 <template>
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+      <el-form-item>
+        <el-date-picker
+          v-model="dataForm.declareTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-input v-model="dataForm.projectName" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('innovate:project:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('innovate:project:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('innovate:project:delete')" type="primary" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量设置中期检查</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">按照年度批量设置</el-button>
       </el-form-item>
     </el-form>
-    <el-card>
-      <!--<template>-->
-        <!--<el-select v-model="instituteId" filterable placeholder="请选择学院"-->
-           <!--@change="getDataList">-->
-          <!--<el-option-->
-            <!--v-for="item in instituteList"-->
-            <!--:key="item.instituteId"-->
-            <!--:label="item.instituteName"-->
-            <!--:value="item.instituteId">-->
-          <!--</el-option>-->
-        <!--</el-select>-->
-      <!--</template>-->
-      <el-radio-group v-model="hasApply" @change="getDataList">
-        <el-radio label="1">未审批</el-radio>
-        <el-radio label="2">已审批</el-radio>
-        <el-radio label="3">全部</el-radio>
-      </el-radio-group>
-    </el-card>
+    <!--<el-card>-->
+      <!--<el-radio-group v-model="hasApply" @change="getDataList">-->
+        <!--<el-radio label="1">未审批</el-radio>-->
+        <!--<el-radio label="2">已审批</el-radio>-->
+        <!--<el-radio label="10">未打分项目</el-radio>-->
+      <!--</el-radio-group>-->
+    <!--</el-card>-->
     <el-table
       :data="dataList"
       border
@@ -52,44 +48,37 @@
           <p v-text="props.$index+1"></p>
         </template>
       </el-table-column>
-      <!--<el-table-column-->
-        <!--sortable-->
-        <!--hidden-->
-        <!--type="expand"-->
-        <!--prop="declareInfoEntity.declareId"-->
-        <!--header-align="center"-->
-        <!--align="center"-->
-        <!--width="120"-->
-        <!--label="展开流程进度">-->
-        <!--<template slot-scope="props">-->
-          <!--<el-row>-->
-            <!--<el-card style=": 0.1rem">-->
-              <!--<el-col :span="3">-->
-                <!--<el-tag>大创申请审批进度</el-tag>-->
-              <!--</el-col>-->
-              <!--<el-col :span="21">-->
-                <!--<el-steps-->
-                  <!--:active="props.row.declareInfoEntity.projectAuditApplyStatus"-->
-                  <!--finish-status="success">-->
-                  <!--<el-step title="项目负责人提交"></el-step>-->
-                  <!--<el-step title="指导老师审批"></el-step>-->
-                  <!--<el-step title="二级学院审批"></el-step>-->
-                  <!--<el-step title="管理员审批"></el-step>-->
-                  <!--<el-step title="评委审批"></el-step>-->
-                  <!--<el-step title="管理员审批"></el-step>-->
-                  <!--<el-step title="超级管理员审批"></el-step>-->
-                <!--</el-steps>-->
-              <!--</el-col>-->
-            <!--</el-card>-->
-          <!--</el-row>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
       <el-table-column
         sortable
-        prop="declareInfoEntity.declareName"
+        hidden
+        type="expand"
+        prop="declareInfoEntity.declareId"
         header-align="center"
         align="center"
-        label="二级学院名称">
+        width="120"
+        label="展开流程进度">
+        <template slot-scope="props">
+          <el-row>
+            <el-card style=": 0.1rem">
+              <el-col :span="3">
+                <el-tag>大创申请审批进度</el-tag>
+              </el-col>
+              <el-col :span="21">
+                <el-steps
+                  :active="props.row.declareInfoEntity.projectAuditApplyStatus"
+                  finish-status="success">
+                  <el-step title="项目负责人提交"></el-step>
+                  <el-step title="指导老师审批"></el-step>
+                  <el-step title="二级学院审批"></el-step>
+                  <el-step title="管理员审批"></el-step>
+                  <el-step title="评委审批"></el-step>
+                  <el-step title="管理员审批"></el-step>
+                  <!--<el-step title="超级管理员审批"></el-step>-->
+                </el-steps>
+              </el-col>
+            </el-card>
+          </el-row>
+        </template>
       </el-table-column>
       <el-table-column
         sortable
@@ -129,14 +118,15 @@
         label="操作">
         <template slot-scope="scope">
           <el-button v-if="isAuth('innovate:project:list')" type="text" size="small" @click="detailHandle(scope.row.declareInfoEntity.declareId)">详情</el-button>
-          <!--<el-button v-if="addOrUpdate(scope.row.declareInfoEntity)" type="text" size="small" @click="addOrUpdateHandle(scope.row.declareInfoEntity.declareId)">修改</el-button>-->
-          <!--<el-button v-if="isDelete(scope.row.declareInfoEntity)" type="text" size="small" @click="deleteHandle(scope.row.declareInfoEntity.declareId)">删除</el-button>-->
-          <!--<br v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)">-->
-          <!--<el-button v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyDeclareHandle(scope.row.declareInfoEntity.declareId)">通过</el-button>-->
-          <!--<el-button v-if="retreatIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.declareInfoEntity)">不通过</el-button>-->
-          <!--<br v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)">-->
-          <!--<el-button v-if="publicDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="publicDeclareHandle(scope.row.declareInfoEntity.declareId)">公布立项项目</el-button>-->
-          <!--<el-button v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="exportDeclareHandle(scope.row.declareInfoEntity)">导出项目信息</el-button>-->
+          <el-button v-if="addOrUpdate(scope.row.declareInfoEntity)" type="text" size="small" @click="addOrUpdateHandle(scope.row.declareInfoEntity.declareId)">修改</el-button>
+          <el-button v-if="isDelete(scope.row.declareInfoEntity)" type="text" size="small" @click="deleteHandle(scope.row.declareInfoEntity.declareId)">删除</el-button>
+          <br v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)">
+          <el-button v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyAwardHandle(scope.row.declareInfoEntity.declareId)">评奖</el-button>
+          <!--<el-button v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyDeclareRef(scope.row.declareInfoEntity.declareId)">通过</el-button>-->
+          <el-button v-if="retreatIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.declareInfoEntity)">不通过</el-button>
+          <br v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)">
+          <el-button v-if="publicDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="publicDeclareHandle(scope.row.declareInfoEntity.declareId)">公布立项项目</el-button>
+          <el-button v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="exportDeclareHandle(scope.row.declareInfoEntity.declareId)">导出项目信息</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -150,36 +140,36 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <!--<add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>-->
-    <!--<update-history v-if="isHistoyVisible" ref="updateHistory" @refreshDataList="getDataList"></update-history>-->
-    <!--<update-add-or-update v-if="isUpdateVisible" ref="isUpdate" @refreshDataList="getDataList"></update-add-or-update>-->
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <update-history v-if="isHistoyVisible" ref="updateHistory" @refreshDataList="getDataList"></update-history>
+    <update-add-or-update v-if="isUpdateVisible" ref="isUpdate" @refreshDataList="getDataList"></update-add-or-update>
     <detail v-if="detailVisible" ref="detail" @refreshDataList="getDataList"></detail>
-    <!--<retreat-add-or-update v-if="retreatVisible" ref="retreat" @refreshDataList="getDataList"></retreat-add-or-update>-->
-    <!--<award-add-or-update v-if="awardVisible" ref="award" @refreshDataList="applyDeclareRef"></award-add-or-update>-->
+    <retreat-add-or-update v-if="retreatVisible" ref="retreat" @refreshDataList="getDataList"></retreat-add-or-update>
+    <award-add-or-update v-if="awardVisible" ref="award" @refreshDataList="getDataList"></award-add-or-update>
+    <export-info-detail v-if="exportVisible" ref="ExportInfoDetail" @refreshDataList="getDataList"></export-info-detail>
   </div>
 </template>
 
 <script>
-  // import AddOrUpdate from './project/info-add-or-update'
+  import AddOrUpdate from './project/info-add-or-update'
   import Detail from './operation/info-detail'
-  // import UpdateAddOrUpdate from './operation/update-add-or-update'
-  // import UpdateHistory from './operation/update-history'
-  // import RetreatAddOrUpdate from './operation/retreat-add-or-update'
-  // import AwardAddOrUpdate from './project/award-add-or-update'
+  import UpdateAddOrUpdate from './operation/update-add-or-update'
+  import UpdateHistory from './operation/update-history'
+  import RetreatAddOrUpdate from './operation/retreat-add-or-update'
+  import AwardAddOrUpdate from './project/award-add-or-update'
+  import ExportInfoDetail from './operation/export-info-detail'
 
   export default {
     data () {
       return {
         // projectList: [],
         // eventLists: [],
-        instituteId: '',
-        instituteList: [],
-        userTeacherInfoEntities: [],
-        // instituteList: this.$store.state.user.institute,
+        userTeacherInfoEntities: this.$store.state.userTeacherInfoEntities,
         hasApply: '1',
         dataForm: {
           projectName: '',
           baseId: '',
+          declareTime: new Date(),
           idDel: 0
         },
         statusList: [
@@ -207,74 +197,53 @@
         isUpdateVisible: false,
         retreatVisible: false,
         awardVisible: false,
-        isHistoyVisible: false
+        isHistoyVisible: false,
+        exportVisible: false
       }
     },
     components: {
-      // AwardAddOrUpdate,
-      // UpdateHistory,
-      // UpdateAddOrUpdate,
-      // RetreatAddOrUpdate,
-      // AddOrUpdate,
+      ExportInfoDetail,
+      AwardAddOrUpdate,
+      UpdateHistory,
+      UpdateAddOrUpdate,
+      RetreatAddOrUpdate,
+      AddOrUpdate,
       Detail
     },
     activated () {
-      // this.getDataList()
-      this.getAllInstituteList()
+      this.getDataList()
     },
     methods: {
-      // 查询二级学院
-      getAllInstituteList () {
-        this.$http({
-          url: this.$http.adornUrl('/innovate/sys/institute/list'),
-          method: 'get',
-          params: this.$http.adornParams({
-          })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.instituteList = data.page.list
-          } else {
-            this.instituteList = []
-          }
-        })
-      },
       // 获取数据列表
       getDataList () {
-        // if (this.instituteId === '' || this.instituteId === null) {
-        //   this.$message({
-        //     type: 'error',
-        //     message: '请先选择学院!'
-        //   })
-        //   return
-        // }
         this.dataListLoading = true
         this.addOrUpdateVisible = false
         this.detailVisible = false
         this.isUpdateVisible = false
         this.isHistoyVisible = false
-        this.$http({
-          url: this.$http.adornUrl(`/innovate/use/teacher/teacher`),
-          method: 'get',
-          params: this.$http.adornParams({
-            'like': ''
-          })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.userTeacherInfoEntities = data.userTeacherInfoEntities
-          }
-        })
+        // this.$http({
+        //   url: this.$http.adornUrl(`/innovate/match/event/event`),
+        //   method: 'get',
+        //   params: this.$http.adornParams({
+        //   })
+        // }).then(({data}) => {
+        //   if (data && data.code === 0) {
+        //     this.eventLists = data.matchEventEntityList
+        //     this.$store.state.eventLists = data.matchEventEntityList
+        //   }
+        // })
         this.$http({
           url: this.$http.adornUrl('/innovate/declare/info/list'),
           method: 'get',
           params: this.$http.adornParams({
-            // 'username': this.dataForm.userName,
+            'projectName': this.dataForm.projectName,
+            'declareTime': this.dataForm.declareTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,
             'hasApply': this.hasApply,
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
-            'instituteId': this.instituteId,
             // 'isStudent': true,
             'apply': 'project_audit_apply_status',
             'applyStatus': 5,
@@ -296,6 +265,13 @@
         this.pageSize = val
         this.pageIndex = 1
         this.getDataList()
+      },
+      // 审批
+      applyDeclareHandle (id) {
+        this.awardVisible = true
+        this.$nextTick(() => {
+          this.$refs.award.init(id)
+        })
       },
       // 当前页
       currentChangeHandle (val) {
@@ -327,14 +303,20 @@
           this.$refs.updateHistory.init(id)
         })
       },
-      // selectInstitute () {
-      //   console.log('selectInstitute' + this.instituteId)
-      // },
       // 公布立项项目
       publicDeclareHandle (id) {
+        this.$message({
+          message: '功能未实现',
+          type: 'error',
+          duration: 1500
+        })
       },
       // "导出项目信息
       exportDeclareHandle (id) {
+        this.exportVisible = true
+        this.$nextTick(() => {
+          this.$refs.ExportInfoDetail.init(id)
+        })
       },
       applyDeclareIsVisible (item) {
         if (this.isAuth('innovate:project:apply:audit')) {
@@ -367,7 +349,7 @@
         return false
       },
       publicDeclareIsVisible (item) {
-        if (this.isAuth('innovate:declare:retreat')) {
+        if (this.isAuth('innovate:declare:retreat')) { // innovate:declare:public
           if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
             if (item.projectAuditApplyStatus === 6) {
               let roleIdList = this.$store.state.user.roleIdList
@@ -382,7 +364,7 @@
         return false
       },
       exportDeclareIsVisible (item) {
-        if (this.isAuth('innovate:declare:retreat')) {
+        if (this.isAuth('innovate:declare:retreat')) { // innovate:declare:export
           if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
             if (item.projectAuditApplyStatus === 6) {
               let roleIdList = this.$store.state.user.roleIdList
@@ -400,7 +382,7 @@
       detailHandle (id) {
         this.detailVisible = true
         this.$nextTick(() => {
-          this.$refs.detail.init(id)
+          this.$refs.detail.init(id, false)
         })
       },
       // 不通过
@@ -411,30 +393,41 @@
         })
       },
       // 审批
-      applyDeclareHandle (id) {
+      applyAwardHandle (id) {
         this.awardVisible = true
         this.$nextTick(() => {
           this.$refs.award.init(id)
         })
       },
       // 审批
-      applyDeclareRef (id) {
-        this.$http({
-          url: this.$http.adornUrl('/innovate/declare/apply/apply'),
-          method: 'post',
-          params: this.$http.adornParams({
-            'declareId': id,
-            'apply': 'project_audit_apply_status',
-            'roleId': 5
-          }, false)
-        }).then(({data}) => {
-          this.$message({
-            type: 'success',
-            message: '提交成功!'
-          })
-          this.getDataList()
-        })
-      },
+      // applyDeclareRef (id) {
+      //   this.$confirm('此操作将使该项目进入下一个审批流程，是否继续?', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     this.$http({
+      //       url: this.$http.adornUrl('/innovate/declare/apply/apply'),
+      //       method: 'post',
+      //       params: this.$http.adornParams({
+      //         'declareId': id,
+      //         'apply': 'project_audit_apply_status',
+      //         'roleId': 5
+      //       }, false)
+      //     }).then(({data}) => {
+      //       this.$message({
+      //         type: 'success',
+      //         message: '提交成功!'
+      //       })
+      //       this.getDataList()
+      //     })
+      //   }).catch(() => {
+      //     this.$message({
+      //       type: 'info',
+      //       message: '已取消申请'
+      //     })
+      //   })
+      // },
       addOrUpdate (item) {
         if ((item.projectAuditApplyStatus === 0) &&
           this.isAuth('innovate:declare:update')) {
@@ -449,51 +442,33 @@
       },
       // 删除
       deleteHandle (id) {
-        var canDelete = true
-        var declareIds = id ? [id] : this.dataListSelections.map(item => {
-          if ((item.projectInfoEntity.projectAuditApplyStatus > 0) ||
-            !this.isAuth('innovate:declare:delete')) {
-            canDelete = false
-          } else {
-            canDelete = false
-          }
-          return item.projectInfoEntity.declareId
+        var ids = id ? [id] : this.dataListSelections.map(item => {
+          return item.fileAskId
         })
-        this.$confirm(`确定要进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (canDelete) {
-            this.$http({
-              url: this.$http.adornUrl('/innovate/declare/info/delete'),
-              method: 'post',
-              data: this.$http.adornData(declareIds, false)
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.getDataList()
-                  }
-                })
-              } else {
-                this.$message.error(data.msg)
-              }
-            })
-          } else {
-            this.$message({
-              message: '包含不可删除项目',
-              type: 'error',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          }
-        }).catch(() => {})
+          this.$http({
+            url: this.$http.adornUrl('/check/innovatefileask/save'),
+            method: 'post',
+            data: this.$http.adornData(ids, false)
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        })
       }
     }
   }
