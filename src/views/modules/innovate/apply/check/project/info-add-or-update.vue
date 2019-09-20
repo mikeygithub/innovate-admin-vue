@@ -3,78 +3,59 @@
     width="60%"
     @close="closeDialog"
     v-loading="dataListLoading"
-    :title="!dataForm.id ? '新增大创信息' : '修改大创信息'"
+    :title="!dataForm.id ? '上传材料信息' : '修改材料信息'"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-row :gutter="20">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="16rem" style="width: 94%; margin: 0 auto">
-        <el-col :span="24">
-          <el-form-item label="大创项目名称" prop="declareName">
-            <el-input v-model="dataForm.declareName" placeholder="请输入大创项目名称"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="申报类型" prop="declareType">
-            <el-select v-model="dataForm.declareType"  placeholder="请选择">
-              <el-option v-for="item in declareTypeList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col>
-        <el-form-item label="所属学科" prop="subjectId">
-          <el-select v-model="dataForm.subjectId" placeholder="请选择">
-            <el-option
-              v-for="item in subjectList"
-              :key="item.subjectId"
-              :label="item.subjectName"
-              :value="item.subjectId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        </el-col>
-        <el-col>
-        <el-form-item label="所在二级学院" prop="instituteId">
-          <el-select v-model="dataForm.instituteId" placeholder="请选择">
-            <el-option
-              v-for="item in instituteList"
-              :key="item.instituteId"
-              :label="item.instituteName"
-              :value="item.instituteId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="项目简介(300字之内)" prop="declareDescribe">
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="大创项目名称" prop="declareName">-->
+            <!--<el-input v-model="dataForm.declareName" placeholder="请输入大创项目名称"></el-input>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="申报类型" prop="declareType">-->
+            <!--<el-select v-model="dataForm.declareType"  placeholder="请选择">-->
+              <!--<el-option v-for="item in declareTypeList" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col>-->
+        <!--<el-form-item label="所属学科" prop="subjectId">-->
+          <!--<el-select v-model="dataForm.subjectId" placeholder="请选择">-->
+            <!--<el-option-->
+              <!--v-for="item in subjectList"-->
+              <!--:key="item.subjectId"-->
+              <!--:label="item.subjectName"-->
+              <!--:value="item.subjectId">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col>-->
+        <!--<el-form-item label="所在二级学院" prop="instituteId">-->
+          <!--<el-select v-model="dataForm.instituteId" placeholder="请选择">-->
+            <!--<el-option-->
+              <!--v-for="item in instituteList"-->
+              <!--:key="item.instituteId"-->
+              <!--:label="item.instituteName"-->
+              <!--:value="item.instituteId">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="项目简介(300字之内)" prop="declareDescribe">-->
 
-            <el-input type="textarea" maxlength="400"
-                      :rows="5"
-                      v-model="dataForm.declareDescribe"
-                      placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="项目指导老师" prop="teacherLists">
-            <el-button size="mini"
-                       v-if="addVisible(teacherLists)"
-                       type="primary" plain @click="addTeacher()">添加</el-button>
-            <template v-for="(item,index) in teacherLists" v-if="item.isDel !== 1">
-              <el-col :span="24">
-                <el-tag style="margin-right: 1rem"
-                        v-for="user in userTeacherInfoEntities"
-                        :key="user.userId"
-                        v-if="user.userId === item.userId"
-                        v-text="'姓名：' + user.sysUserEntity.name">
-                </el-tag>
-                <el-button size="mini" type="primary" plain @click="addTeacher()">添加</el-button>
-                <el-button size="mini" type="primary" plain @click="addTeacher(item, index)">修改</el-button>
-                <el-button size="mini" type="danger" @click="delTeacher(item, index)">删除</el-button>
-              </el-col>
-            </template>
-            <span v-if="isTeacherInfoNullVisible" style="color: crimson">*请联系指导老师完善个人信息</span>
-          </el-form-item>
-          <!--<el-form-item label="指导老师" prop="teacherLists">-->
+            <!--<el-input type="textarea" maxlength="400"-->
+                      <!--:rows="5"-->
+                      <!--v-model="dataForm.declareDescribe"-->
+                      <!--placeholder="请输入"></el-input>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="项目指导老师" prop="teacherLists">-->
             <!--<el-button size="mini"-->
                        <!--v-if="addVisible(teacherLists)"-->
                        <!--type="primary" plain @click="addTeacher()">添加</el-button>-->
@@ -93,23 +74,42 @@
             <!--</template>-->
             <!--<span v-if="isTeacherInfoNullVisible" style="color: crimson">*请联系指导老师完善个人信息</span>-->
           <!--</el-form-item>-->
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="项目参与者信息" prop="staffInfoLists">
-            <el-button size="mini"
-                       v-if="addVisible(staffInfoLists)" type="primary" plain @click="addStaff()">添加</el-button>
-            <template v-for="(item,index) in staffInfoLists" v-if="item.isDel !== 1">
-              <el-col :span="24">
-                <el-tag style="margin-right: 1rem"
-                        v-text="item.staffName">
-                </el-tag>
-                <el-button size="mini" type="primary" plain @click="addStaff()">添加</el-button>
-                <el-button size="mini" type="primary" plain @click="addStaff(item, index)">修改</el-button>
-                <el-button size="mini" type="danger" @click="delStaff(item, index)">删除</el-button>
-              </el-col>
-            </template>
-          </el-form-item>
-        </el-col>
+          <!--&lt;!&ndash;<el-form-item label="指导老师" prop="teacherLists">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-button size="mini"&ndash;&gt;-->
+                       <!--&lt;!&ndash;v-if="addVisible(teacherLists)"&ndash;&gt;-->
+                       <!--&lt;!&ndash;type="primary" plain @click="addTeacher()">添加</el-button>&ndash;&gt;-->
+            <!--&lt;!&ndash;<template v-for="(item,index) in teacherLists" v-if="item.isDel !== 1">&ndash;&gt;-->
+              <!--&lt;!&ndash;<el-col :span="24">&ndash;&gt;-->
+                <!--&lt;!&ndash;<el-tag style="margin-right: 1rem"&ndash;&gt;-->
+                        <!--&lt;!&ndash;v-for="user in userTeacherInfoEntities"&ndash;&gt;-->
+                        <!--&lt;!&ndash;:key="user.userId"&ndash;&gt;-->
+                        <!--&lt;!&ndash;v-if="user.userId === item.userId"&ndash;&gt;-->
+                        <!--&lt;!&ndash;v-text="'姓名：' + user.sysUserEntity.name">&ndash;&gt;-->
+                <!--&lt;!&ndash;</el-tag>&ndash;&gt;-->
+                <!--&lt;!&ndash;<el-button size="mini" type="primary" plain @click="addTeacher()">添加</el-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<el-button size="mini" type="primary" plain @click="addTeacher(item, index)">修改</el-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<el-button size="mini" type="danger" @click="delTeacher(item, index)">删除</el-button>&ndash;&gt;-->
+              <!--&lt;!&ndash;</el-col>&ndash;&gt;-->
+            <!--&lt;!&ndash;</template>&ndash;&gt;-->
+            <!--&lt;!&ndash;<span v-if="isTeacherInfoNullVisible" style="color: crimson">*请联系指导老师完善个人信息</span>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+        <!--</el-col>-->
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="项目参与者信息" prop="staffInfoLists">-->
+            <!--<el-button size="mini"-->
+                       <!--v-if="addVisible(staffInfoLists)" type="primary" plain @click="addStaff()">添加</el-button>-->
+            <!--<template v-for="(item,index) in staffInfoLists" v-if="item.isDel !== 1">-->
+              <!--<el-col :span="24">-->
+                <!--<el-tag style="margin-right: 1rem"-->
+                        <!--v-text="item.staffName">-->
+                <!--</el-tag>-->
+                <!--<el-button size="mini" type="primary" plain @click="addStaff()">添加</el-button>-->
+                <!--<el-button size="mini" type="primary" plain @click="addStaff(item, index)">修改</el-button>-->
+                <!--<el-button size="mini" type="danger" @click="delStaff(item, index)">删除</el-button>-->
+              <!--</el-col>-->
+            <!--</template>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
 
         <el-col :span="24">
           <el-form-item label="附件" prop="attachLists">
@@ -129,7 +129,7 @@
           <el-upload
             class="upload-demo"
             :action="url"
-            :data="{declareName: dataForm.declareName}"
+            :data="{declareId: dataForm.declareInfoEntity.declareId}"
             :on-success="successHandle1">
             <el-button size="small" type="primary">点击上传</el-button>
           <label>
@@ -209,39 +209,33 @@
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()" :loading="addLoading">确定</el-button>
     </span>
-    <teacher-add-or-update v-if="teacherAddOrUpdateVisible" ref="teacherAddOrUpdate" @refreshDataList="teacherRef"></teacher-add-or-update>
-    <person-add-or-update v-if="personAddOrUpdateVisible" ref="personAddOrUpdate" @refreshDataList="personRef"></person-add-or-update>
+    <!--<teacher-add-or-update v-if="teacherAddOrUpdateVisible" ref="teacherAddOrUpdate" @refreshDataList="teacherRef"></teacher-add-or-update>-->
+    <!--<person-add-or-update v-if="personAddOrUpdateVisible" ref="personAddOrUpdate" @refreshDataList="personRef"></person-add-or-update>-->
     <!--<award-add-or-update v-if="awardAddOrUpdateVisible" ref="awardAddOrUpdate" @refreshDataList="awardRef"></award-add-or-update>-->
-    <staff-add-or-update v-if="staffAddOrUpdateVisible" ref="staffAddOrUpdate" @refreshDataList="staffRef"></staff-add-or-update>
+    <!--<staff-add-or-update v-if="staffAddOrUpdateVisible" ref="staffAddOrUpdate" @refreshDataList="staffRef"></staff-add-or-update>-->
   </el-dialog>
 </template>
 
 <script>
-  import TeacherAddOrUpdate from './teacher-add-or-update'
-  import StaffAddOrUpdate from './staff-add-or-update'
   export default {
-    components: {
-      StaffAddOrUpdate, // 项目参与者
-      TeacherAddOrUpdate
-    },
     data () {
-      var validateTeacher = (rule, value, callback) => {
-        if (this.teacherLists.length === 0) {
-          callback(new Error('指导老师信息不能为空'))
-        } else {
-          let notNull = false
-          for (let index = 0; index < this.teacherLists.length; index++) {
-            if (this.teacherLists[index].isDel === 0) {
-              notNull = true
-            }
-          }
-          if (notNull) {
-            callback()
-          } else {
-            callback(new Error('指导老师信息不能为空'))
-          }
-        }
-      }
+      // var validateTeacher = (rule, value, callback) => {
+      //   if (this.teacherLists.length === 0) {
+      //     callback(new Error('指导老师信息不能为空'))
+      //   } else {
+      //     let notNull = false
+      //     for (let index = 0; index < this.teacherLists.length; index++) {
+      //       if (this.teacherLists[index].isDel === 0) {
+      //         notNull = true
+      //       }
+      //     }
+      //     if (notNull) {
+      //       callback()
+      //     } else {
+      //       callback(new Error('指导老师信息不能为空'))
+      //     }
+      //   }
+      // }
       var validateAttach = (rule, value, callback) => {
         if (this.attachLists.length === 0) {
           callback(new Error('附件不能为空'))
@@ -284,7 +278,6 @@
         leadVisible: false,
         ptStaffInfoVisible: false,
         projectTeaInfoVisible: false,
-        // stationList: [],
         userTeacherInfoEntities: this.$store.state.userTeacherInfoEntities,
         subjectList: this.$store.state.user.subject,
         instituteList: this.$store.state.user.institute, // 二级学院
@@ -302,9 +295,6 @@
           projectUserId: this.$store.state.user.id,
           declareName: '',
           declareType: '',
-          // matchDescribe: '',
-          // matchBrightSpot: '',
-          // matchExpect: '',
           projectAuditApplyStatus: 0,
           isUpdate: 0,
           isDel: 0
@@ -316,9 +306,6 @@
           declareDescribe: [
             { required: true, message: '大创项目简介', trigger: 'blur' }
           ],
-          // eventId: [
-          //   { required: true, message: '请选择比赛赛事', trigger: 'blur' }
-          // ],
           instituteId: [
             { required: true, message: '请选择所属二级学院', trigger: 'blur' }
           ],
@@ -328,68 +315,33 @@
           declareType: [
             { required: true, message: '请选择申报类型', trigger: 'blur' }
           ],
-          // matchDescribe: [
-          //   { required: true, message: '项目概述不能为空', trigger: 'blur' }
-          // ],
-          // matchBrightSpot: [
-          //   { required: true, message: '项目创新之处和亮点不能为空', trigger: 'blur' }
-          // ],
-          // matchExpect: [
-          //   { required: true, message: '项目预期或已取得的成果不能为空', trigger: 'blur' }
-          // ],,
           attachLists: [
             { validator: validateAttach, trigger: 'blur' }
-          ],
-          teacherLists: [
-            { validator: validateTeacher, trigger: 'blur' }
           ]
         }
       }
     },
     methods: {
       init (id) {
-        this.url = this.$http.adornUrl(`/innovate/declare/attach/upload?token=${this.$cookie.get('token')}`)
-        // this.eventLists = this.$store.state.eventLists
+        this.url = this.$http.adornUrl(`/innovate/check/attach/upload?token=${this.$cookie.get('token')}`)
         this.visible = true
         this.dataListLoading = true
-        this.dataForm.declareId = id || 0
-        // if (this.isAuth('innovate:station:list')) {
-        //   this.$http({
-        //     url: this.$http.adornUrl(`/innovate/base/station/list`),
-        //     method: 'get',
-        //     params: this.$http.adornParams()
-        //   }).then(({data}) => {
-        //     if (data && data.code === 0) {
-        //       this.stationList = data.page.list
-        //     }
-        //   })
-        // }
+        this.dataForm.checkId = id || 0
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
-          if (this.dataForm.declareId) {
-            this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/info/info`),
-              method: 'get',
-              params: this.$http.adornParams({
-                'declareId': this.dataForm.declareId,
-                'apply': 'project_audit_apply_status'
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.dataForm = data.declareInfo.declareInfoEntity
-                this.teacherLists = data.declareInfo.declareTeacherEntities
-                this.personInfoList = data.declareInfo.userPersonInfoEntities
-                this.attachLists = data.declareInfo.declareAttachEntities
-                this.staffInfoLists = data.declareInfo.declareStaffInfoEntities
-                this.awardInfoLists = data.declareInfo.declareAwardEntities
-                this.dataForm.auditNoPass = 0
-                this.isTeacherInfoNull()
-                this.dataListLoading = false
-              }
+          this.$http({
+            url: this.$http.adornUrl(`/innovate/check/info`),
+            method: 'get',
+            params: this.$http.adornParams({
+              'checkId': this.dataForm.checkId
             })
-          } else {
-            this.dataListLoading = false
-          }
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.dataForm = data.info
+              this.dataListLoading = false
+            }
+          })
+          this.dataListLoading = false
         })
       },
       // 表单提交
@@ -405,16 +357,11 @@
             this.dataForm.isUpdate = 0
             this.addLoading = true
             this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/info/${!this.dataForm.declareId ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/innovate/check/info/${!this.dataForm.checkId ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
                 'declareInfoEntity': this.dataForm,
-                // 'projectLegalInfoEntities': this.legalLists,
-                'userPersonInfoEntities': this.personInfoList,
-                'declareTeacherEntities': this.teacherLists,
-                'declareAttachEntities': this.attachLists,
-                'declareStaffInfoEntities': this.staffInfoLists,
-                'declareAwardEntities': this.awardInfoLists
+                'declareAttachEntities': this.attachLists
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
@@ -471,26 +418,6 @@
         }
         this.isTeacherInfoNull()
       },
-      // isTeacherInfoNull () {
-      //   this.isTeacherInfoNullVisible = false
-      //   var teacherNum = 0
-      //   var teacherLength = 0
-      //   for (let item in this.teacherLists) {
-      //     for (let teacher in this.userTeacherInfoEntities) {
-      //       if (this.teacherLists[item].userId !== null) {
-      //         if (this.userTeacherInfoEntities[teacher].userId === this.teacherLists[item].userId && this.teacherLists[item].isDel !== 1) {
-      //           teacherNum++
-      //         }
-      //       }
-      //     }
-      //     if (this.teacherLists[item].isDel !== 1) {
-      //       teacherLength++
-      //     }
-      //   }
-      //   if (teacherNum < teacherLength) {
-      //     this.isTeacherInfoNullVisible = true
-      //   }
-      // },
       isTeacherInfoNull () {
         this.isTeacherInfoNullVisible = false
         var teacherNum = 0
@@ -528,54 +455,15 @@
           this.attachLists.splice(index, 1)
         }
       },
-      addAward (item, index) {
-        this.awardAddOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs['awardAddOrUpdate'].init(item, index + 1)
-        })
-      },
-      delAward: function (data, index) {
-        data.isDel = 1
-        this.awardLists[index] = data
-      },
-      awardRef (data, index) {
-        data.declareId = this.dataForm.declareId
-        this.awardAddOrUpdateVisible = false
-        if (index) {
-          this.awardLists[index - 1] = data
-        } else {
-          this.awardLists.push(data)
-        }
-      },
-      addStaff (item, index) {
-        this.staffAddOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs['staffAddOrUpdate'].init(item, index + 1)
-        })
-      },
-      delStaff: function (data, index) {
-        data.isDel = 1
-        this.staffInfoLists[index] = data
-      },
-      staffRef (data, index) {
-        data.declareId = this.dataForm.declareId
-        this.staffAddOrUpdateVisible = false
-        if (index) {
-          this.staffInfoLists[index - 1] = data
-        } else {
-          this.staffInfoLists.push(data)
-        }
-      },
-
       upLoadSubmit () {
         this.$refs.upLoadFiles.submit()
       },
       upLoadChange () {
         this.upLoadData = {
-          'declareName': this.dataForm.declareName,
+          'declareId': this.dataForm.declareInfoEntity.declareId,
           'token': this.$cookie.get('token')
         }
-        this.upLoadUrl = this.$http.adornUrl(`/innovate/declare/attach/upload`)
+        this.upLoadUrl = this.$http.adornUrl(`/innovate/check/attach/upload`)
       },
       upLoadRemove (file, fileList) {
         console.log(file, fileList)
@@ -585,7 +473,7 @@
       },
       upLoadSuccess (data) {
         if (data && data.code === 0) {
-          this.attachLists.push(data.declareAttachEntity)
+          this.attachLists.push(data.checkAttachEntity)
         } else {
           this.$message.error(data.msg)
         }
