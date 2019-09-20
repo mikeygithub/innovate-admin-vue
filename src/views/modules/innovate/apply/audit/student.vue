@@ -220,7 +220,8 @@
             this.totalPage = data.page.totalCount
             for (let index = 0; index < this.dataList.length; index++) {
               if (this.applyDeclareIsVisible(this.dataList[index].declareInfoEntity) === true) {
-                this.applyDeclareHandle(this.dataList[index].declareInfoEntity.declareId)
+                // this.applyDeclareHandle(this.dataList[index].declareInfoEntity.declareId)
+                this.$message.warning('请您尽快提交申请！')
               }
             }
           } else {

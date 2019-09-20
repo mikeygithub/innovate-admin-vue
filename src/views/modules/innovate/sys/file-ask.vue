@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('check:innovatefileask:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('check:innovatefileask:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('innovate:file:ask:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('innovate:file:ask:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -32,7 +32,13 @@
         prop="fileAskType"
         header-align="center"
         align="center"
-        label="类型：0 大创,1 中期检查,2 赛事,3 结题">
+        label="类型">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.fileAskType === 1" size="small">大创</el-tag>
+          <el-tag v-if="scope.row.fileAskType === 2" size="small">中期检查</el-tag>
+          <el-tag v-if="scope.row.fileAskType === 3" size="small">赛事</el-tag>
+          <el-tag v-if="scope.row.fileAskType === 4" size="small">结题</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="fileAskContent"
@@ -44,6 +50,7 @@
         prop="fileAskTime"
         header-align="center"
         align="center"
+        :formatter="dateFormat"
         label="年度">
       </el-table-column>
       <el-table-column
@@ -106,7 +113,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/check/innovatefileask/list'),
+          url: this.$http.adornUrl('/innovate/sys/file/ask/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -157,7 +164,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/check/innovatefileask/delete'),
+            url: this.$http.adornUrl('/innovate/sys/file/ask/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -175,6 +182,12 @@
             }
           })
         })
+      },
+      // 时间格式化
+      // 多选
+      dateFormat (row, column) {
+        var t = new Date(row.fileAskTime)
+        return t.getFullYear() + '年'
       }
     }
   }
