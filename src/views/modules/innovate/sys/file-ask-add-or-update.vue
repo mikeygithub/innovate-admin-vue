@@ -75,7 +75,7 @@
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.fileAskId) {
             this.$http({
-              url: this.$http.adornUrl(`/innovate/sys/file/ask/${this.dataForm.fileAskId}`),
+              url: this.$http.adornUrl(`/innovate/sys/file/ask/info/${this.dataForm.fileAskId}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
