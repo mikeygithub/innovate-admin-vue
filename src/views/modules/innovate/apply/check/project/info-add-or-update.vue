@@ -111,33 +111,34 @@
           <!--</el-form-item>-->
         <!--</el-col>-->
 
-        <el-col :span="24">
-          <el-form-item label="附件" prop="attachLists">
-            <template v-for="(item,index) in attachLists" v-if="item.isDel !== 1">
-              <el-col :span="24">
-                <el-tag style="margin-right: 1rem"
-                        v-text="item.attachName">
-                </el-tag>
-                <el-button size="mini" type="danger" @click="delAttach(item, index)">删除</el-button>
-              </el-col>
-            </template>
-          </el-form-item>
-        </el-col>
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="附件" prop="attachLists">-->
+            <!--<template v-for="(item,index) in attachLists" v-if="item.isDel !== 1">-->
+              <!--<el-col :span="24">-->
+                <!--<el-tag style="margin-right: 1rem"-->
+                        <!--v-text="item.attachName">-->
+                <!--</el-tag>-->
+                <!--<el-button size="mini" type="danger" @click="delAttach(item, index)">删除</el-button>-->
+              <!--</el-col>-->
+            <!--</template>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
         <!--独立附件start-->
-        <el-col :span="24">
-        <el-form-item label="提交申报书">
-          <el-upload
-            class="upload-demo"
-            :action="url"
-            :data="{declareId: dataForm.declareInfoEntity.declareId}"
-            :on-success="successHandle1">
-            <el-button size="small" type="primary">点击上传</el-button>
-          <label>
-            （以附件形式上传提交申报书的扫描件）
-          </label>
-          </el-upload>
-        </el-form-item>
-        </el-col>
+        <!--<el-col :span="24">-->
+        <!--<el-form-item label="提交申报书">-->
+          <!--<el-upload-->
+            <!--class="upload-demo"-->
+            <!--:action="url"-->
+            <!--:data="{declareId: dataForm.declareInfoEntity.declareId}"-->
+            <!--:on-success="successHandle1">-->
+            <!--<el-button size="small" type="primary">点击上传</el-button>-->
+          <!--<label>-->
+            <!--（以附件形式上传提交申报书的扫描件）-->
+          <!--</label>-->
+          <!--</el-upload>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+
         <!--独立附件end-->
         <!--项目参与学生信息表独立附件start-->
         <!--<el-col :span="24">-->
@@ -171,38 +172,48 @@
           <!--</el-form-item>-->
         <!--</el-col>-->
         <!--项目指导教师一览表独立附件end-->
-        <!--<el-col :span="24">-->
-          <!--<el-form-item label="附件列表" prop="attachLists">-->
-            <!--<template v-for="(item,index) in attachLists" v-if="item.isDel !== 1">-->
-              <!--<el-col :span="24">-->
-                <!--<el-tag style="margin-right: 1rem"-->
-                        <!--v-text="item.attachName">-->
-                <!--</el-tag>-->
-                <!--<el-button size="mini" type="danger" @click="delAttach(item, index)">删除</el-button>-->
-              <!--</el-col>-->
-            <!--</template>-->
-          <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--<el-col :span="24">-->
-          <!--<el-form-item label="文件上传">-->
-            <!--<el-upload-->
-              <!--multiple-->
-              <!--ref="upLoadFiles"-->
-              <!--list-type="card"-->
-              <!--:data="upLoadData"-->
-              <!--:action="upLoadUrl"-->
-              <!--:on-preview="upLoadPreview"-->
-              <!--:on-remove="upLoadRemove"-->
-              <!--:on-success="upLoadSuccess"-->
-              <!--:on-change="upLoadChange"-->
-              <!--:file-list="fileList"-->
-              <!--:auto-upload="false">-->
-              <!--<el-button slot="trigger" size="small" type="primary">选取文件</el-button>-->
-              <!--<el-button style="margin-left: 10px;" size="small" type="success" @click="upLoadSubmit">添加到附件列表</el-button>-->
-              <!--<div slot="tip" class="el-upload__tip">注意文件需要添加到附件列表后确定保存才能添加成功</div>-->
-            <!--</el-upload>-->
-          <!--</el-form-item>-->
-        <!--</el-col>-->
+        <el-col :span="24">
+          <template>
+            <el-alert
+              title="上传附件要求"
+              type="success"
+              description="这是一句绕口令：黑灰化肥会挥发发灰黑化肥挥发；灰黑化肥会挥发发黑灰化肥发挥。 黑灰化肥会挥发发灰黑化肥黑灰挥发化为灰……">
+            </el-alert>
+          </template>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="附件列表" prop="attachLists">
+            <template v-for="(item,index) in attachLists" v-if="item.isDel !== 1">
+              <el-col :span="24">
+                <el-tag style="margin-right: 1rem"
+                        v-text="item.attachName">
+                </el-tag>
+                <el-button size="mini" type="danger" @click="delAttach(item, index)">删除</el-button>
+              </el-col>
+            </template>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="24">
+          <el-form-item label="文件上传">
+            <el-upload
+              multiple
+              ref="upLoadFiles"
+              list-type="card"
+              :data="upLoadData"
+              :action="upLoadUrl"
+              :on-preview="upLoadPreview"
+              :on-remove="upLoadRemove"
+              :on-success="upLoadSuccess"
+              :on-change="upLoadChange"
+              :file-list="fileList"
+              :auto-upload="false">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="upLoadSubmit">添加到附件列表</el-button>
+              <div slot="tip" class="el-upload__tip">注意文件需要添加到附件列表后确定保存才能添加成功</div>
+            </el-upload>
+          </el-form-item>
+        </el-col>
       </el-form>
     </el-row>
     <span slot="footer" class="dialog-footer">
@@ -289,6 +300,7 @@
         ],
         dataForm: {
           declareId: '',
+          checkId: '',
           eventId: '',
           instituteId: '',
           subjectId: '',
@@ -301,22 +313,22 @@
         },
         dataRule: {
           declareName: [
-            { required: true, message: '大创项目名称不能为空', trigger: 'blur' }
+            {required: true, message: '大创项目名称不能为空', trigger: 'blur'}
           ],
           declareDescribe: [
-            { required: true, message: '大创项目简介', trigger: 'blur' }
+            {required: true, message: '大创项目简介', trigger: 'blur'}
           ],
           instituteId: [
-            { required: true, message: '请选择所属二级学院', trigger: 'blur' }
+            {required: true, message: '请选择所属二级学院', trigger: 'blur'}
           ],
           subjectId: [
-            { required: true, message: '请选择所属学科', trigger: 'blur' }
+            {required: true, message: '请选择所属学科', trigger: 'blur'}
           ],
           declareType: [
-            { required: true, message: '请选择申报类型', trigger: 'blur' }
+            {required: true, message: '请选择申报类型', trigger: 'blur'}
           ],
           attachLists: [
-            { validator: validateAttach, trigger: 'blur' }
+            {validator: validateAttach, trigger: 'blur'}
           ]
         }
       }
@@ -328,7 +340,7 @@
         this.dataListLoading = true
         this.dataForm.checkId = id || 0
         this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
+          // this.$refs['dataForm'].resetFields()
           this.$http({
             url: this.$http.adornUrl(`/innovate/check/info`),
             method: 'get',
@@ -337,7 +349,9 @@
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
+              console.log(data.info)
               this.dataForm = data.info
+              this.attachLists = data.info.innovateCheckAttachEntities
               this.dataListLoading = false
             }
           })
@@ -346,43 +360,34 @@
       },
       // 表单提交
       dataFormSubmit () {
-        this.$refs['dataForm'].validate((valid) => {
-          this.dataForm.declareId = this.dataForm.declareId || undefined
-          if (valid) {
-            if (this.dataForm.declareId) {
-              this.dataForm.projectSetDate = Number(this.dataForm.projectSetDate)
-              this.dataForm.projectInDate = Number(this.dataForm.projectInDate)
-              this.dataForm.projectRegDate = Number(this.dataForm.projectRegDate)
-            }
-            this.dataForm.isUpdate = 0
-            this.addLoading = true
-            this.$http({
-              url: this.$http.adornUrl(`/innovate/check/info/${!this.dataForm.checkId ? 'save' : 'update'}`),
-              method: 'post',
-              data: this.$http.adornData({
-                'declareInfoEntity': this.dataForm,
-                'declareAttachEntities': this.attachLists
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
-                })
-              } else {
-                this.$message.error(data.msg)
-                this.addLoading = true
+        this.dataForm.isUpdate = 0
+        this.addLoading = true
+        this.$http({
+          url: this.$http.adornUrl(`/innovate/check/${!this.dataForm.checkId ? 'save' : 'update'}`),
+          method: 'post',
+          data: this.$http.adornData({
+            'innovateCheckInfoEntity': this.dataForm.innovateCheckInfoEntity,
+            'innovateCheckAttachEntities': this.attachLists,
+            'innovateCheckRetreatEntities': this.dataForm.innovateCheckRetreatEntities
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.visible = false
+                this.$emit('refreshDataList')
               }
             })
+          } else {
+            this.$message.error(data.msg)
+            this.addLoading = true
           }
         })
       },
-      // 子组件的各类方法
+    // 子组件的各类方法
       addVisible (list) {
         let isDelNum = 0
         let visible = false
@@ -396,57 +401,6 @@
         }
         return visible
       },
-      addTeacher (item, index) {
-        this.teacherAddOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs['teacherAddOrUpdate'].init(item, index + 1)
-        })
-        this.isTeacherInfoNull()
-      },
-      delTeacher: function (data, index) {
-        data.isDel = 1
-        this.teacherLists[index] = data
-        this.isTeacherInfoNull()
-      },
-      teacherRef (data, index) {
-        data.declareId = this.dataForm.declareId
-        this.teacherAddOrUpdateVisible = false
-        if (index) {
-          this.teacherLists[index - 1] = data
-        } else {
-          this.teacherLists.push(data)
-        }
-        this.isTeacherInfoNull()
-      },
-      isTeacherInfoNull () {
-        this.isTeacherInfoNullVisible = false
-        var teacherNum = 0
-        var teacherLength = 0
-        for (let item in this.teacherLists) {
-          for (let teacher in this.userTeacherInfoEntities) {
-            if (this.teacherLists[item].userId !== null) {
-              if (this.userTeacherInfoEntities[teacher].userId === this.teacherLists[item].userId && this.teacherLists[item].isDel !== 1) {
-                teacherNum++
-              }
-            }
-          }
-          if (this.teacherLists[item].isDel !== 1) {
-            teacherLength++
-          }
-        }
-        if (teacherNum < teacherLength) {
-          this.isTeacherInfoNullVisible = true
-        }
-      },
-      personRef (data, index) {
-        data.declareId = this.dataForm.declareId
-        this.personAddOrUpdateVisible = false
-        if (index) {
-          this.personInfoList[index - 1] = data
-        } else {
-          this.personInfoList.push(data)
-        }
-      },
       delAttach: function (data, index) {
         if (data.isDel !== 1) {
           data.isDel = 1
@@ -457,9 +411,11 @@
       },
       upLoadSubmit () {
         this.$refs.upLoadFiles.submit()
+        // this.$refs.upLoadFiles.clearFiles()
       },
       upLoadChange () {
         this.upLoadData = {
+          'checkId': this.dataForm.innovateCheckInfoEntity.checkId,
           'declareId': this.dataForm.declareInfoEntity.declareId,
           'token': this.$cookie.get('token')
         }
@@ -478,12 +434,11 @@
           this.$message.error(data.msg)
         }
       },
-
       closeDialog () {
         this.visible = false
         this.$emit('refreshDataList')
       },
-      // 上传成功
+    // 上传成功
       successHandle1 (response, file, fileList) {
         if (response && response.code === 0) {
           this.attachLists.push(response.declareAttachEntity)
@@ -491,21 +446,6 @@
           this.$message.error(response.msg)
         }
       }
-      // successHandle2 (response, file, fileList) {
-      //   if (response && response.code === 0) {
-      //     this.attachLists.push(response.declareAttachEntity)
-      //   } else {
-      //     this.$message.error(response.msg)
-      //   }
-      // },
-      // successHandle3 (response, file, fileList) {
-      //   if (response && response.code === 0) {
-      //     this.attachLists.push(response.declareAttachEntity)
-      //   } else {
-      //     this.$message.error(response.msg)
-      //   }
-      // }
-
     }
   }
 </script>

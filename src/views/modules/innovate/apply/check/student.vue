@@ -16,6 +16,12 @@
         <el-button @click="getDataList()">查询</el-button>
       </el-form-item>
     </el-form>
+    <el-card>
+      <el-radio-group v-model="hasApply" @change="getDataList">
+        <el-radio label="0">未提交</el-radio>
+        <el-radio label="1">已提交</el-radio>
+      </el-radio-group>
+    </el-card>
     <el-table
       :data="dataList"
       border
@@ -107,8 +113,11 @@
         align="center"
         label="提交状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 0" size="small">未提交</el-tag>
-          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus != 0" size="small">已经提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 0" size="small">未完善信息</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 1" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 2" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 3" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 4" size="small">已提交</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -126,7 +135,7 @@
           <el-button v-if="isUpadate(scope.row.declareInfoEntity)" type="text" size="small" @click="isUpdateHandle(scope.row.declareInfoEntity.declareId)">申请修改</el-button>
           <el-button v-if="isUpadate(scope.row.declareInfoEntity)" type="text" size="small" @click="updateHistoryHandle(scope.row.declareInfoEntity.declareId)">申请记录</el-button>
           <br v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)">
-          <el-button v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyDeclareHandle(scope.row.declareInfoEntity.declareId)">提交大创申请</el-button>
+          <el-button v-if="applyCheckIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="applyDeclareHandle(scope.row.innovateCheckInfoEntity.checkId)">提交</el-button>
           </template>
       </el-table-column>
     </el-table>
@@ -158,6 +167,7 @@
       return {
         projectList: [],
         userTeacherInfoEntities: this.$store.state.userTeacherInfoEntities,
+        hasApply: '0',
         dataForm: {
           projectName: '',
           baseId: '',
@@ -214,13 +224,13 @@
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,
+            'hasApply': this.hasApply,
             'checkNoPass': 0,
             'checkTime': this.dataForm.checkTime.getFullYear(),
             'isDel': 0
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            // console.log(data.page.list)
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
           } else {
@@ -281,6 +291,16 @@
         }
         return false
       },
+      applyCheckIsVisible (item) {
+        if (this.isAuth('innovate:check:info')) {
+          if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+            if (item.projectCheckApplyStatus === 0) {
+              return true
+            }
+          }
+        }
+        return false
+      },
       // 详情
       detailHandle (id) {
         this.detailVisible = true
@@ -290,17 +310,17 @@
       },
       // 审批
       applyDeclareHandle (id) {
-        this.$confirm('此操作将使该项目进入不可修改状态，并进入比赛审批流程，是否继续?', '提示', {
+        this.$confirm('此操作将使该项目提交中期检查，并进入审批流程，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/innovate/check/apply/apply'),
+            url: this.$http.adornUrl('/innovate/check/apply'),
             method: 'post',
             params: this.$http.adornParams({
               'checkId': id,
-              'apply': 'project_check_apply_status'
+              'projectCheckApplyStatus': 1
             }, false)
           }).then(({data}) => {
             this.$message({
