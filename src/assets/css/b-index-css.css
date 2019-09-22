@@ -86,7 +86,11 @@ body{background-color:#f6f6f8;}
 .app-form:hover{
     border-color: #00d7c6;
 }
-.app-form form{height: 100%;}
+
+
+
+
+/*.app-form form{height: 100%;}*/
 .app-seach{
     position: absolute;
     top: 0;
