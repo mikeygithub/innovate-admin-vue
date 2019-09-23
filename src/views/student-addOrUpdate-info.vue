@@ -121,7 +121,8 @@
       </el-form>
     </el-row>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
+      <!--<el-button @click="visible = false">取消</el-button>-->
+      <el-button @click="noPerfectInfo()">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()" :loading="addLoading">确定</el-button>
     </span>
   </el-dialog>
@@ -339,6 +340,22 @@
               }
             })
           }
+        })
+      },
+      // 取消完善个人信息
+      noPerfectInfo () {
+        this.$confirm('不完善个人信息，将无法正常进行大创申报，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.visible = false
+        }).catch(() => {
+          this.visible = true
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消申请'
+          // })
         })
       }
     }

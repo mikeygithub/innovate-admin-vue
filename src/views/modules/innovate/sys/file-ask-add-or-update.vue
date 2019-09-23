@@ -20,11 +20,10 @@
           type="year"
           placeholder="请选择年度">
         </el-date-picker>
-        <!--<el-input v-model="dataForm.fileAskTime" placeholder="年度"></el-input>-->
       </el-form-item>
-      <el-form-item label="删除标识" prop="isDel">
-        <el-input v-model="dataForm.isDel" placeholder="删除标识"></el-input>
-      </el-form-item>
+      <!--<el-form-item label="删除标识" prop="isDel">-->
+        <!--<el-input v-model="dataForm.isDel" placeholder="删除标识"></el-input>-->
+      <!--</el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -43,7 +42,7 @@
           fileAskType: '',
           fileAskContent: '',
           fileAskTime: new Date(),
-          isDel: ''
+          isDel: 0
         },
         fileAskTypeList: [
           {value: 1, label: '大创'},
@@ -94,7 +93,26 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           this.dataForm.fileAskId = this.dataForm.fileAskId || undefined
-          console.log(this.dataForm.fileAskTime.getTime())
+          // 验证填写时间的该类新要求是否存在：类型=>1 大创,2 中期检查,3 赛事,4 结题
+          // if (!this.dataForm.fileAskId) {
+          //   this.$http({
+          //     url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
+          //     method: 'get',
+          //     params: this.$http.adornParams({
+          //       'fileAskType': this.dataForm.fileAskType,
+          //       'fileAskTime': this.dataForm.fileAskTime.getTime()
+          //     })
+          //   }).then(({data}) => {
+          //     if (data && data.code === 0) {
+          //       if (data.fileAsk != null) {
+          //         switch (this.dataForm.fileAskType) {
+          //           case 1: this.$message.error("")
+          //         }
+          //         return ;
+          //       }
+          //     }
+          //   })
+          // }
           if (valid) {
             this.$http({
               url: this.$http.adornUrl(`/innovate/sys/file/ask/${!this.dataForm.fileAskId ? 'save' : 'update'}`),
@@ -103,7 +121,7 @@
                 'fileAskId': this.dataForm.fileAskId || undefined,
                 'fileAskType': this.dataForm.fileAskType,
                 'fileAskContent': this.dataForm.fileAskContent,
-                'fileAskTime': this.dataForm.fileAskTime.getTime(),
+                'fileAskTime': new Date(this.dataForm.fileAskTime).getTime(),
                 'isDel': this.dataForm.isDel
               })
             }).then(({data}) => {

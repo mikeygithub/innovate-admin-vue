@@ -1,9 +1,6 @@
 <template>
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <!--<el-form-item>-->
-        <!--<el-input v-model="dataForm.fileAskType" placeholder="请选择类型" clearable></el-input>-->
-      <!--</el-form-item>-->
       <el-form-item>
         <el-select v-model="dataForm.fileAskType" placeholder="请选择类型">
           <el-option
@@ -59,7 +56,7 @@
         align="center"
         label="类型">
         <template slot-scope="scope">
-          <el-tag v-for="item in fileAskTypeList" v-if="scope.row.fileAskType === item.value" v-text="item.label" size="small">大创</el-tag>
+          <el-tag v-for="(item,index) in fileAskTypeList" :key="index" v-if="scope.row.fileAskType === item.value" v-text="item.label" size="small">大创</el-tag>
           <!--<el-tag v-if="scope.row.fileAskType === 2" size="small">中期检查</el-tag>-->
           <!--<el-tag v-if="scope.row.fileAskType === 3" size="small">赛事</el-tag>-->
           <!--<el-tag v-if="scope.row.fileAskType === 4" size="small">结题</el-tag>-->
@@ -78,12 +75,12 @@
         :formatter="dateFormat"
         label="年度">
       </el-table-column>
-      <el-table-column
-        prop="isDel"
-        header-align="center"
-        align="center"
-        label="删除标识">
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="isDel"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="删除标识">-->
+      <!--</el-table-column>-->
       <el-table-column
         fixed="right"
         header-align="center"
@@ -117,7 +114,8 @@
       return {
         dataForm: {
           fileAskType: '',
-          fileAskTime: new Date()
+          fileAskTime: new Date(),
+          idDel: 0
         },
         fileAskTypeList: [
           {value: 1, label: '大创'},
@@ -151,7 +149,8 @@
             'fileAskType': this.dataForm.fileAskType,
             'fileAskTime': this.dataForm.fileAskTime.getFullYear(),
             'currPage': this.pageIndex,
-            'pageSize': this.pageSize
+            'pageSize': this.pageSize,
+            'isDel': 0
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

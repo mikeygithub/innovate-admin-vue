@@ -58,6 +58,17 @@
             </template>
           </el-form-item>
         </el-col>
+
+        <el-col :span="24">
+          <template>
+            <el-alert
+              title="附件要求"
+              type="success"
+              :description="fileAskContent"
+              show-icon>
+            </el-alert>
+          </template>
+        </el-col>
         <!--独立附件start-->
         <el-col :span="24">
           <el-form-item label="项目进展报告" prop="reportSalesName">
@@ -150,6 +161,7 @@
         url: '',
         upLoadUrl: '',
         upLoadData: {},
+        fileAskContent: '无',
         tables: [],
         fileList: [],
         teacherLists: [],
@@ -256,6 +268,19 @@
             })
           } else {
             this.dataListLoading = false
+          }
+        })
+        // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
+        this.$http({
+          url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'fileAskType': 4,
+            'fileAskTime': new Date().getFullYear()
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.fileAskContent = data.fileAsk.fileAskContent
           }
         })
       },
