@@ -2,12 +2,27 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
+        <el-select v-model="dataForm.fileAskType" placeholder="请选择类型">
+          <el-option
+            v-for="fileAsk in fileAskTypeList"
+            :key="fileAsk.label"
+            :label="fileAsk.label"
+            :value="fileAsk.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
+        <!--年度 start-->
+        <el-date-picker
+          v-model="dataForm.fileAskTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
+        <!--年度 end-->
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('check:innovatefileask:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('check:innovatefileask:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('innovate:file:ask:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('innovate:file:ask:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -22,17 +37,30 @@
         align="center"
         width="50">
       </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="fileAskId"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="ID">-->
+      <!--</el-table-column>-->
       <el-table-column
-        prop="fileAskId"
         header-align="center"
+        type="index"
         align="center"
-        label="上传文件要求">
+        width="60"
+        label="序号">
       </el-table-column>
       <el-table-column
         prop="fileAskType"
         header-align="center"
         align="center"
-        label="类型：0 大创,1 中期检查,2 赛事,3 结题">
+        label="类型">
+        <template slot-scope="scope">
+          <el-tag v-for="(item,index) in fileAskTypeList" :key="index" v-if="scope.row.fileAskType === item.value" v-text="item.label" size="small">大创</el-tag>
+          <!--<el-tag v-if="scope.row.fileAskType === 2" size="small">中期检查</el-tag>-->
+          <!--<el-tag v-if="scope.row.fileAskType === 3" size="small">赛事</el-tag>-->
+          <!--<el-tag v-if="scope.row.fileAskType === 4" size="small">结题</el-tag>-->
+        </template>
       </el-table-column>
       <el-table-column
         prop="fileAskContent"
@@ -44,14 +72,15 @@
         prop="fileAskTime"
         header-align="center"
         align="center"
+        :formatter="dateFormat"
         label="年度">
       </el-table-column>
-      <el-table-column
-        prop="isDel"
-        header-align="center"
-        align="center"
-        label="删除标识">
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="isDel"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="删除标识">-->
+      <!--</el-table-column>-->
       <el-table-column
         fixed="right"
         header-align="center"
@@ -84,8 +113,16 @@
     data () {
       return {
         dataForm: {
-          key: ''
+          fileAskType: '',
+          fileAskTime: new Date(),
+          idDel: 0
         },
+        fileAskTypeList: [
+          {value: 1, label: '大创'},
+          {value: 2, label: '中期检查'},
+          {value: 3, label: '赛事'},
+          {value: 4, label: '结题'}
+        ],
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
@@ -106,12 +143,14 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/check/innovatefileask/list'),
+          url: this.$http.adornUrl('/innovate/sys/file/ask/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'key': this.dataForm.key
+            'fileAskType': this.dataForm.fileAskType,
+            'fileAskTime': this.dataForm.fileAskTime.getFullYear(),
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'isDel': 0
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -157,7 +196,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/check/innovatefileask/delete'),
+            url: this.$http.adornUrl('/innovate/sys/file/ask/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -175,6 +214,12 @@
             }
           })
         })
+      },
+      // 时间格式化
+      // 多选
+      dateFormat (row, column) {
+        var t = new Date(row.fileAskTime)
+        return t.getFullYear() + '年'
       }
     }
   }
