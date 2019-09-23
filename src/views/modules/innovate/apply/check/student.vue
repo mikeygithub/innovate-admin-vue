@@ -3,6 +3,7 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-date-picker
+          @change="getDataList"
           v-model="dataForm.checkTime"
           align="right"
           type="year"
@@ -18,8 +19,8 @@
     </el-form>
     <el-card>
       <el-radio-group v-model="hasApply" @change="getDataList">
-        <el-radio label="0">未提交</el-radio>
-        <el-radio label="1">已提交</el-radio>
+        <el-radio label="1">未提交</el-radio>
+        <el-radio label="2">已提交</el-radio>
       </el-radio-group>
     </el-card>
     <el-table
@@ -167,7 +168,7 @@
       return {
         projectList: [],
         userTeacherInfoEntities: this.$store.state.userTeacherInfoEntities,
-        hasApply: '0',
+        hasApply: '1',
         dataForm: {
           projectName: '',
           baseId: '',
@@ -226,6 +227,8 @@
             'userId': this.$store.state.user.id,
             'hasApply': this.hasApply,
             'checkNoPass': 0,
+            'projectCheckApplyStatus': 0,
+            'projectName': this.dataForm.projectName,
             'checkTime': this.dataForm.checkTime.getFullYear(),
             'isDel': 0
           })

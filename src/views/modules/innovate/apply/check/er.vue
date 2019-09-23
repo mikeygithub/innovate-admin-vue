@@ -3,7 +3,8 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-date-picker
-          v-model="dataForm.declareTime"
+          @change="getDataList"
+          v-model="dataForm.checkTime"
           align="right"
           type="year"
           placeholder="请选择年度">
@@ -14,8 +15,6 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('innovate:project:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('innovate:project:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-card>
@@ -60,16 +59,16 @@
           <el-row>
             <el-card style=": 0.1rem">
               <el-col :span="3">
-                <el-tag>大创申请审批进度</el-tag>
+                <el-tag>中期检查审批进度</el-tag>
               </el-col>
               <el-col :span="21">
                 <el-steps
-                  :active="props.row.declareInfoEntity.projectAuditApplyStatus"
+                  :active="props.row.innovateCheckInfoEntity.projectCheckApplyStatus"
                   finish-status="success">
                   <el-step title="项目负责人提交"></el-step>
-                  <el-step title="指导老师审批"></el-step>
+                  <!--<el-step title="指导老师审批"></el-step>-->
                   <el-step title="二级学院审批"></el-step>
-                  <el-step title="管理员审批"></el-step>
+                  <el-step title="管理员分配评委组"></el-step>
                   <el-step title="评委审批"></el-step>
                   <el-step title="管理员审批"></el-step>
                   <!--<el-step title="超级管理员审批"></el-step>-->
@@ -84,7 +83,7 @@
         prop="declareInfoEntity.declareName"
         header-align="center"
         align="center"
-        label="大创项目名称">
+        label="中期检查项目名称">
       </el-table-column>
       <el-table-column
         sortable
@@ -103,10 +102,23 @@
         prop="declareInfoEntity.declareTime"
         header-align="center"
         align="center"
-        label="申报时间">
+        label="创建时间">
         <template slot-scope="scope">
-          <!--<el-tag v-if="scope.row.declareInfoEntity.declareTime === null" size="small">未申报</el-tag>-->
-          <el-tag v-if="scope.row.declareInfoEntity.declareTime != null" size="small">{{scope.row.declareInfoEntity.declareTime}}</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.checkTime != null" size="small">{{scope.row.innovateCheckInfoEntity.checkTime}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        sortable
+        prop="declareInfoEntity.declareTime"
+        header-align="center"
+        align="center"
+        label="提交状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 0" size="small">未完善信息</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 1" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 2" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 3" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 4" size="small">已提交</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -116,12 +128,10 @@
         width="220"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('innovate:declare:list')" type="text" size="small" @click="detailHandle(scope.row.declareInfoEntity.declareId)">详情</el-button>
-          <el-button v-if="addOrUpadate(scope.row.declareInfoEntity)" type="text" size="small" @click="addOrUpdateHandle(scope.row.declareInfoEntity.declareId)">修改</el-button>
-          <el-button v-if="isDelete(scope.row.declareInfoEntity)" type="text" size="small" @click="deleteHandle(scope.row.declareInfoEntity.matchId)">删除</el-button>
-          <br v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)">
-          <el-button v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyDeclareHandle(scope.row.declareInfoEntity.declareId)">通过</el-button>
-          <el-button v-if="retreatIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.declareInfoEntity)">不通过</el-button>
+          <el-button v-if="isAuth('innovate:project:list')" type="text" size="small" @click="detailHandle(scope.row.declareInfoEntity.declareId)">详情</el-button>
+          <br v-if="applyDeclareIsVisible(scope.row.innovateCheckInfoEntity)">
+          <el-button v-if="applyCheckPassIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="applyDeclareHandle(scope.row.innovateCheckInfoEntity.checkId)">通过</el-button>
+          <el-button v-if="applyCheckPassIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.innovateCheckInfoEntity)">不通过</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -154,13 +164,12 @@
     data () {
       return {
         projectList: [],
-        // eventLists: [],
         userTeacherInfoEntities: this.$store.state.userTeacherInfoEntities,
         hasApply: '1',
         dataForm: {
           projectName: '',
           baseId: '',
-          declareTime: new Date(),
+          checkTime: new Date(),
           idDel: 0
         },
         statusList: [
@@ -186,16 +195,16 @@
         detailVisible: false,
         applyVisible: false,
         isUpdateVisible: false,
-        retreatVisible: false,
-        isHistoyVisible: false
+        isHistoyVisible: false,
+        retreatVisible: false
       }
     },
     components: {
       UpdateHistory,
       UpdateAddOrUpdate,
-      RetreatAddOrUpdate,
       AddOrUpdate,
-      Detail
+      Detail,
+      RetreatAddOrUpdate
     },
     activated () {
       this.getDataList()
@@ -208,24 +217,18 @@
         this.detailVisible = false
         this.isUpdateVisible = false
         this.isHistoyVisible = false
+        this.retreatVisible = false
         this.$http({
-          url: this.$http.adornUrl('/innovate/declare/info/list'),
+          url: this.$http.adornUrl('/innovate/check/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'projectName': this.dataForm.projectName,
-            'declareTime': this.dataForm.declareTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
-            'userId': this.$store.state.user.id,
             'hasApply': this.hasApply,
-            'noPass': 'audit_no_pass',
-            'noPassStatus': 0,
-            'erInstituteId': this.$store.state.user.instituteId,
-            'isEr': true,
-            // 'isTeacher': true,
-            // 'isStudent': true,
-            'apply': 'project_audit_apply_status',
-            'applyStatus': 2,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 1,
+            'projectName': this.dataForm.projectName,
+            'checkTime': this.dataForm.checkTime.getFullYear(),
             'isDel': 0
           })
         }).then(({data}) => {
@@ -276,9 +279,9 @@
         })
       },
       applyDeclareIsVisible (item) {
-        if (this.isAuth('innovate:project:apply:audit')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 2) {
+        if (this.isAuth('innovate:check:info')) {
+          if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+            if (item.projectCheckApplyStatus === 1) {
               let roleIdList = this.$store.state.user.roleIdList
               for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
                 if (roleIdList[roleIndex] === 4) {
@@ -290,16 +293,21 @@
         }
         return false
       },
-      retreatIsVisible (item) {
-        if (this.isAuth('innovate:declare:retreat')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 2) {
-              let roleIdList = this.$store.state.user.roleIdList
-              for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
-                if (roleIdList[roleIndex] === 4) {
-                  return true
-                }
-              }
+      applyCheckIsVisible (item) {
+        if (this.isAuth('innovate:check:info')) {
+          if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+            if (item.projectCheckApplyStatus === 0) {
+              return true
+            }
+          }
+        }
+        return false
+      },
+      applyCheckPassIsVisible (item) {
+        if (this.isAuth('innovate:check:info')) {
+          if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+            if (item.projectCheckApplyStatus === 1) {
+              return true
             }
           }
         }
@@ -312,27 +320,19 @@
           this.$refs.detail.init(id)
         })
       },
-      // 不通过
-      retreatHandle (item) {
-        this.retreatVisible = true
-        this.$nextTick(() => {
-          this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
-        })
-      },
       // 审批
       applyDeclareHandle (id) {
-        this.$confirm('此操作将使该项目进入下一个审批流程，是否继续?', '提示', {
+        this.$confirm('此操作将使该项目提交中期检查，并进入审批流程，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/innovate/declare/apply/apply'),
+            url: this.$http.adornUrl('/innovate/check/apply'),
             method: 'post',
             params: this.$http.adornParams({
-              'declareId': id,
-              'apply': 'project_audit_apply_status',
-              'roleId': 4
+              'checkId': id,
+              'projectCheckApplyStatus': 2
             }, false)
           }).then(({data}) => {
             this.$message({
@@ -349,64 +349,26 @@
         })
       },
       addOrUpadate (item) {
-        if ((item.projectAuditApplyStatus === 0) &&
-          this.isAuth('innovate:declare:update')) {
+        if ((item.projectCheckApplyStatus === 0)) {
           return true
         }
       },
       isDelete (item) {
-        if ((item.projectAuditApplyStatus === 0) &&
-          this.isAuth('innovate:declare:delete')) {
+        if ((item.projectCheckApplyStatus === 0) && this.isAuth('innovate:declare:delete')) {
           return true
         }
       },
-      // 删除
-      deleteHandle (id) {
-        var canDelete = true
-        var declareIds = id ? [id] : this.dataListSelections.map(item => {
-          if ((item.projectInfoEntity.projectAuditApplyStatus > 0) ||
-            !this.isAuth('innovate:declare:delete')) {
-            canDelete = false
-          } else {
-            canDelete = false
-          }
-          return item.projectInfoEntity.declareId
+      isUpadate (item) {
+        if (item.projectStatus === 1) {
+          return true
+        }
+      },
+      // 不通过
+      retreatHandle (item) {
+        this.retreatVisible = true
+        this.$nextTick(() => {
+          this.$refs.retreat.init(item.checkId, 'project_check_apply_status', item.projectCheckApplyStatus)
         })
-        this.$confirm(`确定要进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if (canDelete) {
-            this.$http({
-              url: this.$http.adornUrl('/innovate/declare/info/delete'),
-              method: 'post',
-              data: this.$http.adornData(declareIds, false)
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.getDataList()
-                  }
-                })
-              } else {
-                this.$message.error(data.msg)
-              }
-            })
-          } else {
-            this.$message({
-              message: '包含不可删除项目',
-              type: 'error',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          }
-        }).catch(() => {})
       }
     }
   }

@@ -6,8 +6,8 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
-      <el-form-item label="评委组" prop="declareInfoEntity.groupId">
-        <el-select v-model="dataForm.declareInfoEntity.groupId" placeholder="请选择">
+      <el-form-item label="评委组" prop="checkInfoEntity.groupId">
+        <el-select v-model="dataForm.checkInfoEntity.groupId" placeholder="请选择">
           <el-option
             v-for="item in groupList"
             :key="item.groupId"
@@ -20,12 +20,12 @@
     </el-form>
     <el-card>
       当前评委组人员：
-      <template v-for="item in groupList" v-if="item.groupId === dataForm.declareInfoEntity.groupId">
+      <template v-for="item in groupList" v-if="item.groupId === dataForm.checkInfoEntity.groupId">
         <template v-for="groupUser in item.innovateReviewGroupUserEntities">
           <template v-for="user in sysUserEntities" v-if="groupUser.userId === user.userId">
             {{user.name}}
-            <el-tag v-for="teacher in dataForm.declareTeacherEntities"
-                    :key="teacher.declareTeacherId"
+            <el-tag v-for="teacher in dataForm.checkTeacherEntities"
+                    :key="teacher.checkTeacherId"
                     v-if="groupUser.userId === teacher.userId"
                     type="danger">
               该评委不能审核自己的项目
@@ -56,7 +56,7 @@
         groupList: [],
         id: 0,
         dataForm: {
-          declareInfoEntity: {
+          checkInfoEntity: {
             groupId: ''
           }
         },
@@ -64,7 +64,7 @@
         pageSize: 10,
         totalPage: 0,
         dataRule: {
-          'declareInfoEntity.groupId': [
+          'checkInfoEntity.groupId': [
             { required: true, message: '不能为空', trigger: 'blur' }
           ]
         }
@@ -98,15 +98,15 @@
           this.id = index || 0
           if (this.id) {
             this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/info/info`),
+              url: this.$http.adornUrl(`/innovate/check/info`),
               method: 'get',
               params: this.$http.adornParams({
-                'declareId': this.id
-                // 'apply': 'project_match_apply_status'
+                'checkId': this.id
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm = data.declareInfo
+                console.log(data.info)
+                this.dataForm.checkInfoEntity = data.info.innovateCheckInfoEntity
               }
             })
           }
@@ -118,12 +118,13 @@
           if (valid) {
             this.addLoading = true
             this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/review/review`),
+              url: this.$http.adornUrl(`/innovate/check/review/review`),
               method: 'post',
               data: this.$http.adornData({
-                'groupId': this.dataForm.declareInfoEntity.groupId,
-                'apply': 'project_audit_apply_status',
-                'declareId': this.id,
+                'groupId': this.dataForm.checkInfoEntity.groupId,
+                'apply': 'project_check_apply_status',
+                'checkId': this.id,
+                'declareId': this.dataForm.checkInfoEntity.declareId,
                 'roleId': 5,
                 'userId': this.userId,
                 'reApply': this.reApply

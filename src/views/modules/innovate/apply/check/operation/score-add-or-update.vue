@@ -43,9 +43,9 @@
         id: 0,
         dataForm: {
           reviewId: '',
-          apply: 'project_audit_apply_status',
+          apply: 'project_check_apply_status',
           userId: this.$store.state.user.id,
-          declareId: this.id,
+          checkId: this.id,
           score: '',
           opinion: ''
         },
@@ -71,17 +71,17 @@
           this.id = index || 0
           if (this.id) {
             this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/review/info`),
+              url: this.$http.adornUrl(`/innovate/check/review/info`),
               method: 'get',
               params: this.$http.adornParams({
-                'apply': 'project_audit_apply_status',
+                'apply': 'project_check_apply_status',
                 'userId': this.$store.state.user.id,
-                'declareId': this.id,
+                'checkId': this.id,
                 'isDel': 0
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm = data.declareReviewEntity
+                this.dataForm = data.checkReviewEntity
               }
             })
           }
@@ -92,7 +92,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/review/score`),
+              url: this.$http.adornUrl(`/innovate/check/review/score`),
               method: 'post',
               data: this.$http.adornData(this.dataForm)
             }).then(({data}) => {

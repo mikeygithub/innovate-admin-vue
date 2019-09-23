@@ -62,13 +62,13 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/retreat/retreat`),
+              url: this.$http.adornUrl(`/innovate/check/retreat/save`),
               method: 'post',
               params: this.$http.adornParams({
                 'apply': this.apply,
-                'declareId': this.id,
+                'checkId': this.id,
                 'userId': this.$store.state.user.id,
-                'option': this.dataForm.option,
+                'retreatOption': this.dataForm.option,
                 'applyStatus': this.applyStatus
               })
             }).then(({data}) => {

@@ -354,6 +354,29 @@
           </tr>
         </template>
         <!--评分结束-->
+
+        <!--中期检查附加s-->
+        <template v-if="this.checkInfoModelList.length>0">
+        <tr align='center' >
+          <td colspan="10" style="height: 1.2rem"></td>
+        </tr>
+        <tr align="center" class="contents">
+          <th colspan="10">中期检查信息</th>
+        </tr>
+        <tr align='center'>
+          <td colspan="10" style="height: 1.2rem"></td>
+        </tr>
+          <!--遍历中期检查信息-->
+          <template v-for="(item,index) in checkInfoModelList">
+            <!--信息-->
+            <!--TODO:待完善-->
+            <!--附件-->
+          </template>
+        <tr align='center'>
+          <td colspan="10" style="height: 1.2rem"></td>
+        </tr>
+      </template>
+        <!--中期检查附加e-->
       </table>
     </el-row>
     <span slot="footer" class="dialog-footer">
@@ -390,6 +413,7 @@
         awardLists: [],
         subList: [],
         perInfoList: [],
+        checkInfoModelList: [],
         signingOpinionEntity: {
           signingOpinion: '',
           signingOpinionTime: ''
@@ -494,6 +518,21 @@
                   this.reviewNameList.push(user)
                 })
               }
+              // 中期检查
+              this.$http({
+                url: this.$http.adornUrl(`/innovate/check/list`),
+                method: 'get',
+                params: this.$http.adornParams({
+                  'declareId': this.dataForm.checkId,
+                  'isDel': '0'
+                })
+              }).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.attachLists = data.info
+                } else {
+                  this.$message.error(data.msg)
+                }
+              })
               // 获取指导老师签署意见
               this.$http({
                 url: this.$http.adornUrl(`/innovate/declare/signingopinion/info`),

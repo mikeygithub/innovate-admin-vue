@@ -27,7 +27,7 @@
           <td colspan="5" v-text="item.retreatOption"></td>
           <td colspan="3">
             <span v-if="item.applyStatus === 0">项目负责人</span>
-            <span v-if="item.applyStatus === 1">指导老师</span>
+            <!--<span v-if="item.applyStatus === 1">指导老师</span>-->
             <span v-if="item.applyStatus === 2">二级学院</span>
             <span v-if="item.applyStatus === 3">管理员</span>
             <span v-if="item.applyStatus === 4">评委</span>
@@ -71,19 +71,22 @@
         this.$nextTick(() => {
           if (this.id) {
             this.$http({
-              url: this.$http.adornUrl('/innovate/declare/retreat/query'),
+              url: this.$http.adornUrl('/innovate/check/retreat/query'),
               method: 'post',
               params: this.$http.adornParams({
-                'declareId': this.id
-                // 'userId': this.$store.state.user.id
+                'checkId': this.id,
+                'isDel': 0
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
+                console.log('message:' + JSON.stringify(data))
                 if (data.retreatEntityList.length > 0) {
                   this.historyList = data.retreatEntityList
                 } else {
                   this.historyList = []
                 }
+              } else {
+                this.$message.error(data.msg)
               }
               this.dataListLoading = false
             })

@@ -3,7 +3,8 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-date-picker
-          v-model="dataForm.declareTime"
+          @change="getDataList"
+          v-model="dataForm.checkTime"
           align="right"
           type="year"
           placeholder="请选择年度">
@@ -58,16 +59,16 @@
           <el-row>
             <el-card style=": 0.1rem">
               <el-col :span="3">
-                <el-tag>大创申请审批进度</el-tag>
+                <el-tag>中期检查审批进度</el-tag>
               </el-col>
               <el-col :span="21">
                 <el-steps
-                  :active="props.row.declareInfoEntity.projectAuditApplyStatus"
+                  :active="props.row.innovateCheckInfoEntity.projectCheckApplyStatus"
                   finish-status="success">
                   <el-step title="项目负责人提交"></el-step>
-                  <el-step title="指导老师审批"></el-step>
+                  <!--<el-step title="指导老师审批"></el-step>-->
                   <el-step title="二级学院审批"></el-step>
-                  <el-step title="管理员审批"></el-step>
+                  <el-step title="管理员分配评委组"></el-step>
                   <el-step title="评委审批"></el-step>
                   <el-step title="管理员审批"></el-step>
                   <!--<el-step title="超级管理员审批"></el-step>-->
@@ -82,7 +83,7 @@
         prop="declareInfoEntity.declareName"
         header-align="center"
         align="center"
-        label="大创项目名称">
+        label="中期检查项目名称">
       </el-table-column>
       <el-table-column
         sortable
@@ -101,10 +102,20 @@
         prop="declareInfoEntity.declareTime"
         header-align="center"
         align="center"
-        label="申报时间">
+        label="创建时间">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.declareInfoEntity.declareTime === null" size="small">未申报</el-tag>
-          <el-tag v-if="scope.row.declareInfoEntity.declareTime != null" size="small">{{scope.row.declareInfoEntity.declareTime}}</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.checkTime != null" size="small">{{scope.row.innovateCheckInfoEntity.checkTime}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        sortable
+        prop="declareInfoEntity.declareTime"
+        header-align="center"
+        align="center"
+        label="提交状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus < 3" size="small">未分配</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus >= 3" size="small">已分配</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -114,10 +125,10 @@
         width="220"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('innovate:declare:list')" type="text" size="small" @click="detailHandle(scope.row.declareInfoEntity.declareId)">详情</el-button>
-          <el-button v-if="retreatIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.declareInfoEntity)">不通过</el-button>
-          <el-button v-if="applyIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="reviewAddOrUpdateHandle(scope.row.declareInfoEntity.declareId)">分配评委组</el-button>
-          <el-button v-if="reApplyIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="reviewAddOrUpdateHandle(scope.row.declareInfoEntity.declareId)">重新分配评委组</el-button>
+          <el-button v-if="isAuth('innovate:check:list')" type="text" size="small" @click="detailHandle(scope.row.innovateCheckInfoEntity.declareId)">详情</el-button>
+          <el-button v-if="retreatIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.innovateCheckInfoEntity)">不通过</el-button>
+          <el-button v-if="applyIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="reviewAddOrUpdateHandle(scope.row.innovateCheckInfoEntity.checkId)">分配评委组</el-button>
+          <el-button v-if="reApplyIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="reviewAddOrUpdateHandle(scope.row.innovateCheckInfoEntity.checkId)">重新分配评委组</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -152,7 +163,7 @@
         hasApply: '1',
         dataForm: {
           projectName: '',
-          declareTime: new Date(),
+          checkTime: new Date(),
           baseId: ''
         },
         statusList: [
@@ -198,47 +209,27 @@
         this.reviewAddOrUpdateVisible = false
         this.reApplyButtonVisible = 'false'
         this.$http({
-          url: this.$http.adornUrl(`/innovate/use/teacher/teacher`),
+          url: this.$http.adornUrl('/innovate/check/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'like': ''
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'hasApply': this.hasApply,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 2,
+            'projectName': this.dataForm.projectName,
+            'checkTime': this.dataForm.checkTime.getFullYear(),
+            'isDel': 0
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.sysTeacherEntities = data.sysTeacherEntities
+            this.dataList = data.page.list
+            this.totalPage = data.page.totalCount
+          } else {
+            this.dataList = []
+            this.totalPage = 0
           }
-        })
-        this.$nextTick(() => {
-          this.$http({
-            url: this.$http.adornUrl('/innovate/declare/info/list'),
-            method: 'get',
-            params: this.$http.adornParams({
-              'projectName': this.dataForm.projectName,
-              'declareTime': this.dataForm.declareTime.getFullYear(),
-              'currPage': this.pageIndex,
-              'pageSize': this.pageSize,
-              'userId': this.$store.state.user.id,
-              'hasApply': this.hasApply,
-              'noPass': 'audit_no_pass',
-              'noPassStatus': 0,
-              // 'auditNoPass': 0,
-              // 'isTeacher': true,
-              // 'isStudent': true,
-              'apply': 'project_audit_apply_status',
-              'applyStatus': 3,
-              'isDel': 0
-            })
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.dataList = data.page.list
-              this.totalPage = data.page.totalCount
-            } else {
-              this.dataList = []
-              this.totalPage = 0
-            }
-            this.reApplyButtonVisible = 'false'
-            this.dataListLoading = false
-          })
+          this.dataListLoading = false
         })
       },
       // 每页数
@@ -285,7 +276,7 @@
       retreatHandle (item) {
         this.retreatVisible = true
         this.$nextTick(() => {
-          this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
+          this.$refs.retreat.init(item.checkId, 'project_check_apply_status', item.projectCheckApplyStatus)
         })
       },
       // 新增 / 修改
@@ -296,50 +287,50 @@
         })
       },
       retreatIsVisible (item) {
-        if (this.isAuth('innovate:declare:retreat')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 3) {
-              let roleIdList = this.$store.state.user.roleIdList
-              for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
-                if (roleIdList[roleIndex] === 5) {
-                  return true
-                }
+        // if (this.isAuth('check:retreat:save')) {
+        if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+          if (item.projectCheckApplyStatus === 2) {
+            let roleIdList = this.$store.state.user.roleIdList
+            for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
+              if (roleIdList[roleIndex] === 5) {
+                return true
               }
             }
           }
         }
+        // }
         return false
       },
       applyIsVisible (item) {
-        if (this.isAuth('innovate:project:apply:audit')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 3) {
-              let roleIdList = this.$store.state.user.roleIdList
-              for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
-                if (roleIdList[roleIndex] === 5) {
-                  return true
-                }
+        // if (this.isAuth('innovate:project:apply:audit')) {
+        if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+          if (item.projectCheckApplyStatus === 2) {
+            let roleIdList = this.$store.state.user.roleIdList
+            for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
+              if (roleIdList[roleIndex] === 5) {
+                return true
               }
             }
           }
         }
+        // }
         return false
       },
 
       reApplyIsVisible (item) {
-        if (this.isAuth('innovate:project:apply:audit')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 4) {
-              let roleIdList = this.$store.state.user.roleIdList
-              for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
-                if (roleIdList[roleIndex] === 5) {
-                  this.reApplyButtonVisible = 'true'
-                  return true
-                }
+        // if (this.isAuth('innovate:project:apply:audit')) {
+        if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+          if (item.projectCheckApplyStatus === 3) {
+            let roleIdList = this.$store.state.user.roleIdList
+            for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
+              if (roleIdList[roleIndex] === 5) {
+                this.reApplyButtonVisible = 'true'
+                return true
               }
             }
           }
         }
+        // }
         return false
       },
       // 详情

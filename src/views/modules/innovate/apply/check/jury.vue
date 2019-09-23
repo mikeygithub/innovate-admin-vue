@@ -3,7 +3,7 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-date-picker
-          v-model="dataForm.declareTime"
+          v-model="dataForm.checkTime"
           align="right"
           type="year"
           placeholder="请选择年度">
@@ -59,16 +59,16 @@
           <el-row>
             <el-card style=": 0.1rem">
               <el-col :span="3">
-                <el-tag>大创申请审批进度</el-tag>
+                <el-tag>中期检查审批进度</el-tag>
               </el-col>
               <el-col :span="21">
                 <el-steps
-                  :active="props.row.declareInfoEntity.projectAuditApplyStatus"
+                  :active="props.row.innovateCheckInfoEntity.projectCheckApplyStatus"
                   finish-status="success">
                   <el-step title="项目负责人提交"></el-step>
-                  <el-step title="指导老师审批"></el-step>
+                  <!--<el-step title="指导老师审批"></el-step>-->
                   <el-step title="二级学院审批"></el-step>
-                  <el-step title="管理员审批"></el-step>
+                  <el-step title="管理员分配评委组"></el-step>
                   <el-step title="评委审批"></el-step>
                   <el-step title="管理员审批"></el-step>
                   <!--<el-step title="超级管理员审批"></el-step>-->
@@ -83,7 +83,7 @@
         prop="declareInfoEntity.declareName"
         header-align="center"
         align="center"
-        label="大创项目名称">
+        label="中期检查项目名称">
       </el-table-column>
       <el-table-column
         sortable
@@ -102,10 +102,20 @@
         prop="declareInfoEntity.declareTime"
         header-align="center"
         align="center"
-        label="申报时间">
+        label="创建时间">
         <template slot-scope="scope">
-          <!--<el-tag v-if="scope.row.declareInfoEntity.declareTime === null" size="small">未申报</el-tag>-->
-          <el-tag v-if="scope.row.declareInfoEntity.declareTime != null" size="small">{{scope.row.declareInfoEntity.declareTime}}</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.checkTime != null" size="small">{{scope.row.innovateCheckInfoEntity.checkTime}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        sortable
+        prop="declareInfoEntity.declareTime"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus <= 3" size="small">未评分</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus > 3" size="small">已评分</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -115,8 +125,8 @@
         width="220"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('innovate:declare:list')" type="text" size="small" @click="detailHandle(scope.row.declareInfoEntity.declareId)">详情</el-button>
-          <el-button v-if="applyIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyHandle(scope.row.declareInfoEntity.declareId)">评分</el-button>
+          <el-button v-if="isAuth('innovate:declare:list')" type="text" size="small" @click="detailHandle(scope.row.innovateCheckInfoEntity.declareId)">详情</el-button>
+          <el-button v-if="applyIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="applyHandle(scope.row.innovateCheckInfoEntity.checkId)">评分</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -147,7 +157,7 @@
         hasReview: '1',
         dataForm: {
           projectName: '',
-          declareTime: new Date(),
+          checkTime: new Date(),
           baseId: ''
         },
         statusList: [
@@ -201,25 +211,23 @@
           }
         })
         this.$http({
-          url: this.$http.adornUrl('/innovate/declare/info/list'),
+          url: this.$http.adornUrl('/innovate/check/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'projectName': this.dataForm.projectName,
-            'declareTime': this.dataForm.declareTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
-            'userId': this.$store.state.user.id,
-            'hasReview': this.hasReview,
-            'noPass': 'audit_no_pass',
-            'noPassStatus': 0,
-            // 'isTeacher': true
-            // 'isStudent': true
-            'apply': 'project_audit_apply_status',
-            'applyStatus': 4,
+            'reviewUserId': this.$store.state.user.id,
+            'hasApply': this.hasReview,
+            'hasReview': true,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 3,
+            'projectName': this.dataForm.projectName,
+            'checkTime': this.dataForm.checkTime.getFullYear(),
             'isDel': 0
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
+            console.log(data)
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
           } else {
@@ -252,14 +260,12 @@
         })
       },
       applyIsVisible (item) {
-        if (this.isAuth('innovate:project:apply:audit')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 4) {
-              let roleIdList = this.$store.state.user.roleIdList
-              for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
-                if (roleIdList[roleIndex] === 6) {
-                  return true
-                }
+        if (this.isAuth('innovate:check:list') && item != null && item !== '') {
+          if (item.projectCheckApplyStatus === 3) {
+            let roleIdList = this.$store.state.user.roleIdList
+            for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
+              if (roleIdList[roleIndex] === 6) {
+                return true
               }
             }
           }
@@ -267,9 +273,9 @@
         return false
       },
       retreatIsVisible (item) {
-        if (this.isAuth('innovate:declare:retreat')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 2) {
+        if (this.isAuth('innovate:check:retreat')) {
+          if (item.innovateCheckInfoEntity !== null || item.innovateCheckInfoEntity !== '') {
+            if (item.innovateCheckInfoEntity === 3) {
               let roleIdList = this.$store.state.user.roleIdList
               for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
                 if (roleIdList[roleIndex] === 5) {
