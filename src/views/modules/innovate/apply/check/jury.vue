@@ -217,8 +217,8 @@
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'reviewUserId': this.$store.state.user.id,
-            'hasApply': this.hasReview,
-            'hasReview': true,
+            'hasReview': this.hasReview,
+            'isReview': true,
             'checkNoPass': 0,
             'projectCheckApplyStatus': 3,
             'projectName': this.dataForm.projectName,
@@ -261,7 +261,7 @@
       },
       applyIsVisible (item) {
         if (this.isAuth('innovate:check:list') && item != null && item !== '') {
-          if (item.projectCheckApplyStatus === 3) {
+          if (item.projectCheckApplyStatus === 4) {
             let roleIdList = this.$store.state.user.roleIdList
             for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
               if (roleIdList[roleIndex] === 6) {

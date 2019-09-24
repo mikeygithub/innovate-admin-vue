@@ -137,226 +137,226 @@
         </template>
         <!--项目负责人结束-->
 
-        <!--员工信息开始-->
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr class="contents"><th colspan="10">项目参与者信息</th></tr>
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr align='center'>
-          <th>姓名</th>
-          <th>性别</th>
-          <th>学号</th>
-          <th>所在二级学院</th>
-          <th>所在年级</th>
-          <th>所在班级</th>
-          <th>所在宿舍</th>
-          <th>联系电话</th>
-          <th>QQ号</th>
-          <th>个人电子邮箱</th>
-        </tr>
-        <template>
-          <tr v-for="item in staffList" align="center">
-            <td v-text="item.staffName"></td>
-            <td v-for="sex in sexList"
-                :key="sex.value"
-                v-if="item.staffSex=== sex.value"
-                v-text="sex.label">
-            </td>
-            <td v-text="item.staffStuNo"></td>
-            <td>
-              <span v-for="institute in instituteList"
-                    v-if="item.instituteId === institute.instituteId"
-                    v-text="institute.instituteName"
-                    align="center"></span>
-            </td>
-            <td>
-              <span v-for="grade in gradeList"
-                    v-if="item.gradeId === grade.gradeId"
-                    v-text="grade.gradeName"
-                    align="center">
-              </span>
-            </td>
-            <td colspan="1" v-text="item.staffClassNo"></td>
-            <td colspan="1" v-text="item.staffCormNo"></td>
-            <td colspan="1" v-text="item.staffTel"></td>
-            <td colspan="1" v-text="item.staffQq"></td>
-            <td colspan="1" v-text="item.staffEmail"></td>
-          </tr>
-        </template>
-        <!--员工信息结束-->
+        <!--&lt;!&ndash;员工信息开始&ndash;&gt;-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr class="contents"><th colspan="10">项目参与者信息</th></tr>-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<th>姓名</th>-->
+          <!--<th>性别</th>-->
+          <!--<th>学号</th>-->
+          <!--<th>所在二级学院</th>-->
+          <!--<th>所在年级</th>-->
+          <!--<th>所在班级</th>-->
+          <!--<th>所在宿舍</th>-->
+          <!--<th>联系电话</th>-->
+          <!--<th>QQ号</th>-->
+          <!--<th>个人电子邮箱</th>-->
+        <!--</tr>-->
+        <!--<template>-->
+          <!--<tr v-for="item in staffList" align="center">-->
+            <!--<td v-text="item.staffName"></td>-->
+            <!--<td v-for="sex in sexList"-->
+                <!--:key="sex.value"-->
+                <!--v-if="item.staffSex=== sex.value"-->
+                <!--v-text="sex.label">-->
+            <!--</td>-->
+            <!--<td v-text="item.staffStuNo"></td>-->
+            <!--<td>-->
+              <!--<span v-for="institute in instituteList"-->
+                    <!--v-if="item.instituteId === institute.instituteId"-->
+                    <!--v-text="institute.instituteName"-->
+                    <!--align="center"></span>-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--<span v-for="grade in gradeList"-->
+                    <!--v-if="item.gradeId === grade.gradeId"-->
+                    <!--v-text="grade.gradeName"-->
+                    <!--align="center">-->
+              <!--</span>-->
+            <!--</td>-->
+            <!--<td colspan="1" v-text="item.staffClassNo"></td>-->
+            <!--<td colspan="1" v-text="item.staffCormNo"></td>-->
+            <!--<td colspan="1" v-text="item.staffTel"></td>-->
+            <!--<td colspan="1" v-text="item.staffQq"></td>-->
+            <!--<td colspan="1" v-text="item.staffEmail"></td>-->
+          <!--</tr>-->
+        <!--</template>-->
+        <!--&lt;!&ndash;员工信息结束&ndash;&gt;-->
 
-        <!--导师信息开始-->
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr class="contents" align="center">
-          <th colspan="10">指导老师信息</th>
-        </tr>
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr align='center'>
-          <th>姓名</th>
-          <th>性别</th>
-          <th colspan="2">所在单位/二级学院</th>
-          <th>职务</th>
-          <th>职称</th>
-          <th colspan="2">邮箱</th>
-          <th colspan="2">联系电话</th>
-          <!--<th colspan="2">身份证号</th>-->
-        </tr>
-        <template v-for="item in userTeacherInfoEntities">
-          <tr align="center">
-            <td v-text="item.sysUserEntity.name"></td>
-            <td v-for="sex in sexList"
-                :key="sex.value"
-                v-if="item.teacherSex === sex.value"
-                v-text="sex.label">
-            </td>
-            <td colspan="2"
-                v-for="institute in instituteList"
-                v-if="item.sysUserEntity.instituteId === institute.instituteId"
-                v-text="institute.instituteName">
-            </td>
-            <td v-text="item.teacherPost"></td>
-            <td colspan="1">
-              <span v-for="teacherTitle in teacherTitleList" v-if="item.teacherTitle === teacherTitle.titleId" v-text="teacherTitle.titleName"></span>
-            </td>
-            <td colspan="2">{{item.sysUserEntity.email}}</td>
-            <td colspan="2">{{item.sysUserEntity.mobile}}</td>
-            <!--<td colspan="2" v-text="item.teacherCardNo"></td>-->
-          </tr>
-        </template>
-        <!--导师信息结束-->
-        <!--指导老师签署意见开始-->
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr align="center" class="contents">
-          <th colspan="10">指导老师签署意见</th>
-        </tr>
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr align='center'>
-          <th colspan="2">签署意见</th>
-          <th colspan="8" v-if="signingOpinionEntity!==null" v-text="signingOpinionEntity.signingOpinion"></th>
-        </tr>
-        <!--指导老师签署意见结束-->
+        <!--&lt;!&ndash;导师信息开始&ndash;&gt;-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr class="contents" align="center">-->
+          <!--<th colspan="10">指导老师信息</th>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<th>姓名</th>-->
+          <!--<th>性别</th>-->
+          <!--<th colspan="2">所在单位/二级学院</th>-->
+          <!--<th>职务</th>-->
+          <!--<th>职称</th>-->
+          <!--<th colspan="2">邮箱</th>-->
+          <!--<th colspan="2">联系电话</th>-->
+          <!--&lt;!&ndash;<th colspan="2">身份证号</th>&ndash;&gt;-->
+        <!--</tr>-->
+        <!--<template v-for="item in userTeacherInfoEntities">-->
+          <!--<tr align="center">-->
+            <!--<td v-text="item.sysUserEntity.name"></td>-->
+            <!--<td v-for="sex in sexList"-->
+                <!--:key="sex.value"-->
+                <!--v-if="item.teacherSex === sex.value"-->
+                <!--v-text="sex.label">-->
+            <!--</td>-->
+            <!--<td colspan="2"-->
+                <!--v-for="institute in instituteList"-->
+                <!--v-if="item.sysUserEntity.instituteId === institute.instituteId"-->
+                <!--v-text="institute.instituteName">-->
+            <!--</td>-->
+            <!--<td v-text="item.teacherPost"></td>-->
+            <!--<td colspan="1">-->
+              <!--<span v-for="teacherTitle in teacherTitleList" v-if="item.teacherTitle === teacherTitle.titleId" v-text="teacherTitle.titleName"></span>-->
+            <!--</td>-->
+            <!--<td colspan="2">{{item.sysUserEntity.email}}</td>-->
+            <!--<td colspan="2">{{item.sysUserEntity.mobile}}</td>-->
+            <!--&lt;!&ndash;<td colspan="2" v-text="item.teacherCardNo"></td>&ndash;&gt;-->
+          <!--</tr>-->
+        <!--</template>-->
+        <!--&lt;!&ndash;导师信息结束&ndash;&gt;-->
+        <!--&lt;!&ndash;指导老师签署意见开始&ndash;&gt;-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr align="center" class="contents">-->
+          <!--<th colspan="10">指导老师签署意见</th>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<th colspan="2">签署意见</th>-->
+          <!--<th colspan="8" v-if="signingOpinionEntity!==null" v-text="signingOpinionEntity.signingOpinion"></th>-->
+        <!--</tr>-->
+        <!--&lt;!&ndash;指导老师签署意见结束&ndash;&gt;-->
 
 
-        <!--成果/奖项开始-->
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr align="center" class="contents">
-          <th colspan="10">所获成果/奖项</th>
-        </tr>
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr>
-          <th colspan="1">获奖等级</th>
-          <th colspan="3">所获总奖金（元）</th>
-          <th colspan="3">所获区级奖金（元）</th>
-          <th colspan="3">所获校级奖金（元）</th>
-          <!--<th colspan="1">操作</th>-->
-        </tr>
-        <template>
-          <tr v-for="item in awardList" align="center">
-            <td colspan="1"
-                v-for="type in awardTypeList"
-                :key="type.value"
-                v-if="type.value === item.awardType"
-                v-text="type.label">
-            </td>
-            <td colspan="3" v-text="item.awardMoneyAll"></td>
-            <td colspan="3" v-text="item.awardMoneyDistrict"></td>
-            <td colspan="3" v-text="item.awardMoneySchool"></td>
-            <!--<td colspan="1" v-text="item.awardFileName"></td>-->
-          </tr>
-        </template>
-        <!--成果/奖项结束-->
+        <!--&lt;!&ndash;成果/奖项开始&ndash;&gt;-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr align="center" class="contents">-->
+          <!--<th colspan="10">所获成果/奖项</th>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+          <!--<th colspan="1">获奖等级</th>-->
+          <!--<th colspan="3">所获总奖金（元）</th>-->
+          <!--<th colspan="3">所获区级奖金（元）</th>-->
+          <!--<th colspan="3">所获校级奖金（元）</th>-->
+          <!--&lt;!&ndash;<th colspan="1">操作</th>&ndash;&gt;-->
+        <!--</tr>-->
+        <!--<template>-->
+          <!--<tr v-for="item in awardList" align="center">-->
+            <!--<td colspan="1"-->
+                <!--v-for="type in awardTypeList"-->
+                <!--:key="type.value"-->
+                <!--v-if="type.value === item.awardType"-->
+                <!--v-text="type.label">-->
+            <!--</td>-->
+            <!--<td colspan="3" v-text="item.awardMoneyAll"></td>-->
+            <!--<td colspan="3" v-text="item.awardMoneyDistrict"></td>-->
+            <!--<td colspan="3" v-text="item.awardMoneySchool"></td>-->
+            <!--&lt;!&ndash;<td colspan="1" v-text="item.awardFileName"></td>&ndash;&gt;-->
+          <!--</tr>-->
+        <!--</template>-->
+        <!--&lt;!&ndash;成果/奖项结束&ndash;&gt;-->
 
-        <!--附件开始-->
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr align="center" class="contents">
-          <th colspan="10">附件</th>
-        </tr>
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr align='center'>
-          <th colspan="7">附件名</th>
-          <th colspan="3">操作</th>
-        </tr>
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <template>
-          <tr v-for="item in attachLists"
-              align="center">
-            <td colspan="7" v-text="item.attachName"></td>
-            <td colspan="3"><el-button type="info" @click="attachDown(item)" :loading="downloadLoading">下载</el-button></td>
-          </tr>
-        </template>
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <!--附件结束-->
+        <!--&lt;!&ndash;附件开始&ndash;&gt;-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr align="center" class="contents">-->
+          <!--<th colspan="10">附件</th>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<th colspan="7">附件名</th>-->
+          <!--<th colspan="3">操作</th>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<template>-->
+          <!--<tr v-for="item in attachLists"-->
+              <!--align="center">-->
+            <!--<td colspan="7" v-text="item.attachName"></td>-->
+            <!--<td colspan="3"><el-button type="info" @click="attachDown(item)" :loading="downloadLoading">下载</el-button></td>-->
+          <!--</tr>-->
+        <!--</template>-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--&lt;!&ndash;附件结束&ndash;&gt;-->
 
-        <!--评分开始-->
-        <template v-for="item in roleLists"
-                  v-if="item === 5 || item === 1">
-          <tr align='center'>
-            <td colspan="10" style="height: 1.2rem"></td>
-          </tr>
-          <tr align="center" class="contents">
-            <th colspan="10">评分详情</th>
-          </tr>
-          <tr align='center'>
-            <td colspan="10" style="height: 1.2rem"></td>
-          </tr>
-          <tr align='center'>
-            <td colspan="5">平均分</td>
-            <td colspan="5" v-text="declareInfo.declareScoreAvg + '分'"></td>
-          </tr>
-          <tr align='center'>
-            <td colspan="10" style="height: 1.2rem"></td>
-          </tr>
-          <tr align='center'>
-            <th colspan="2">评委</th>
-            <th colspan="3">流程</th>
-            <th colspan="2">分数</th>
-            <th colspan="3">建议</th>
-          </tr>
-          <template v-for="type in reviewTypeList">
-            <template v-for="(item, index) in reviewList"
-                      v-if="type.value === item.apply && type.value === 'project_audit_apply_status'" >
-              <tr align="center">
-                <template v-if="isAuth('sys:user:info')">
-                  <td colspan="2" v-for="reviewName in reviewNameList"  v-if="reviewName.userId === item.userId" v-text="reviewName.name"></td>
-                </template>
-                <td colspan="2" v-if="!isAuth('sys:user:info', item.userId)" v-text="'评委:' + (index + 1)"></td>
-                <td colspan="3" v-text="type.label"></td>
-                <td colspan="2" v-text="item.score"></td>
-                <td colspan="3" v-text="item.opinion"></td>
-              </tr>
-            </template>
-          </template>
-          <tr align='center'>
-            <td colspan="10" style="height: 1.2rem"></td>
-          </tr>
-        </template>
-        <!--评分结束-->
+        <!--&lt;!&ndash;评分开始&ndash;&gt;-->
+        <!--<template v-for="item in roleLists"-->
+                  <!--v-if="item === 5 || item === 1">-->
+          <!--<tr align='center'>-->
+            <!--<td colspan="10" style="height: 1.2rem"></td>-->
+          <!--</tr>-->
+          <!--<tr align="center" class="contents">-->
+            <!--<th colspan="10">评分详情</th>-->
+          <!--</tr>-->
+          <!--<tr align='center'>-->
+            <!--<td colspan="10" style="height: 1.2rem"></td>-->
+          <!--</tr>-->
+          <!--<tr align='center'>-->
+            <!--<td colspan="5">平均分</td>-->
+            <!--<td colspan="5" v-text="declareInfo.declareScoreAvg + '分'"></td>-->
+          <!--</tr>-->
+          <!--<tr align='center'>-->
+            <!--<td colspan="10" style="height: 1.2rem"></td>-->
+          <!--</tr>-->
+          <!--<tr align='center'>-->
+            <!--<th colspan="2">评委</th>-->
+            <!--<th colspan="3">流程</th>-->
+            <!--<th colspan="2">分数</th>-->
+            <!--<th colspan="3">建议</th>-->
+          <!--</tr>-->
+          <!--<template v-for="type in reviewTypeList">-->
+            <!--<template v-for="(item, index) in reviewList"-->
+                      <!--v-if="type.value === item.apply && type.value === 'project_audit_apply_status'" >-->
+              <!--<tr align="center">-->
+                <!--<template v-if="isAuth('sys:user:info')">-->
+                  <!--<td colspan="2" v-for="reviewName in reviewNameList"  v-if="reviewName.userId === item.userId" v-text="reviewName.name"></td>-->
+                <!--</template>-->
+                <!--<td colspan="2" v-if="!isAuth('sys:user:info', item.userId)" v-text="'评委:' + (index + 1)"></td>-->
+                <!--<td colspan="3" v-text="type.label"></td>-->
+                <!--<td colspan="2" v-text="item.score"></td>-->
+                <!--<td colspan="3" v-text="item.opinion"></td>-->
+              <!--</tr>-->
+            <!--</template>-->
+          <!--</template>-->
+          <!--<tr align='center'>-->
+            <!--<td colspan="10" style="height: 1.2rem"></td>-->
+          <!--</tr>-->
+        <!--</template>-->
+        <!--&lt;!&ndash;评分结束&ndash;&gt;-->
 
         <!--中期检查附加s-->
-        <template v-if="this.checkInfoModelList.length>0">
+        <template v-if="checkInfoVisiable">
         <tr align='center' >
           <td colspan="10" style="height: 1.2rem"></td>
         </tr>
@@ -367,10 +367,94 @@
           <td colspan="10" style="height: 1.2rem"></td>
         </tr>
           <!--遍历中期检查信息-->
-          <template v-for="(item,index) in checkInfoModelList">
+          <template v-for="(items,index) in checkInfoModelList">
             <!--信息-->
-            <!--TODO:待完善-->
-            <!--附件-->
+            <!--评分-->
+            <template v-if="items.innovateCheckReviewEntities.length>0">
+            <template v-for="item in roleLists" v-if="item === 5 || item === 1">
+              <tr align='center'>
+                <td colspan="10" style="height: 1.2rem"></td>
+              </tr>
+              <tr align="center" class="contents">
+                <th colspan="10">评分详情</th>
+              </tr>
+              <tr align='center'>
+                <td colspan="10" style="height: 1.2rem"></td>
+              </tr>
+              <tr align='center'>
+                <td colspan="5">平均分</td>
+                <td colspan="5" v-text="items.innovateCheckInfoEntity.checkScoreAvg != null?items.innovateCheckInfoEntity.checkScoreAvg + '分':''"></td>
+              </tr>
+              <tr align='center'>
+                <td colspan="10" style="height: 1.2rem"></td>
+              </tr>
+              <tr align='center'>
+                <th colspan="2">评委</th>
+                <th colspan="3">流程</th>
+                <th colspan="2">分数</th>
+                <th colspan="3">建议</th>
+              </tr>
+              <template v-for="item in items.innovateCheckReviewEntities">
+                <!--<template v-for="(item, index) in reviewList" v-if="type.value === item.apply && type.value === 'project_check_apply_status'" >-->
+                  <!--<tr align="center">-->
+                    <!--<template v-if="isAuth('sys:user:info')">-->
+                      <!--<td colspan="2" v-for="reviewName in reviewNameList"  v-if="reviewName.userId === item.userId" v-text="reviewName.name"></td>-->
+                    <!--</template>-->
+                    <!--<td colspan="2" v-if="!isAuth('sys:user:info', item.userId)" v-text="'评委:' + (index + 1)"></td>-->
+                    <!--<td colspan="3" v-text="type.label"></td>-->
+                    <!--<td colspan="2" v-text="item.score"></td>-->
+                    <!--<td colspan="3" v-text="item.opinion"></td>-->
+                  <!--</tr>-->
+                <!--</template>-->
+                <!--<template v-for="(item, index) in reviewList" v-if="type.value === item.apply && type.value === 'project_check_apply_status'" >-->
+                  <tr align="center">
+                    <!--<template v-if="isAuth('sys:user:info')">-->
+                      <!--<td colspan="2" v-for="reviewName in reviewNameList"  v-if="reviewName.userId === item.userId" v-text="reviewName.name"></td>-->
+                    <!--</template>-->
+                    <!--<td colspan="2" v-if="!isAuth('sys:user:info', item.userId)" v-text="'评委:' + (index + 1)"></td>-->
+                    <td colspan="2" v-text="item.userName"></td>
+                    <td colspan="3" v-for="type in reviewTypeList" v-if="item.apply === type.value " v-text="type.label"></td>
+                    <td colspan="2" v-text="item.score"></td>
+                    <td colspan="3" v-text="item.opinion"></td>
+                  </tr>
+                <!--</template>-->
+              </template>
+              <tr align='center'>
+                <td colspan="10" style="height: 1.2rem"></td>
+              </tr>
+            </template>
+            </template>
+              <!--评分结束-->
+            <!--附件开始-->
+            <template v-if="items.innovateCheckAttachEntities.length>0">
+              <tr align='center'>
+                <td colspan="10" style="height: 1.2rem"></td>
+              </tr>
+              <tr align="center" class="contents">
+                <th colspan="10">附件</th>
+              </tr>
+              <tr align='center'>
+                <td colspan="10" style="height: 1.2rem"></td>
+              </tr>
+              <tr align='center'>
+                <th colspan="7">附件名</th>
+                <th colspan="3">操作</th>
+              </tr>
+              <tr align='center'>
+                <td colspan="10" style="height: 1.2rem"></td>
+              </tr>
+              <template>
+                <tr v-for="item in items.innovateCheckAttachEntities"
+                    align="center">
+                  <td colspan="7" v-text="item.attachName"></td>
+                  <td colspan="3"><el-button type="info" @click="attachDown(item)" :loading="downloadLoading">下载</el-button></td>
+                </tr>
+              </template>
+              <tr align='center'>
+                <td colspan="10" style="height: 1.2rem"></td>
+              </tr>
+              <!--附件结束-->
+            </template>
           </template>
         <tr align='center'>
           <td colspan="10" style="height: 1.2rem"></td>
@@ -395,6 +479,7 @@
         visible: false,
         dataListLoading: false,
         downloadLoading: false,
+        checkInfoVisiable: false,
         declareInfo: {},
         instituteList: this.$store.state.user.institute,
         gradeList: this.$store.state.user.grade,
@@ -422,6 +507,7 @@
           {value: 'project_audit_apply_status', label: '训练申请流程'},
           {value: 'project_base_apply_status', label: '中心申请流程'},
           {value: 'project_match_apply_status', label: '比赛申请流程'},
+          {value: 'project_check_apply_status', label: '中期检查流程'},
           {value: 'project_finish_apply_status', label: '结题申请流程'}
         ],
         awardTypeList: [
@@ -523,12 +609,17 @@
                 url: this.$http.adornUrl(`/innovate/check/list`),
                 method: 'get',
                 params: this.$http.adornParams({
-                  'declareId': this.dataForm.checkId,
+                  'declareId': this.dataForm.id,
+                  'checkNoPass': 0,
                   'isDel': '0'
                 })
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  this.attachLists = data.info
+                  console.log(data)
+                  this.checkInfoModelList = data.page.list
+                  if (data.page.list.length > 0) {
+                    this.checkInfoVisiable = true
+                  }
                 } else {
                   this.$message.error(data.msg)
                 }
@@ -555,11 +646,10 @@
       attachDown (attach) {
         this.downloadLoading = true
         this.$httpFile({
-          url: this.$httpFile.adornUrl(`/innovate/declare/attach/download`),
+          url: this.$httpFile.adornUrl(`/innovate/check/attach/download`),
           method: 'post',
           params: this.$httpFile.adornParams({
             'filePath': attach.attachPath
-            // 'apply': 'project_base_apply_status'
           })
         }).then(response => {
           if (!response) {

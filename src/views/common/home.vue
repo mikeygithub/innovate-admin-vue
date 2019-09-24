@@ -378,8 +378,6 @@
             'hasApply': this.hasApply,
             'noPass': 'base_no_pass',
             'noPassStatus': 0,
-            // 'isTeacher': true
-            // 'isStudent': true
             'apply': 'project_base_apply_status',
             'applyStatus': 5,
             'isDel': 0
@@ -401,7 +399,6 @@
             'hasApply': this.hasApply,
             'noPass': 'match_no_pass',
             'noPassStatus': 0,
-            // 'isStudent': true,
             'apply': 'project_match_apply_status',
             'applyStatus': 6,
             'isDel': 0
@@ -423,7 +420,6 @@
             'hasApply': this.hasApply,
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
-            // 'isStudent': true,
             'apply': 'project_audit_apply_status',
             'applyStatus': 6,
             'isDel': 0
@@ -446,10 +442,7 @@
             'userId': this.$store.state.user.id,
             'noPass': 'match_no_pass',
             'noPassStatus': 1,
-            // 'isTeacher': true,
             'isStudent': true,
-            // 'apply': 'project_audit_apply_status',
-            // 'applyStatus': 3
             'isDel': 0
           })
         }).then(({data}) => {
@@ -469,10 +462,7 @@
             'userId': this.$store.state.user.id,
             'noPass': 'audit_no_pass',
             'noPassStatus': 1,
-            // 'isTeacher': true,
             'isStudent': true,
-            // 'apply': 'project_audit_apply_status',
-            // 'applyStatus': 3
             'isDel': 0
           })
         }).then(({data}) => {
@@ -502,10 +492,7 @@
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,
             'isUpdate': 1,
-            // 'isTeacher': true,
             'isStudent': true,
-            // 'apply': 'project_audit_apply_status',
-            // 'applyStatus': 3
             'isDel': 0
           })
         }).then(({data}) => {
@@ -530,7 +517,6 @@
             'noPass': 'base_no_pass',
             'noPassStatus': 0,
             'isTeacher': true,
-            // 'isStudent': true
             'apply': 'project_base_apply_status',
             'applyStatus': 1,
             'isDel': 0
@@ -553,7 +539,6 @@
             'noPass': 'match_no_pass',
             'noPassStatus': 0,
             'isTeacher': true,
-            // 'isStudent': true,
             'apply': 'project_match_apply_status',
             'applyStatus': 1,
             'isDel': 0
@@ -576,7 +561,6 @@
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
             'isTeacher': true,
-            // 'isStudent': true,
             'apply': 'project_audit_apply_status',
             'applyStatus': 1,
             'isDel': 0
@@ -600,7 +584,6 @@
             'hasApply': this.hasApply,
             'noPass': 'match_no_pass',
             'noPassStatus': 0,
-            // 'isStudent': true,
             'erInstituteId': this.$store.state.user.instituteId,
             'isEr': true,
             'apply': 'project_match_apply_status',
@@ -626,8 +609,6 @@
             'noPassStatus': 0,
             'erInstituteId': this.$store.state.user.instituteId,
             'isEr': true,
-            // 'isTeacher': true,
-            // 'isStudent': true,
             'apply': 'project_audit_apply_status',
             'applyStatus': 2,
             'isDel': 0
@@ -674,8 +655,6 @@
             'hasApply': this.hasApply,
             'noPass': 'match_no_pass',
             'noPassStatus': 0,
-            // 'isTeacher': true
-            // 'isStudent': true
             'apply': 'project_match_apply_status',
             'applyStatus': 3,
             'isDel': 0
@@ -697,9 +676,6 @@
             'hasApply': this.hasApply,
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
-            // 'auditNoPass': 0,
-            // 'isTeacher': true,
-            // 'isStudent': true,
             'apply': 'project_audit_apply_status',
             'applyStatus': 3,
             'isDel': 0
@@ -717,11 +693,7 @@
           params: this.$http.adornParams({
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
-            // 'userId': this.$store.state.user.id,
             'applyUpdate': 1,
-            // 'isStudent': true
-            // 'apply': 'project_audit_apply_status',
-            // 'applyStatus': 3
             'isDel': 0
           })
         }).then(({data}) => {
@@ -741,8 +713,6 @@
             'hasApply': this.hasApply,
             'noPass': 'base_no_pass',
             'noPassStatus': 0,
-            // 'isTeacher': true
-            // 'isStudent': true
             'apply': 'project_base_apply_status',
             'applyStatus': 4,
             'isDel': 0
@@ -764,7 +734,6 @@
             'hasApply': this.hasApply,
             'noPass': 'match_no_pass',
             'noPassStatus': 0,
-            // 'isStudent': true,
             'apply': 'project_match_apply_status',
             'applyStatus': 5,
             'isDel': 0
@@ -786,7 +755,6 @@
             'hasApply': this.hasApply,
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
-            // 'isStudent': true,
             'apply': 'project_audit_apply_status',
             'applyStatus': 5,
             'isDel': 0
@@ -810,8 +778,6 @@
             'hasReview': this.hasReview,
             'noPass': 'base_no_pass',
             'noPassStatus': 0,
-            // 'isTeacher': true
-            // 'isStudent': true
             'apply': 'project_base_apply_status',
             'applyStatus': 3,
             'isDel': 0
@@ -833,8 +799,6 @@
             'hasReview': this.hasReview,
             'noPass': 'match_no_pass',
             'noPassStatus': 0,
-            // 'isTeacher': true
-            // 'isStudent': true
             'apply': 'project_match_apply_status',
             'applyStatus': 4,
             'isDel': 0
@@ -856,8 +820,6 @@
             'hasReview': this.hasReview,
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
-            // 'isTeacher': true
-            // 'isStudent': true
             'apply': 'project_audit_apply_status',
             'applyStatus': 4,
             'isDel': 0

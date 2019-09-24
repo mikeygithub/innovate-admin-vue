@@ -28,11 +28,11 @@
           <td colspan="3">
             <span v-if="item.applyStatus === 0">项目负责人</span>
             <!--<span v-if="item.applyStatus === 1">指导老师</span>-->
-            <span v-if="item.applyStatus === 2">二级学院</span>
-            <span v-if="item.applyStatus === 3">管理员</span>
-            <span v-if="item.applyStatus === 4">评委</span>
-            <span v-if="item.applyStatus === 5">管理员</span>
-            <span v-if="item.applyStatus === 6">超级管理员</span>
+            <span v-if="item.applyStatus === 1">二级学院</span>
+            <span v-if="item.applyStatus === 2">管理员</span>
+            <span v-if="item.applyStatus === 3">评委</span>
+            <span v-if="item.applyStatus === 4">管理员</span>
+            <span v-if="item.applyStatus === 5">超级管理员</span>
           </td>
         </tr>
       </template>

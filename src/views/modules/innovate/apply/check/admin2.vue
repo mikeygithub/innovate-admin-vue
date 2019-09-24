@@ -3,7 +3,7 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-date-picker
-          v-model="dataForm.declareTime"
+          v-model="dataForm.checkTime"
           align="right"
           type="year"
           placeholder="请选择年度">
@@ -14,15 +14,13 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('innovate:project:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('innovate:project:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-card>
       <el-radio-group v-model="hasApply" @change="getDataList">
         <el-radio label="1">未审批</el-radio>
         <el-radio label="2">已审批</el-radio>
-        <el-radio label="10">未打分项目</el-radio>
+        <el-radio label="4">未打分项目</el-radio>
       </el-radio-group>
     </el-card>
     <el-table
@@ -61,16 +59,16 @@
           <el-row>
             <el-card style=": 0.1rem">
               <el-col :span="3">
-                <el-tag>大创申请审批进度</el-tag>
+                <el-tag>中期检查审批进度</el-tag>
               </el-col>
               <el-col :span="21">
                 <el-steps
-                  :active="props.row.declareInfoEntity.projectAuditApplyStatus"
+                  :active="props.row.innovateCheckInfoEntity.projectCheckApplyStatus"
                   finish-status="success">
                   <el-step title="项目负责人提交"></el-step>
-                  <el-step title="指导老师审批"></el-step>
+                  <!--<el-step title="指导老师审批"></el-step>-->
                   <el-step title="二级学院审批"></el-step>
-                  <el-step title="管理员审批"></el-step>
+                  <el-step title="管理员分配评委组"></el-step>
                   <el-step title="评委审批"></el-step>
                   <el-step title="管理员审批"></el-step>
                   <!--<el-step title="超级管理员审批"></el-step>-->
@@ -85,7 +83,7 @@
         prop="declareInfoEntity.declareName"
         header-align="center"
         align="center"
-        label="大创项目名称">
+        label="中期检查项目名称">
       </el-table-column>
       <el-table-column
         sortable
@@ -104,10 +102,20 @@
         prop="declareInfoEntity.declareTime"
         header-align="center"
         align="center"
-        label="申报时间">
+        label="创建时间">
         <template slot-scope="scope">
-          <!--<el-tag v-if="scope.row.declareInfoEntity.declareTime === null" size="small">未申报</el-tag>-->
-          <el-tag v-if="scope.row.declareInfoEntity.declareTime != null" size="small">{{scope.row.declareInfoEntity.declareTime}}</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.checkTime != null" size="small">{{scope.row.innovateCheckInfoEntity.checkTime}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        sortable
+        prop="declareInfoEntity.declareTime"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus <= 3" size="small">未评分</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus > 3" size="small">已评分</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -169,7 +177,7 @@
         dataForm: {
           projectName: '',
           baseId: '',
-          declareTime: new Date(),
+          checkTime: new Date(),
           idDel: 0
         },
         statusList: [
@@ -221,32 +229,17 @@
         this.detailVisible = false
         this.isUpdateVisible = false
         this.isHistoyVisible = false
-        // this.$http({
-        //   url: this.$http.adornUrl(`/innovate/match/event/event`),
-        //   method: 'get',
-        //   params: this.$http.adornParams({
-        //   })
-        // }).then(({data}) => {
-        //   if (data && data.code === 0) {
-        //     this.eventLists = data.matchEventEntityList
-        //     this.$store.state.eventLists = data.matchEventEntityList
-        //   }
-        // })
         this.$http({
-          url: this.$http.adornUrl('/innovate/declare/info/list'),
+          url: this.$http.adornUrl('/innovate/check/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'projectName': this.dataForm.projectName,
-            'declareTime': this.dataForm.declareTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
-            'userId': this.$store.state.user.id,
             'hasApply': this.hasApply,
-            'noPass': 'audit_no_pass',
-            'noPassStatus': 0,
-            // 'isStudent': true,
-            'apply': 'project_audit_apply_status',
-            'applyStatus': 5,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 5,
+            'projectName': this.dataForm.projectName,
+            'checkTime': this.dataForm.checkTime.getFullYear(),
             'isDel': 0
           })
         }).then(({data}) => {

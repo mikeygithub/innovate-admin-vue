@@ -119,6 +119,8 @@
           <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 2" size="small">已提交</el-tag>
           <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 3" size="small">已提交</el-tag>
           <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 4" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 5" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 6" size="small">已提交</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -326,16 +328,24 @@
               'projectCheckApplyStatus': 1
             }, false)
           }).then(({data}) => {
-            this.$message({
-              type: 'success',
-              message: '提交成功!'
+            this.$notify({
+              title: '操作成功',
+              duration: '3000',
+              message: '提交成功',
+              type: 'success'
             })
             this.getDataList()
           })
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消申请'
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消申请'
+          // })
+          this.$notify({
+            title: '操作提示',
+            duration: '3000',
+            message: '已取消申请',
+            type: 'info'
           })
         })
       },
@@ -378,10 +388,11 @@
               data: this.$http.adornData(matchIds, false)
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.$message({
-                  message: '操作成功',
+                this.$notify({
+                  title: '操作成功',
+                  duration: '3000',
+                  message: '删除成功',
                   type: 'success',
-                  duration: 1500,
                   onClose: () => {
                     this.getDataList()
                   }
@@ -391,14 +402,16 @@
               }
             })
           } else {
-            this.$message({
-              message: '包含不可删除项目',
+            this.$notify({
+              title: '操作成功',
+              duration: '3000',
+              message: '删除成功',
               type: 'error',
-              duration: 1500,
               onClose: () => {
                 this.getDataList()
               }
             })
+            this.getDataList()
           }
         }).catch(() => {})
       }

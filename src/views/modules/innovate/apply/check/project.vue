@@ -15,7 +15,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button type="primary" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量设置中期检查</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">按照年度批量设置</el-button>
+        <el-button type="primary" @click="setByYearHandle()">按照年度批量设置</el-button>
       </el-form-item>
     </el-form>
     <!--<el-card>-->
@@ -140,7 +140,8 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <!--<add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>-->
+    <set-check-by-year v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></set-check-by-year>
     <update-history v-if="isHistoyVisible" ref="updateHistory" @refreshDataList="getDataList"></update-history>
     <update-add-or-update v-if="isUpdateVisible" ref="isUpdate" @refreshDataList="getDataList"></update-add-or-update>
     <detail v-if="detailVisible" ref="detail" @refreshDataList="getDataList"></detail>
@@ -152,6 +153,7 @@
 
 <script>
   import AddOrUpdate from './project/info-add-or-update'
+  import SetCheckByYear from './project/set-check-by-year'
   import Detail from './operation/info-detail'
   import UpdateAddOrUpdate from './operation/update-add-or-update'
   import UpdateHistory from './operation/update-history'
@@ -208,7 +210,8 @@
       UpdateAddOrUpdate,
       RetreatAddOrUpdate,
       AddOrUpdate,
-      Detail
+      Detail,
+      SetCheckByYear
     },
     activated () {
       this.getDataList()
@@ -221,17 +224,6 @@
         this.detailVisible = false
         this.isUpdateVisible = false
         this.isHistoyVisible = false
-        // this.$http({
-        //   url: this.$http.adornUrl(`/innovate/match/event/event`),
-        //   method: 'get',
-        //   params: this.$http.adornParams({
-        //   })
-        // }).then(({data}) => {
-        //   if (data && data.code === 0) {
-        //     this.eventLists = data.matchEventEntityList
-        //     this.$store.state.eventLists = data.matchEventEntityList
-        //   }
-        // })
         this.$http({
           url: this.$http.adornUrl('/innovate/declare/info/list'),
           method: 'get',
@@ -244,7 +236,6 @@
             'hasApply': this.hasApply,
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
-            // 'isStudent': true,
             'apply': 'project_audit_apply_status',
             'applyStatus': 5,
             'isDel': 0
@@ -283,7 +274,7 @@
         this.dataListSelections = val
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
+      setByYearHandle (id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
@@ -399,35 +390,6 @@
           this.$refs.award.init(id)
         })
       },
-      // 审批
-      // applyDeclareRef (id) {
-      //   this.$confirm('此操作将使该项目进入下一个审批流程，是否继续?', '提示', {
-      //     confirmButtonText: '确定',
-      //     cancelButtonText: '取消',
-      //     type: 'warning'
-      //   }).then(() => {
-      //     this.$http({
-      //       url: this.$http.adornUrl('/innovate/declare/apply/apply'),
-      //       method: 'post',
-      //       params: this.$http.adornParams({
-      //         'declareId': id,
-      //         'apply': 'project_audit_apply_status',
-      //         'roleId': 5
-      //       }, false)
-      //     }).then(({data}) => {
-      //       this.$message({
-      //         type: 'success',
-      //         message: '提交成功!'
-      //       })
-      //       this.getDataList()
-      //     })
-      //   }).catch(() => {
-      //     this.$message({
-      //       type: 'info',
-      //       message: '已取消申请'
-      //     })
-      //   })
-      // },
       addOrUpdate (item) {
         if ((item.projectAuditApplyStatus === 0) &&
           this.isAuth('innovate:declare:update')) {
@@ -456,16 +418,25 @@
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.$message({
+              this.$notify({
+                title: '结果提示',
+                duration: '3000',
                 message: '操作成功',
                 type: 'success',
-                duration: 1500,
                 onClose: () => {
                   this.getDataList()
                 }
               })
             } else {
-              this.$message.error(data.msg)
+              this.$notify({
+                title: '操作失败',
+                duration: '3000',
+                message: data.msg,
+                type: 'error',
+                onClose: () => {
+                  this.$message.error(data.msg)
+                }
+              })
             }
           })
         })
