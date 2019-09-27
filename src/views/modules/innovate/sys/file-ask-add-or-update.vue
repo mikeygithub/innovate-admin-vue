@@ -1,5 +1,7 @@
 <template>
   <el-dialog
+    @close="closeDialog"
+    v-loading="dataListLoading"
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
@@ -11,7 +13,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="要求" prop="fileAskContent">
-        <el-input v-model="dataForm.fileAskContent" placeholder="要求"></el-input>
+        <el-input type="textarea" maxlength="400"
+                  :rows="5"
+                  v-model="dataForm.fileAskContent"
+                  placeholder="要求"></el-input>
       </el-form-item>
       <el-form-item label="年度" prop="fileAskTime">
         <el-date-picker
@@ -37,6 +42,8 @@
     data () {
       return {
         visible: false,
+        addLoading: false,
+        dataListLoading: false,
         dataForm: {
           fileAskId: '',
           fileAskType: '',
@@ -68,8 +75,9 @@
     },
     methods: {
       init (id) {
-        this.dataForm.fileAskId = id || 0
         this.visible = true
+        this.dataListLoading = true
+        this.dataForm.fileAskId = id || 0
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.fileAskId) {
@@ -84,8 +92,11 @@
                 // this.dataForm.fileAskContent = data.innovateFileAsk.fileAskContent
                 // this.dataForm.fileAskTime = data.innovateFileAsk.fileAskTime
                 // this.dataForm.isDel = data.innovateFileAsk.isDel
+                this.dataListLoading = false
               }
             })
+          } else {
+            this.dataListLoading = false
           }
         })
       },
@@ -114,6 +125,7 @@
           //   })
           // }
           if (valid) {
+            this.addLoading = true
             this.$http({
               url: this.$http.adornUrl(`/innovate/sys/file/ask/${!this.dataForm.fileAskId ? 'save' : 'update'}`),
               method: 'post',
@@ -137,10 +149,15 @@
                 })
               } else {
                 this.$message.error(data.msg)
+                this.addLoading = true
               }
             })
           }
         })
+      },
+      closeDialog () {
+        this.visible = false
+        this.$emit('refreshDataList')
       }
     }
   }

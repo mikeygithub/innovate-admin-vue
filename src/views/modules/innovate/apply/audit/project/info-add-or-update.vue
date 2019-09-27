@@ -120,16 +120,6 @@
               show-icon>
             </el-alert>
           </template>
-          <!--<el-form-item label="附件" prop="attachLists">-->
-            <!--<template v-for="(item,index) in attachLists" v-if="item.isDel !== 1">-->
-              <!--<el-col :span="24">-->
-                <!--<el-tag style="margin-right: 1rem"-->
-                        <!--v-text="item.attachName">-->
-                <!--</el-tag>-->
-                <!--<el-button size="mini" type="danger" @click="delAttach(item, index)">删除</el-button>-->
-              <!--</el-col>-->
-            <!--</template>-->
-          <!--</el-form-item>-->
         </el-col>
         <!--独立附件start-->
         <el-col :span="24">
@@ -139,10 +129,7 @@
             :action="url"
             :data="{declareName: dataForm.declareName}"
             :on-success="successHandle1">
-            <el-button size="small" type="primary">点击上传</el-button>
-          <label>
-            （以附件形式上传提交申报书的扫描件）
-          </label>
+            <el-button size="small" icon="el-icon-upload" type="primary">点击上传</el-button>
           </el-upload>
         </el-form-item>
         </el-col>
@@ -399,19 +386,21 @@
           } else {
             this.dataListLoading = false
           }
-        })
-        // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
-        this.$http({
-          url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
-          method: 'get',
-          params: this.$http.adornParams({
-            'fileAskType': 1,
-            'fileAskTime': new Date().getFullYear()
+          // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
+          this.dataListLoading = true
+          this.$http({
+            url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
+            method: 'get',
+            params: this.$http.adornParams({
+              'fileAskType': 1,
+              'fileAskTime': new Date().getFullYear()
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.fileAskContent = data.fileAsk == null ? '无' : data.fileAsk.fileAskContent
+              this.dataListLoading = false
+            }
           })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.fileAskContent = data.fileAsk.fileAskContent
-          }
         })
       },
       // 表单提交
@@ -435,7 +424,7 @@
                 'userPersonInfoEntities': this.personInfoList,
                 'declareTeacherEntities': this.teacherLists,
                 'declareAttachEntities': this.attachLists,
-                'declareStaffInfoEntities': this.staffInfoLists,
+                'declareStaffInfoEntities': this,
                 'declareAwardEntities': this.awardInfoLists
               })
             }).then(({data}) => {

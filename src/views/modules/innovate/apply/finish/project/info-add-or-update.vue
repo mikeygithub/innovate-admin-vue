@@ -78,46 +78,9 @@
               :data="{finishName: dataForm.finishName}"
               :on-success="successHandle1">
               <el-button size="small" type="primary">点击上传</el-button>
-              <label>
-                （以附件形式上传项目进展报告的扫描件）
-              </label>
             </el-upload>
           </el-form-item>
         </el-col>
-        <!--独立附件end-->
-        <!--<el-col :span="24">-->
-          <!--<el-form-item label="附件列表" prop="attachLists">-->
-            <!--<template v-for="(item,index) in attachLists" v-if="item.isDel !== 1">-->
-              <!--<el-col :span="24">-->
-                <!--<el-tag style="margin-right: 1rem"-->
-                        <!--v-text="item.attachName">-->
-                <!--</el-tag>-->
-                <!--<el-button size="mini" type="danger" @click="delAttach(item, index)">删除</el-button>-->
-              <!--</el-col>-->
-            <!--</template>-->
-          <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--<el-col :span="24">-->
-          <!--<el-form-item label="文件上传">-->
-            <!--<el-upload-->
-              <!--multiple-->
-              <!--ref="upLoadFiles"-->
-              <!--list-type="card"-->
-              <!--:data="upLoadData"-->
-              <!--:action="upLoadUrl"-->
-              <!--:on-preview="upLoadPreview"-->
-              <!--:on-remove="upLoadRemove"-->
-              <!--:on-success="upLoadSuccess"-->
-              <!--:on-change="upLoadChange"-->
-              <!--:file-list="fileList"-->
-              <!--:auto-upload="false">-->
-              <!--<el-button slot="trigger" size="small" type="primary">选取文件</el-button>-->
-              <!--<el-button style="margin-left: 10px;" size="small" type="success" @click="upLoadSubmit">添加到附件列表</el-button>-->
-              <!--<div slot="tip" class="el-upload__tip">注意文件需要添加到附件列表后确定保存才能添加成功</div>-->
-            <!--</el-upload>-->
-            <!--&lt;!&ndash;<input type="file" name="file" hidden/>&ndash;&gt;-->
-          <!--</el-form-item>-->
-        <!--</el-col>-->
       </el-form>
     </el-row>
     <span slot="footer" class="dialog-footer">
@@ -269,19 +232,21 @@
           } else {
             this.dataListLoading = false
           }
-        })
-        // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
-        this.$http({
-          url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
-          method: 'get',
-          params: this.$http.adornParams({
-            'fileAskType': 4,
-            'fileAskTime': new Date().getFullYear()
+          // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
+          this.dataListLoading = true
+          this.$http({
+            url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
+            method: 'get',
+            params: this.$http.adornParams({
+              'fileAskType': 4,
+              'fileAskTime': new Date().getFullYear()
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.fileAskContent = data.fileAsk == null ? '无' : data.fileAsk.fileAskContent
+              this.dataListLoading = false
+            }
           })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.fileAskContent = data.fileAsk.fileAskContent
-          }
         })
       },
       // 表单提交

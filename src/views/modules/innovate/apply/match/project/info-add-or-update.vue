@@ -139,16 +139,6 @@
               show-icon>
             </el-alert>
           </template>
-          <!--<el-form-item label="附件" prop="attachLists">-->
-            <!--<template v-for="(item,index) in attachLists" v-if="item.isDel !== 1">-->
-              <!--<el-col :span="24">-->
-                <!--<el-tag style="margin-right: 1rem"-->
-                        <!--v-text="item.attachName">-->
-                <!--</el-tag>-->
-                <!--<el-button size="mini" type="danger" @click="delAttach(item, index)">删除</el-button>-->
-              <!--</el-col>-->
-            <!--</template>-->
-          <!--</el-form-item>-->
         </el-col>
         <el-col :span="24">
           <el-form-item label="文件上传">
@@ -365,19 +355,21 @@
           } else {
             this.dataListLoading = false
           }
-        })
-        // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
-        this.$http({
-          url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
-          method: 'get',
-          params: this.$http.adornParams({
-            'fileAskType': 3,
-            'fileAskTime': new Date().getFullYear()
+          // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
+          this.dataListLoading = true
+          this.$http({
+            url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
+            method: 'get',
+            params: this.$http.adornParams({
+              'fileAskType': 3,
+              'fileAskTime': new Date().getFullYear()
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.fileAskContent = data.fileAsk == null ? '无' : data.fileAsk.fileAskContent
+              this.dataListLoading = false
+            }
           })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.fileAskContent = data.fileAsk.fileAskContent
-          }
         })
       },
       // 表单提交
