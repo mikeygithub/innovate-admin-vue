@@ -5,9 +5,9 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
-      <el-form-item label="项目编号" prop="declareNum">
-        <el-input v-model="declareNum" placeholder="请输入"></el-input>
-      </el-form-item>
+      <!--<el-form-item label="项目编号" prop="declareNum">-->
+        <!--<el-input v-model="declareNum" placeholder="请输入"></el-input>-->
+      <!--</el-form-item>-->
       <el-form-item label="奖金类型" prop="awardType">
         <el-select v-model="dataForm.awardType" placeholder="请选择">
           <el-option
@@ -90,7 +90,7 @@
         declareNum: '',
         dataForm: {
           awardId: '',
-          declareId: '',
+          checkId: '',
           awardType: '',
           awardMoneyAll: '',
           awardMoneySchool: '',
@@ -102,9 +102,9 @@
           awardType: [
             { required: true, message: '请选择奖金类型', trigger: 'blur' }
           ],
-          declareNum: [
-            { required: true, message: '请输入项目编号', trigger: 'blur' }
-          ],
+          // declareNum: [
+          //   { required: true, message: '请输入项目编号', trigger: 'blur' }
+          // ],
           awardMoneyAll: [
             { required: true, message: '不能为空', trigger: 'blur' },
             { validator: validateFloatNumber, trigger: 'blur' }
@@ -125,27 +125,26 @@
         // this.url = this.$http.adornUrl(`/innovate/declare/attach/uploadfile?token=${this.$cookie.get('token')}`)
         this.visible = true
         this.id = index || 0
-        this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
-          if (this.id) {
-            this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/info/info`),
-              method: 'get',
-              params: this.$http.adornParams({
-                'declareId': this.id,
-                'apply': 'project_audit_apply_status'
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.declareInfoEntity = data.declareInfo
-                if (this.declareInfoEntity.declareAwardEntities.length > 0) {
-                  this.dataForm = this.declareInfoEntity.declareAwardEntities[0]
-                }
-                // this.dataForm.awardTime = new Date(this.dataForm.awardTime)
-              }
-            })
-          }
-        })
+        // this.$nextTick(() => {
+        //   this.$refs['dataForm'].resetFields()
+        //   if (this.id) {
+        //     this.$http({
+        //       url: this.$http.adornUrl(`/innovate/check/info`),
+        //       method: 'get',
+        //       params: this.$http.adornParams({
+        //         'checkId': this.id
+        //       })
+        //     }).then(({data}) => {
+        //       if (data && data.code === 0) {
+        //         this.declareInfoEntity = data.declareInfo
+        //         if (this.declareInfoEntity.declareAwardEntities.length > 0) {
+        //           this.dataForm = this.declareInfoEntity.declareAwardEntities[0]
+        //         }
+        //         // this.dataForm.awardTime = new Date(this.dataForm.awardTime)
+        //       }
+        //     })
+        //   }
+        // })
       },
       // // 上传之前
       // beforeUploadHandle (file) {
@@ -169,24 +168,19 @@
       // 表单提交
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
-          this.dataForm.declareId = this.id || undefined
+          this.dataForm.checkId = this.id || undefined
           if (valid) {
             this.dataForm.awardTime = Number(this.dataForm.awardTime)
-            this.declareInfoEntity.declareAwardEntities.push(this.dataForm)
-            this.declareInfoEntity.declareInfoEntity.declareNum = this.declareNum
             this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/info/update`),
+              url: this.$http.adornUrl(`/innovate/check/award/save`),
               method: 'post',
-              data: this.$http.adornData(this.declareInfoEntity)
+              data: this.$http.adornData(this.dataForm)
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.$http({
-                  url: this.$http.adornUrl('/innovate/declare/apply/apply'),
-                  method: 'post',
+                  url: this.$http.adornUrl('/innovate/check/apply'),
                   params: this.$http.adornParams({
-                    'declareId': this.id,
-                    'apply': 'project_audit_apply_status',
-                    'roleId': 5
+                    'checkId': this.id
                   }, false)
                 })
                 this.$message({

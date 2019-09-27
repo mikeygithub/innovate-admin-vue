@@ -80,7 +80,7 @@
               </el-col>
               <el-col :span="21">
                 <el-steps
-                  :active="props.row.innovateCheckInfoEntity.project_check_apply_status"
+                  :active="props.row.innovateCheckInfoEntity.projectCheckApplyStatus"
                   finish-status="success">
                   <el-step title="项目负责人提交"></el-step>
                   <!--<el-step title="指导老师审批"></el-step>-->
@@ -247,6 +247,8 @@
           params: this.$http.adornParams({
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
+            'hasApply': this.hasApply,
+            'projectCheckApplyStatus': 0,
             'checkNoPass': 0,
             'instituteId': this.instituteId,
             'checkTime': this.dataForm.checkTime.getFullYear(),

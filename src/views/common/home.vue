@@ -34,6 +34,9 @@
               </div>
             </el-card>
           </el-col>
+          <!--中期检查s-->
+
+          <!--中期检查e-->
           <el-col :span="8">
             <el-card v-if="totalPageMatchSuperAdmin > 0">
               <div slot="header">
@@ -91,6 +94,38 @@
               </div>
             </el-card>
           </el-col>
+          <!--中期检查s-->
+          <el-col :span="8">
+            <el-card v-if="submitChecks.length > 0">
+              <div slot="header">
+                <span>中期流程管理->待提交项目列表(项目负责人)</span>
+              </div>
+              <div>
+                <li v-for="item in submitChecks">
+                  项目：{{item.declareInfoEntity.declareName}}
+                  <span v-if="item.innovateCheckInfoEntity.checkNoPass === 0">、</span>
+                  待提交
+                  <router-link to="/innovate-apply/check/student">跳转</router-link>
+                </li>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card v-if="noPassChecks.length > 0">
+              <div slot="header">
+                <span>中期流程管理->不通过项目列表(项目负责人)</span>
+              </div>
+              <div>
+                <li v-for="item in noPassChecks">
+                  项目：{{item.declareInfoEntity.declareName}}
+                  <span v-if="item.innovateCheckInfoEntity.checkNoPass === 1">、</span>
+                  不通过，请修改
+                  <router-link to="/innovate-apply/check/nopass">跳转</router-link>
+                </li>
+              </div>
+            </el-card>
+          </el-col>
+          <!--中期检查e-->
           <el-col :span="8">
             <el-card v-if="noPassAudits.length > 0">
               <div slot="header">
@@ -142,6 +177,19 @@
               </div>
             </el-card>
           </el-col>
+          <!--中期检查s-->
+          <!--<el-col :span="8">-->
+            <!--<el-card v-if="totalPageCheckTeacher > 0">-->
+              <!--<div slot="header">-->
+                <!--<span>大创申请管理->指导老师审批列表(指导老师)</span>-->
+              <!--</div>-->
+              <!--<div>-->
+                <!--<span>{{totalPageCheckTeacher}}条、待审批</span>-->
+                <!--<router-link to="/innovate-apply/check/teacher">跳转</router-link>-->
+              <!--</div>-->
+            <!--</el-card>-->
+          <!--</el-col>-->
+          <!--中期检查e-->
         </template>
         <!--二级学院-->
         <template v-if="role === 4">
@@ -167,6 +215,19 @@
               </div>
             </el-card>
           </el-col>
+          <!--中期检查s-->
+          <el-col :span="8">
+            <el-card v-if="totalPageCheckEr > 0">
+              <div slot="header">
+                <span>中期检查管理->二级学院审批列表(二级学院)</span>
+              </div>
+              <div>
+                <span>{{totalPageCheckEr}}条、待审批</span>
+                <router-link to="/innovate-apply/check/er">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
+          <!--中期检查e-->
         </template>
         <!--分配评委-->
         <template v-if="role === 5">
@@ -203,6 +264,19 @@
               </div>
             </el-card>
           </el-col>
+          <!--中期检查s-->
+          <el-col :span="8">
+            <el-card v-if="totalPageCheckAdmin > 0">
+              <div slot="header">
+                <span>中期检查管理->分配评委组列表(分配评委)</span>
+              </div>
+              <div>
+                <span>{{totalPageCheckAdmin}}条、待审批</span>
+                <router-link to="/innovate-apply/check/admin">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
+          <!--中期检查e-->
         </template>
         <!--评委-->
         <template v-if="role === 6">
@@ -239,6 +313,19 @@
               </div>
             </el-card>
           </el-col>
+          <!--中期检查s-->
+          <el-col :span="8">
+            <el-card v-if="totalPageCheckJury > 0">
+              <div slot="header">
+                <span>中期检查管理->评委打分列表(评委)</span>
+              </div>
+              <div>
+                <span>{{totalPageCheckJury}}条、待审批</span>
+                <router-link to="/innovate-apply/check/jury">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
+          <!--中期检查e-->
         </template>
         <!--管理员-->
         <template v-if="role === 5">
@@ -286,6 +373,19 @@
               </div>
             </el-card>
           </el-col>
+          <!--中期检查s-->
+          <el-col :span="8">
+            <el-card v-if="totalPageCheckAdmin2 > 0">
+              <div slot="header">
+                <span>中期检查申请管理->管理员审批列表(管理员)</span>
+              </div>
+              <div>
+                <span>{{totalPageCheckAdmin2}}条、待审批</span>
+                <router-link to="/innovate-apply/check/admin2">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
+          <!--中期检查e-->
         </template>
       </template>
     </el-row>
@@ -304,24 +404,31 @@
         totalPageBaseTeacher: '',
         totalPageMatchTeacher: '',
         totalPageAuditTeacher: '',
+        totalPageCheckTeacher: '',
         totalPageBaseEr: '',
         totalPageMatchEr: '',
         totalPageAuditEr: '',
+        totalPageCheckEr: '',
         totalPageBaseAdmin: '',
         totalPageMatchAdmin: '',
         totalPageAuditAdmin: '',
+        totalPageCheckAdmin: '',
         totalPageBaseJury: '',
         totalPageMatchJury: '',
         totalPageAuditJury: '',
+        totalPageCheckJury: '',
         totalPageBaseAdmin2: '',
         totalPageMatchAdmin2: '',
         totalPageAuditAdmin2: '',
+        totalPageCheckAdmin2: '',
         totalPageBaseSuperAdmin: '',
         totalPageMatchSuperAdmin: '',
         totalPageAuditSuperAdmin: '',
         totalPageBaseExamine: '',
+        submitChecks: '',
         noPassProjects: '',
         noPassMatchs: '',
+        noPassChecks: '',
         noPassAudits: ''
       }
     },
@@ -504,6 +611,46 @@
             this.totalPage = 0
           }
         })
+        // 待提交中期检查项目
+        this.$http({
+          url: this.$http.adornUrl('/innovate/check/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'userId': this.$store.state.user.id,
+            'hasApply': this.hasApply,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 0,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.submitChecks = data.page.list
+          } else {
+            this.submitChecks = []
+          }
+        })
+        // 中期不通过
+        this.$http({
+          url: this.$http.adornUrl('/innovate/check/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'userId': this.$store.state.user.id,
+            'checkNoPass': 1,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.noPassChecks = data.page.list
+            this.totalPage = data.page.totalCount
+          } else {
+            this.dataList = []
+            this.totalPage = 0
+          }
+        })
       },
       getTeacher () {
         this.$http({
@@ -620,6 +767,25 @@
             this.totalPage = 0
           }
         })
+        // 中期检查
+        this.$http({
+          url: this.$http.adornUrl('/innovate/check/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'hasApply': this.hasApply,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 1,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.totalPageCheckEr = data.page.totalCount
+          } else {
+            this.dataList = []
+          }
+        })
       },
       getAdmin () {
         this.$http({
@@ -632,8 +798,6 @@
             'hasApply': this.hasApply,
             'noPass': 'base_no_pass',
             'noPassStatus': 0,
-            // 'isTeacher': true
-            // 'isStudent': true
             'apply': 'project_base_apply_status',
             'applyStatus': 2,
             'isDel': 0
@@ -766,6 +930,44 @@
             this.totalPage = 0
           }
         })
+        // 中期检查分配评委组
+        this.$http({
+          url: this.$http.adornUrl('/innovate/check/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'hasApply': this.hasApply,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 2,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.totalPageCheckAdmin = data.page.totalCount
+          } else {
+            this.dataList = []
+          }
+        })
+        // 中期检查管理员审批
+        this.$http({
+          url: this.$http.adornUrl('/innovate/check/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'hasApply': this.hasApply,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 4,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.totalPageCheckAdmin2 = data.page.totalCount
+          } else {
+            this.dataList = []
+          }
+        })
       },
       getJury () {
         this.$http({
@@ -829,6 +1031,27 @@
             this.totalPageAuditJury = data.page.totalCount
           } else {
             this.totalPage = 0
+          }
+        })
+        // 中期检查
+        this.$http({
+          url: this.$http.adornUrl('/innovate/check/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'reviewUserId': this.$store.state.user.id,
+            'hasReview': this.hasReview,
+            'isReview': true,
+            'checkNoPass': 0,
+            'projectCheckApplyStatus': 3,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.totalPageCheckJury = data.page.totalCount
+          } else {
+            this.dataList = []
           }
         })
       }

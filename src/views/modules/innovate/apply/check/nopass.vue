@@ -119,6 +119,7 @@
           <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 2" size="small">已提交</el-tag>
           <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 3" size="small">已提交</el-tag>
           <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 4" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.innovateCheckInfoEntity.projectCheckApplyStatus === 5" size="small">已提交</el-tag>
         </template>
       </el-table-column>>
       <el-table-column
@@ -212,9 +213,7 @@
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,
-            // 'hasApply': this.hasApply,
             'checkNoPass': 1,
-            // 'projectCheckApplyStatus': 0,
             'projectName': this.dataForm.projectName,
             'checkTime': this.dataForm.checkTime.getFullYear(),
             'isDel': 0

@@ -261,7 +261,7 @@
       },
       applyIsVisible (item) {
         if (this.isAuth('innovate:check:list') && item != null && item !== '') {
-          if (item.projectCheckApplyStatus === 4) {
+          if (item.projectCheckApplyStatus === 3) {
             let roleIdList = this.$store.state.user.roleIdList
             for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
               if (roleIdList[roleIndex] === 6) {

@@ -129,12 +129,12 @@
           <el-button v-if="addOrUpdate(scope.row.declareInfoEntity)" type="text" size="small" @click="addOrUpdateHandle(scope.row.declareInfoEntity.declareId)">修改</el-button>
           <el-button v-if="isDelete(scope.row.declareInfoEntity)" type="text" size="small" @click="deleteHandle(scope.row.declareInfoEntity.declareId)">删除</el-button>
           <br v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)">
-          <el-button v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyAwardHandle(scope.row.declareInfoEntity.declareId)">评奖</el-button>
+          <el-button v-if="applyDeclareIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="applyAwardHandle(scope.row.innovateCheckInfoEntity.checkId)">评奖</el-button>
           <!--<el-button v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyDeclareRef(scope.row.declareInfoEntity.declareId)">通过</el-button>-->
-          <el-button v-if="retreatIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.declareInfoEntity)">不通过</el-button>
+          <el-button v-if="retreatIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.declareInfoEntity)">不通过</el-button>
           <br v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)">
-          <el-button v-if="publicDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="publicDeclareHandle(scope.row.declareInfoEntity.declareId)">公布立项项目</el-button>
-          <el-button v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="exportDeclareHandle(scope.row.declareInfoEntity.declareId)">导出项目信息</el-button>
+          <!--<el-button v-if="publicDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="publicDeclareHandle(scope.row.declareInfoEntity.declareId)">公布立项项目</el-button>-->
+          <!--<el-button v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="exportDeclareHandle(scope.row.declareInfoEntity.declareId)">导出项目信息</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -237,7 +237,7 @@
             'pageSize': this.pageSize,
             'hasApply': this.hasApply,
             'checkNoPass': 0,
-            'projectCheckApplyStatus': 5,
+            'projectCheckApplyStatus': 4,
             'projectName': this.dataForm.projectName,
             'checkTime': this.dataForm.checkTime.getFullYear(),
             'isDel': 0
@@ -312,33 +312,33 @@
         })
       },
       applyDeclareIsVisible (item) {
-        if (this.isAuth('innovate:project:apply:audit')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 5) {
-              let roleIdList = this.$store.state.user.roleIdList
-              for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
-                if (roleIdList[roleIndex] === 5) {
-                  return true
-                }
+        // if (this.isAuth('innovate:project:apply:audit')) {
+        if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+          if (item.projectCheckApplyStatus === 4) {
+            let roleIdList = this.$store.state.user.roleIdList
+            for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
+              if (roleIdList[roleIndex] === 5) {
+                return true
               }
             }
           }
         }
+        // }
         return false
       },
       retreatIsVisible (item) {
-        if (this.isAuth('innovate:declare:retreat')) {
-          if (item.projectAuditApplyStatus !== null || item.projectAuditApplyStatus !== '') {
-            if (item.projectAuditApplyStatus === 5) {
-              let roleIdList = this.$store.state.user.roleIdList
-              for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
-                if (roleIdList[roleIndex] === 5) {
-                  return true
-                }
+        // if (this.isAuth('innovate:declare:retreat')) {
+        if (item.projectCheckApplyStatus !== null || item.projectCheckApplyStatus !== '') {
+          if (item.projectCheckApplyStatus === 4) {
+            let roleIdList = this.$store.state.user.roleIdList
+            for (let roleIndex = 0; roleIndex < roleIdList.length; roleIndex++) {
+              if (roleIdList[roleIndex] === 5) {
+                return true
               }
             }
           }
         }
+        // }
         return false
       },
       publicDeclareIsVisible (item) {
