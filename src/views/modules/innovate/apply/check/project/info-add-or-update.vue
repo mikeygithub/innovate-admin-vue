@@ -175,9 +175,10 @@
         <el-col :span="24">
           <template>
             <el-alert
-              title="上传附件要求"
+              title="附件要求"
               type="success"
-              description="这是一句绕口令：黑灰化肥会挥发发灰黑化肥挥发；灰黑化肥会挥发发黑灰化肥发挥。 黑灰化肥会挥发发灰黑化肥黑灰挥发化为灰……">
+              :description="fileAskContent"
+              show-icon>
             </el-alert>
           </template>
         </el-col>
@@ -193,7 +194,6 @@
             </template>
           </el-form-item>
         </el-col>
-
         <el-col :span="24">
           <el-form-item label="文件上传">
             <el-upload
@@ -268,6 +268,7 @@
         url: '',
         upLoadUrl: '',
         upLoadData: {},
+        fileAskContent: '无',
         tables: [],
         fileList: [],
         teacherLists: [],
@@ -356,6 +357,21 @@
             }
           })
           this.dataListLoading = false
+          // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
+          this.dataListLoading = true
+          this.$http({
+            url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
+            method: 'get',
+            params: this.$http.adornParams({
+              'fileAskType': 2,
+              'fileAskTime': new Date().getFullYear()
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.fileAskContent = data.fileAsk == null ? '无' : data.fileAsk.fileAskContent
+              this.dataListLoading = false
+            }
+          })
         })
       },
       // 表单提交
