@@ -63,7 +63,7 @@
                   <el-step title="项目负责人提交"></el-step>
                   <el-step title="指导老师审批"></el-step>
                   <el-step title="二级学院审批"></el-step>
-                  <el-step title="管理员审批"></el-step>
+                  <el-step title="管理员分配评委组"></el-step>
                   <el-step title="评委审批"></el-step>
                   <el-step title="管理员审批"></el-step>
                   <!--<el-step title="超级管理员审批"></el-step>-->
@@ -221,7 +221,7 @@
             for (let index = 0; index < this.dataList.length; index++) {
               if (this.applyDeclareIsVisible(this.dataList[index].declareInfoEntity) === true) {
                 // this.applyDeclareHandle(this.dataList[index].declareInfoEntity.declareId)
-                this.$message.warning('请您尽快提交申请！')
+                // this.$message.warning('请您尽快提交申请！')
               }
             }
           } else {

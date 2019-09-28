@@ -131,7 +131,7 @@
           <br v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)">
           <el-button v-if="applyDeclareIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="applyAwardHandle(scope.row.innovateCheckInfoEntity.checkId)">评奖</el-button>
           <!--<el-button v-if="applyDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="applyDeclareRef(scope.row.declareInfoEntity.declareId)">通过</el-button>-->
-          <el-button v-if="retreatIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.declareInfoEntity)">不通过</el-button>
+          <el-button v-if="retreatIsVisible(scope.row.innovateCheckInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.innovateCheckInfoEntity)">不通过</el-button>
           <br v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)">
           <!--<el-button v-if="publicDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="publicDeclareHandle(scope.row.declareInfoEntity.declareId)">公布立项项目</el-button>-->
           <!--<el-button v-if="exportDeclareIsVisible(scope.row.declareInfoEntity)" type="text" size="small" @click="exportDeclareHandle(scope.row.declareInfoEntity.declareId)">导出项目信息</el-button>-->
@@ -382,7 +382,7 @@
       retreatHandle (item) {
         this.retreatVisible = true
         this.$nextTick(() => {
-          this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
+          this.$refs.retreat.init(item.checkId, 'project_check_apply_status', item.projectCheckApplyStatus)
         })
       },
       // 审批

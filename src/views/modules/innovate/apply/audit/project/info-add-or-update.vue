@@ -116,8 +116,7 @@
             <el-alert
               title="附件要求"
               type="success"
-              :description="fileAskContent"
-              show-icon>
+              :description="fileAskContent">
             </el-alert>
           </template>
         </el-col>
@@ -424,7 +423,7 @@
                 'userPersonInfoEntities': this.personInfoList,
                 'declareTeacherEntities': this.teacherLists,
                 'declareAttachEntities': this.attachLists,
-                'declareStaffInfoEntities': this,
+                'declareStaffInfoEntities': this.staffInfoLists,
                 'declareAwardEntities': this.awardInfoLists
               })
             }).then(({data}) => {
