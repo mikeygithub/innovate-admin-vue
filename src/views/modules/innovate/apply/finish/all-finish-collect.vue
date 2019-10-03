@@ -200,7 +200,7 @@
           method: 'get',
           params: this.$http.adornParams({
             'instituteId': this.dataForm.instituteId,
-            'finishTime': this.dataForm.finishTime.getFullYear(),
+            'finishTime': this.dataForm.finishTime == null ? '' : this.dataForm.finishTime.getFullYear(),
             'project_finish_apply_status_more': 2,
             'noPassStatus': 0,
             'noPass': 'finish_no_pass',

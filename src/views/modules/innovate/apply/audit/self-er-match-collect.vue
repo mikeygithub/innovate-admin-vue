@@ -194,7 +194,7 @@
           method: 'get',
           params: this.$http.adornParams({
             'instituteId': this.dataForm.instituteId,
-            'declareTime': this.dataForm.declareTime.getFullYear(),
+            'declareTime': this.dataForm.declareTime == null ? '' : this.dataForm.declareTime.getFullYear(),
             'project_audit_apply_status_more': 2,
             'noPassStatus': 0,
             'noPass': 'audit_no_pass',

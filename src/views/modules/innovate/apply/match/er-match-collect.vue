@@ -234,7 +234,7 @@
           method: 'get',
           params: this.$http.adornParams({
             'instituteId': this.dataForm.instituteId,
-            'matchTime': this.dataForm.matchTime.getFullYear(),
+            'matchTime': this.dataForm.matchTime == null ? '' : this.dataForm.matchTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'project_audit_apply_status_more': 2,
@@ -244,7 +244,6 @@
             'isDel': 0
           })
         }).then(({data}) => {
-          console.log(data)
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount

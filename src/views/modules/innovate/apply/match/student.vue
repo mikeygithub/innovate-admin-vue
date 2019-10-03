@@ -201,7 +201,7 @@
           url: this.$http.adornUrl('/innovate/match/info/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'matchTime': this.dataForm.matchTime.getFullYear(),
+            'matchTime': this.dataForm.matchTime == null ? '' : this.dataForm.matchTime.getFullYear(),
             'projectName': this.dataForm.projectName,
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,

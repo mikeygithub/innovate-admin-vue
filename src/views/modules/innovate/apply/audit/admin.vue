@@ -214,7 +214,7 @@
             method: 'get',
             params: this.$http.adornParams({
               'projectName': this.dataForm.projectName,
-              'declareTime': this.dataForm.declareTime.getFullYear(),
+              'declareTime': this.dataForm.declareTime == null ? '' : this.dataForm.declareTime.getFullYear(),
               'currPage': this.pageIndex,
               'pageSize': this.pageSize,
               'userId': this.$store.state.user.id,

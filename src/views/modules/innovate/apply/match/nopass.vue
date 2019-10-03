@@ -199,7 +199,7 @@
           method: 'get',
           params: this.$http.adornParams({
             'projectName': this.dataForm.projectName,
-            'matchTime': this.dataForm.matchTime.getFullYear(),
+            'matchTime': this.dataForm.matchTime == null ? '' : this.dataForm.matchTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,

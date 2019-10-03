@@ -180,7 +180,7 @@
         allErMatchCollectDetailVisible: false,
         instituteList: this.$store.state.user.institute,
         teacherTitleList: this.$store.state.user.title,
-        subjectList: this.$store.state.user.subject,
+        subjectList: this.$store.state.user.subjectsu,
         declareTypeList: [
           {value: 1, label: '创新训练项目'}, {value: 2, label: '创业训练项目'}, {value: 3, label: '创业实践项目'}
         ]
@@ -203,7 +203,7 @@
           method: 'get',
           params: this.$http.adornParams({
             'instituteId': this.dataForm.instituteId,
-            'declareTime': this.dataForm.declareTime.getFullYear(),
+            'declareTime': this.dataForm.declareTime == null ? '' : this.dataForm.declareTime.getFullYear(),
             'project_audit_apply_status_more': 2,
             'noPassStatus': 0,
             'noPass': 'audit_no_pass',
