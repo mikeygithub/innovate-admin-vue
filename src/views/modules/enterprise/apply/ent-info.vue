@@ -145,13 +145,16 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
+    <ent-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
   </div>
 </template>
 
 <script>
+  import EntDetails from './ent-details'
   export default {
     data () {
       return {
+        shenhe: false,
         hasApply: '0',
         dataForm: {
           baseId: '',
@@ -168,6 +171,7 @@
       }
     },
     components: {
+      EntDetails
     },
     activated () {
       this.getDataList()
@@ -180,6 +184,14 @@
       // 审核
       applyDetailHandle (id) {
         console.log(id)
+        this.shenhe = true
+        this.$nextTick(() => {
+          this.$refs.details.init()
+        })
+      },
+      // 获取详情信息
+      getDetailsInfo () {
+
       },
       // 获取数据列表
       getDataList () {
