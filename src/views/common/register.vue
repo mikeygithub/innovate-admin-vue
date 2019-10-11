@@ -134,7 +134,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-if="false" prop="captcha">
+      <el-form-item prop="captcha">
         <el-row :gutter="24">
           <el-col :span="14">
             <el-input v-model="dataForm.captcha" placeholder="请输入验证码"></el-input>
