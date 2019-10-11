@@ -48,8 +48,8 @@
       <el-form-item label="是否高新区" prop="newHighZones">
 <!--        <el-input v-model="dataForm.newHighZones" :readonly="true"></el-input>-->
         <el-radio-group v-model="dataForm.newHighZones" size="small" :readonly="true">
-          <el-radio border label="0">是</el-radio>
-          <el-radio border label="1">否</el-radio>
+          <el-radio border label="0" :readonly="true">是</el-radio>
+          <el-radio border label="1" :readonly="true">否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="入驻申请时间" prop="entInTime">
@@ -125,37 +125,6 @@
           })
         }
       }
-      // 表单提交
-      // dataFormSubmit () {
-      //     this.$refs['dataForm'].validate((valid) => {
-      //         if (valid) {
-      //             this.$http({
-      //                 url: this.$http.adornUrl(`/innovate/base/station/${!this.dataForm.id ? 'save' : 'update'}`),
-      //                 method: 'post',
-      //                 data: this.$http.adornData({
-      //                     'stationId': this.dataForm.id || undefined,
-      //                     'stationNum': this.dataForm.stationNum,
-      //                     'stationArea': this.dataForm.stationArea,
-      //                     'baseId': this.dataForm.baseId
-      //                 })
-      //             }).then(({data}) => {
-      //                 if (data && data.code === 0) {
-      //                     this.$message({
-      //                         message: '操作成功',
-      //                         type: 'success',
-      //                         duration: 1500,
-      //                         onClose: () => {
-      //                             this.visible = false
-      //                             this.$emit('refreshDataList')
-      //                         }
-      //                     })
-      //                 } else {
-      //                     this.$message.error(data.msg)
-      //                 }
-      //             })
-      //         }
-      //     })
-      // }
     }
   }
 </script>

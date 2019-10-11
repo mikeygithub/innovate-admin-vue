@@ -15,6 +15,10 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button @click="addOrUpdateHandle()">新增</el-button>
+      </el-form-item>
+
     </el-form>
 <!--    <el-card>-->
 <!--      <el-radio-group v-model="hasApply" @change="getDataList">-->
@@ -173,7 +177,7 @@
       deleteHandle (id) {
         let canDelete = true
         let recruitmentInfoIds = id ? [id] : this.dataListSelections.map(item => {
-          if (item.inApply == '1') {
+          if (item.inApply === '1') {
             canDelete = false
           } else {
             canDelete = false
