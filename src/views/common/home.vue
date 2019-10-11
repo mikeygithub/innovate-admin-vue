@@ -433,7 +433,8 @@
       }
     },
     mounted () {
-      setInterval(this.getDataList, 100000)
+      // 调度刷新
+      // setInterval(this.getDataList, 100000)
       this.getDataList()
     },
     methods: {
