@@ -1,197 +1,158 @@
 <template>
   <el-dialog
-    :title="''"
+    :title="'企业审核'"
     :close-on-click-modal="false"
-    width="66rem"
+    width="60%"
     :visible.sync="visible">
-    <h3 class="login-title">企业入驻审核</h3>
-    <el-form :model="dataForm"  ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
-      <el-form-item prop="userName">
-        <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
+    <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
+      <el-form-item label="企业名称" prop="entName">
+        <el-input v-model="dataForm.entName" :readonly="true"></el-input>
       </el-form-item>
-      <el-form-item prop="password">
-        <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
+      <el-form-item label="法人代表" prop="entCorporate">
+        <el-input v-model="dataForm.entCorporate" :readonly="true"></el-input>
       </el-form-item>
-      <el-form-item prop="captcha">
-        <el-row :gutter="20">
-          <el-col :span="14">
-            <el-input v-model="dataForm.captcha" placeholder="验证码">
-            </el-input>
-          </el-col>
-          <el-col :span="10" class="login-captcha">
-            <img style="display: block;width: 100%;" :src="captchaPath" @click="getCaptcha()" alt="">
-          </el-col>
-        </el-row>
+      <el-form-item label="经营范围" prop="entBusiness">
+        <el-input type="textarea" v-model="dataForm.entBusiness" :readonly="true"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-row :gutter="38">
-          <el-col :span="12">
-            <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()" :loading="loginLoading">
-              登录
-            </el-button>
-          </el-col>
-          <el-col :span="12">
-            <el-button class="login-btn-submit" type="primary" @click="visible = false">取消</el-button>
-          </el-col>
-        </el-row>
+      <el-form-item label="统一信用代码" prop="entCode">
+        <el-input v-model="dataForm.entCode" :readonly="true"></el-input>
+      </el-form-item>
+      <el-form-item label="注册资本" prop="entRegister">
+        <el-input v-model="dataForm.entRegister" :readonly="true"></el-input>
+      </el-form-item>
+      <el-form-item label="成立时间" prop="entFoundingTime">
+        <el-date-picker
+          v-model="dataForm.entFoundingTime"
+          :readonly="true"
+          type="datetime"
+          format="yyyy-MM-dd HH:mm:ss"
+          value-format="timestamp"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="企业类型" prop="entType">
+        <el-input v-model="dataForm.entType" :readonly="true"></el-input>
+      </el-form-item>
+      <el-form-item label="经营状态" prop="entStatus">
+        <el-input v-model="dataForm.entStatus" :readonly="true"></el-input>
+      </el-form-item>
+      <el-form-item label="注册地址" prop="entRegisterAddress">
+        <el-input type="textarea" v-model="dataForm.entRegisterAddress" :readonly="true"></el-input>
+      </el-form-item>
+      <el-form-item label="企业地址" prop="entAddress">
+        <el-input type="textarea" v-model="dataForm.entAddress" :readonly="true"></el-input>
+      </el-form-item>
+      <el-form-item label="企业介绍" prop="entIntroduce">
+        <el-input type="textarea" v-model="dataForm.entIntroduce" :readonly="true"></el-input>
+      </el-form-item>
+      <el-form-item label="是否高新区" prop="newHighZones">
+        <el-input v-model="dataForm.newHighZones" :readonly="true"></el-input>
+      </el-form-item>
+      <el-form-item label="入驻申请时间" prop="entInTime">
+        <el-date-picker
+          v-model="dataForm.entInTime"
+          :readonly="true"
+          type="datetime"
+          format="yyyy-MM-dd HH:mm:ss"
+          value-format="timestamp"
+          placeholder="选择日期">
+        </el-date-picker>
       </el-form-item>
     </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="visible = false">取消</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+    </span>
   </el-dialog>
 </template>
 
 <script>
-  import { getUUID } from '@/utils'
-
-  export default {
-    props: {'datas': Object},
+export default {
     data () {
-      return {
-        visible: false,
-        registerVisible: false,
-        loginLoading: false,
-        dataForm: {
-          userName: '',
-          password: '',
-          uuid: '',
-          captcha: ''
-        },
-        captchaPath: ''
-      }
-    },
-    components: {
-    },
-    created () {
-      this.getCaptcha()
-    },
-    mounted () {
-      // this.getDate()
+        return {
+            visible: false,
+            dataList: [],
+            dataForm: {
+                id: 0,
+                entName: '',
+                entCorporate: '',
+                entBusiness: '',
+                entCode: '',
+                entRegister: '',
+                entFoundingTime: '',
+                entType: '',
+                entStatus: '',
+                entRegisterAddress: '',
+                entAddress: '',
+                entIntroduce: '',
+                newHighZones: '',
+                entInTime: '',
+                inApply: ''
+            }
+        }
     },
     methods: {
-      init () {
-        this.visible = true
-      },
-      // 提交表单
-      dataFormSubmit () {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.loginLoading = true
-            this.$http({
-              url: this.$http.adornUrl('/sys/login'),
-              method: 'post',
-              data: this.$http.adornData({
-                'username': this.dataForm.userName,
-                'password': this.dataForm.password,
-                'uuid': this.dataForm.uuid,
-                'captcha': this.dataForm.captcha
-              })
-            }).then(({data}) => {
-              this.loginLoading = false
-              if (data && data.code === 0) {
-                this.$cookie.set('token', data.token)
-                this.$message.success('登入成功')
-                this.$router.replace({ name: 'index' })
-                this.visible = false
-                this.$router.go(0)
-              } else {
-                this.getCaptcha()
-                this.$message.error(data.msg)
-                this.dataForm.captcha = ''
-              }
-            })
-            this.loginLoading = false
-          }
-        })
-      },
-      registerSubmit () {
-        this.registerVisible = true
-        this.$nextTick(() => {
-          this.$refs.register.init()
-        })
-      },
-      // 获取验证码
-      getCaptcha () {
-        this.registerVisible = false
-        this.dataForm.uuid = getUUID()
-        this.captchaPath = this.$http.adornUrl(`/captcha.jpg?uuid=${this.dataForm.uuid}`)
-      },
-    }
-  }
-</script>
+        init (id) {
+            this.visible = true
+            this.dataForm.id = id || 0
 
-<style lang="scss">
-  .site-wrapper.site-page--login {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(38, 50, 56, .6);
-    overflow: hidden;
-    &:before {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      content: "";
-      /*background-image: url(~@/assets/img/login.png);*/
-      background-size: 100% 100%;
+            if (this.dataForm.id) {
+                this.$http({
+                    url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.id}/0`),
+                    method: 'get',
+                    params: this.$http.adornParams()
+                }).then(({data}) => {
+                    console.log(this.dataForm.id)
+                    if (data && data.code === 0) {
+                        this.dataForm.entName = data.data.entName
+                        this.dataForm.entCorporate = data.data.entCorporate
+                        this.dataForm.entBusiness = data.data.entBusiness
+                        this.dataForm.entCode = data.data.entCode
+                        this.dataForm.entRegister = data.data.entRegister
+                        this.dataForm.entFoundingTime = new Date(data.data.entFoundingTime)
+                        this.dataForm.entType = data.data.entType
+                        this.dataForm.entStatus = data.data.entStatus
+                        this.dataForm.entRegisterAddress = data.data.entRegisterAddress
+                        this.dataForm.entAddress = data.data.entAddress
+                        this.dataForm.entIntroduce = data.data.entIntroduce
+                        this.dataForm.newHighZones = data.data.newHighZones
+                        this.dataForm.entInTime = new Date(data.data.entInTime)
+                        this.dataForm.inApply = data.data.inApply
+                    }
+                })
+            }
+        }
+        // 表单提交
+        // dataFormSubmit () {
+        //     this.$refs['dataForm'].validate((valid) => {
+        //         if (valid) {
+        //             this.$http({
+        //                 url: this.$http.adornUrl(`/innovate/base/station/${!this.dataForm.id ? 'save' : 'update'}`),
+        //                 method: 'post',
+        //                 data: this.$http.adornData({
+        //                     'stationId': this.dataForm.id || undefined,
+        //                     'stationNum': this.dataForm.stationNum,
+        //                     'stationArea': this.dataForm.stationArea,
+        //                     'baseId': this.dataForm.baseId
+        //                 })
+        //             }).then(({data}) => {
+        //                 if (data && data.code === 0) {
+        //                     this.$message({
+        //                         message: '操作成功',
+        //                         type: 'success',
+        //                         duration: 1500,
+        //                         onClose: () => {
+        //                             this.visible = false
+        //                             this.$emit('refreshDataList')
+        //                         }
+        //                     })
+        //                 } else {
+        //                     this.$message.error(data.msg)
+        //                 }
+        //             })
+        //         }
+        //     })
+        // }
     }
-    .site-content__wrapper {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      padding: 0;
-      margin: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      background-color: transparent;
-    }
-    .site-content {
-      min-height: 100%;
-      padding: 30px 500px 30px 30px;
-    }
-    .brand-info {
-      margin: 220px 100px 0 90px;
-      color: #fff;
-    }
-    .brand-info__text {
-      margin:  0 0 22px 0;
-      font-size: 48px;
-      font-weight: 400;
-      text-transform : uppercase;
-    }
-    .brand-info__intro {
-      margin: 10px 0;
-      font-size: 16px;
-      line-height: 1.58;
-      opacity: .6;
-    }
-    .login-main {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 150px 60px 180px;
-      width: 470px;
-      min-height: 100%;
-      background-color: #fff;
-    }
-    .login-title {
-      font-size: 16px;
-    }
-    .login-captcha {
-      overflow: hidden;
-      > img {
-        width: 100%;
-        cursor: pointer;
-      }
-    }
-    .login-btn-submit {
-      width: 100%;
-      margin-top: 38px;
-    }
-  }
-</style>
+}
+</script>

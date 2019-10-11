@@ -35,48 +35,6 @@
         align="center"
         width="50">
       </el-table-column>
-      <!--      <el-table-column-->
-      <!--        hidden-->
-      <!--        header-align="center"-->
-      <!--        align="center"-->
-      <!--        width="50"-->
-      <!--        label="ID">-->
-      <!--        <template slot-scope="props">-->
-      <!--          <p v-text="props.$index+1"></p>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
-      <!--      <el-table-column-->
-      <!--        sortable-->
-      <!--        hidden-->
-      <!--        type="expand"-->
-      <!--        prop="matchInfoEntity.matchId"-->
-      <!--        header-align="center"-->
-      <!--        align="center"-->
-      <!--        width="120"-->
-      <!--        label="展开流程进度">-->
-      <!--        <template slot-scope="props">-->
-      <!--          <el-row>-->
-      <!--            <el-card style=": 0.1rem">-->
-      <!--              <el-col :span="3">-->
-      <!--                <el-tag>比赛申请审批进度</el-tag>-->
-      <!--              </el-col>-->
-      <!--              <el-col :span="21">-->
-      <!--                <el-steps-->
-      <!--                  :active="props.row.matchInfoEntity.projectMatchApplyStatus"-->
-      <!--                  finish-status="success">-->
-      <!--                  <el-step title="项目负责人提交"></el-step>-->
-      <!--                  <el-step title="指导老师审批"></el-step>-->
-      <!--                  <el-step title="二级学院审批"></el-step>-->
-      <!--                  <el-step title="管理员分配评委组"></el-step>-->
-      <!--                  <el-step title="评委审批"></el-step>-->
-      <!--                  <el-step title="管理员审批"></el-step>-->
-      <!--                  &lt;!&ndash;<el-step title="超级管理员审批"></el-step>&ndash;&gt;-->
-      <!--                </el-steps>-->
-      <!--              </el-col>-->
-      <!--            </el-card>-->
-      <!--          </el-row>-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
       <el-table-column
         sortable
         prop="entName"
@@ -126,11 +84,13 @@
         fixed="right"
         header-align="center"
         align="center"
-        width="110"
+        width="210"
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="applyDetailHandle(scope.row.entInfoId)">审核</el-button>
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.entInfoId)">详情</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.entInfoId)">通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.entInfoId)">不通过</el-button>
           <el-button v-else type="text" size="small" >无操作</el-button>
         </template>
       </el-table-column>
@@ -182,12 +142,19 @@
         return cellValue === '0' ? '是' : '否'
       },
       // 审核
-      applyDetailHandle (id) {
-        console.log(id)
-        this.shenhe = true
-        this.$nextTick(() => {
-          this.$refs.details.init()
-        })
+      detailHandle (id) {
+      console.log(id)
+      this.shenhe = true
+      this.$nextTick(() => {
+        this.$refs.details.init(id)
+      })
+      },
+      // 不通过
+      retreatHandle (item) {
+          this.retreatVisible = true
+          this.$nextTick(() => {
+              this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
+          })
       },
       // 获取详情信息
       getDetailsInfo () {
