@@ -46,7 +46,11 @@
         <el-input type="textarea" v-model="dataForm.entIntroduce" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="是否高新区" prop="newHighZones">
-        <el-input v-model="dataForm.newHighZones" :readonly="true"></el-input>
+<!--        <el-input v-model="dataForm.newHighZones" :readonly="true"></el-input>-->
+        <el-radio-group v-model="dataForm.newHighZones" size="small" :readonly="true">
+          <el-radio border label="0">是</el-radio>
+          <el-radio border label="1">否</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="入驻申请时间" prop="entInTime">
         <el-date-picker
@@ -67,92 +71,91 @@
 </template>
 
 <script>
-export default {
+  export default {
     data () {
-        return {
-            visible: false,
-            dataList: [],
-            dataForm: {
-                id: 0,
-                entName: '',
-                entCorporate: '',
-                entBusiness: '',
-                entCode: '',
-                entRegister: '',
-                entFoundingTime: '',
-                entType: '',
-                entStatus: '',
-                entRegisterAddress: '',
-                entAddress: '',
-                entIntroduce: '',
-                newHighZones: '',
-                entInTime: '',
-                inApply: ''
-            }
+      return {
+        visible: false,
+        dataList: [],
+        dataForm: {
+          id: 0,
+          entName: '',
+          entCorporate: '',
+          entBusiness: '',
+          entCode: '',
+          entRegister: '',
+          entFoundingTime: '',
+          entType: '',
+          entStatus: '',
+          entRegisterAddress: '',
+          entAddress: '',
+          entIntroduce: '',
+          newHighZones: '',
+          entInTime: '',
+          inApply: ''
         }
+      }
     },
     methods: {
-        init (id) {
-            this.visible = true
-            this.dataForm.id = id || 0
-
-            if (this.dataForm.id) {
-                this.$http({
-                    url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.id}/0`),
-                    method: 'get',
-                    params: this.$http.adornParams()
-                }).then(({data}) => {
-                    console.log(this.dataForm.id)
-                    if (data && data.code === 0) {
-                        this.dataForm.entName = data.data.entName
-                        this.dataForm.entCorporate = data.data.entCorporate
-                        this.dataForm.entBusiness = data.data.entBusiness
-                        this.dataForm.entCode = data.data.entCode
-                        this.dataForm.entRegister = data.data.entRegister
-                        this.dataForm.entFoundingTime = new Date(data.data.entFoundingTime)
-                        this.dataForm.entType = data.data.entType
-                        this.dataForm.entStatus = data.data.entStatus
-                        this.dataForm.entRegisterAddress = data.data.entRegisterAddress
-                        this.dataForm.entAddress = data.data.entAddress
-                        this.dataForm.entIntroduce = data.data.entIntroduce
-                        this.dataForm.newHighZones = data.data.newHighZones
-                        this.dataForm.entInTime = new Date(data.data.entInTime)
-                        this.dataForm.inApply = data.data.inApply
-                    }
-                })
+      init (id) {
+        this.visible = true
+        this.dataForm.id = id || 0
+        if (this.dataForm.id) {
+          this.$http({
+            url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.id}/0`),
+            method: 'get',
+            params: this.$http.adornParams()
+          }).then(({data}) => {
+            console.log(this.dataForm.id)
+            if (data && data.code === 0) {
+              this.dataForm.entName = data.data.entName
+              this.dataForm.entCorporate = data.data.entCorporate
+              this.dataForm.entBusiness = data.data.entBusiness
+              this.dataForm.entCode = data.data.entCode
+              this.dataForm.entRegister = data.data.entRegister
+              this.dataForm.entFoundingTime = new Date(data.data.entFoundingTime)
+              this.dataForm.entType = data.data.entType
+              this.dataForm.entStatus = data.data.entStatus
+              this.dataForm.entRegisterAddress = data.data.entRegisterAddress
+              this.dataForm.entAddress = data.data.entAddress
+              this.dataForm.entIntroduce = data.data.entIntroduce
+              this.dataForm.newHighZones = data.data.newHighZones
+              this.dataForm.entInTime = new Date(data.data.entInTime)
+              this.dataForm.inApply = data.data.inApply
             }
+          })
         }
-        // 表单提交
-        // dataFormSubmit () {
-        //     this.$refs['dataForm'].validate((valid) => {
-        //         if (valid) {
-        //             this.$http({
-        //                 url: this.$http.adornUrl(`/innovate/base/station/${!this.dataForm.id ? 'save' : 'update'}`),
-        //                 method: 'post',
-        //                 data: this.$http.adornData({
-        //                     'stationId': this.dataForm.id || undefined,
-        //                     'stationNum': this.dataForm.stationNum,
-        //                     'stationArea': this.dataForm.stationArea,
-        //                     'baseId': this.dataForm.baseId
-        //                 })
-        //             }).then(({data}) => {
-        //                 if (data && data.code === 0) {
-        //                     this.$message({
-        //                         message: '操作成功',
-        //                         type: 'success',
-        //                         duration: 1500,
-        //                         onClose: () => {
-        //                             this.visible = false
-        //                             this.$emit('refreshDataList')
-        //                         }
-        //                     })
-        //                 } else {
-        //                     this.$message.error(data.msg)
-        //                 }
-        //             })
-        //         }
-        //     })
-        // }
+      }
+      // 表单提交
+      // dataFormSubmit () {
+      //     this.$refs['dataForm'].validate((valid) => {
+      //         if (valid) {
+      //             this.$http({
+      //                 url: this.$http.adornUrl(`/innovate/base/station/${!this.dataForm.id ? 'save' : 'update'}`),
+      //                 method: 'post',
+      //                 data: this.$http.adornData({
+      //                     'stationId': this.dataForm.id || undefined,
+      //                     'stationNum': this.dataForm.stationNum,
+      //                     'stationArea': this.dataForm.stationArea,
+      //                     'baseId': this.dataForm.baseId
+      //                 })
+      //             }).then(({data}) => {
+      //                 if (data && data.code === 0) {
+      //                     this.$message({
+      //                         message: '操作成功',
+      //                         type: 'success',
+      //                         duration: 1500,
+      //                         onClose: () => {
+      //                             this.visible = false
+      //                             this.$emit('refreshDataList')
+      //                         }
+      //                     })
+      //                 } else {
+      //                     this.$message.error(data.msg)
+      //                 }
+      //             })
+      //         }
+      //     })
+      // }
     }
-}
+  }
 </script>

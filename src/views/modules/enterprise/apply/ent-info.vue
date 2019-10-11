@@ -89,8 +89,8 @@
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.entInfoId)">详情</el-button>
-          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.entInfoId)">通过</el-button>
-          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.entInfoId)">不通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">不通过</el-button>
           <el-button v-else type="text" size="small" >无操作</el-button>
         </template>
       </el-table-column>
@@ -106,6 +106,19 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <ent-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
+
+    <!-- 通过按钮 -->
+    <el-dialog
+      title="企业审核提示"
+      :visible.sync="retreatVisible"
+      width="30%"
+      :before-close="handleClose">
+        <span>{{tip}}</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="retreatVisible = false">取 消</el-button>
+          <el-button type="primary" @click="applyEntHandle()">确 定</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -114,7 +127,10 @@
   export default {
     data () {
       return {
+        tempEnt: null, // 企业临时信息
+        tip: '您确认要通过审核吗？该操作不可撤回！',
         shenhe: false,
+        retreatVisible: false,
         hasApply: '0',
         dataForm: {
           baseId: '',
@@ -141,20 +157,13 @@
       formatterZone (row, column, cellValue) {
         return cellValue === '0' ? '是' : '否'
       },
-      // 审核
-      detailHandle (id) {
-      console.log(id)
-      this.shenhe = true
-      this.$nextTick(() => {
-        this.$refs.details.init(id)
-      })
-      },
       // 不通过
       retreatHandle (item) {
-          this.retreatVisible = true
-          this.$nextTick(() => {
-              this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
-          })
+        this.retreatVisible = true
+        this.tempEnt = item
+        // this.$nextTick(() => {
+        //     this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
+        // })
       },
       // 获取详情信息
       getDetailsInfo () {
@@ -202,26 +211,21 @@
         this.dataListSelections = val
       },
       // 审批
-      applyMatchHandle (id) {
-        this.$nextTick(() => {
-          // this.$refs.award.init(id)
-        })
-      },
-      // 审批
-      applyMatchRef (id) {
+      applyEntHandle () {
         this.$http({
-          url: this.$http.adornUrl('/innovate/match/apply/apply'),
+          url: this.$http.adornUrl('/enterprise/info/entExamine'),
           method: 'post',
           params: this.$http.adornParams({
-            'matchId': id,
-            'apply': 'project_match_apply_status',
-            'roleId': 5
+            'userId': this.tempEnt.userId,
+            'entInfoId': this.tempEnt.entInfoId,
+            'inApply': '1'
           }, false)
         }).then(({data}) => {
           this.$message({
             type: 'success',
             message: '提交成功!'
           })
+          this.retreatVisible = false
           this.getDataList()
         })
       },
