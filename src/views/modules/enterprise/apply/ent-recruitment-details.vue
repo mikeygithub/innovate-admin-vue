@@ -43,41 +43,41 @@
 
 <script>
 export default {
-    data () {
-        return {
-            visible: false,
-            dataList: [],
-            dataForm: {
-                id: 0,
-                entName: '',
-                jobContent: '',
-                recruitmentPost: '',
-                recruitmentPeoplePumber: '',
-                recruitmentSpecialty: '',
-                postRequire: '',
-                workWay: '',
-                newHighZones: '',
-                inApply: ''
-            }
-        }
-    },
-    methods: {
-        init (id) {
-            this.visible = true
-            this.dataForm.id = id || 0
-            if (this.dataForm.id) {
-                this.$http({
-                    url: this.$http.adornUrl(`/enterprise/recruitment/info/info/${this.dataForm.id}`),
-                    method: 'get',
-                    params: this.$http.adornParams()
-                }).then(({data}) => {
-                    console.log(this.dataForm.id)
-                    if (data && data.code === 0) {
-                        this.dataForm = data.data
-                    }
-                })
-            }
-        }
+  data () {
+    return {
+      visible: false,
+      dataList: [],
+      dataForm: {
+        id: 0,
+        entName: '',
+        jobContent: '',
+        recruitmentPost: '',
+        recruitmentPeoplePumber: '',
+        recruitmentSpecialty: '',
+        postRequire: '',
+        workWay: '',
+        newHighZones: '',
+        inApply: ''
+      }
     }
+  },
+  methods: {
+    init (id) {
+      this.visible = true
+      this.dataForm.id = id || 0
+      if (this.dataForm.id) {
+        this.$http({
+          url: this.$http.adornUrl(`/enterprise/recruitment/info/info/${this.dataForm.id}`),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          console.log(this.dataForm.id)
+          if (data && data.code === 0) {
+            this.dataForm = data.data
+          }
+        })
+      }
+    }
+  }
 }
 </script>

@@ -17,4 +17,8 @@ vue + element UI
 5. 服务器拉取镜像： docker pull mikeyboom/innovate-admin-vue:v1.2.5
 6. 部署：docker run --name innovate-admin-vue -d -p 8001:8001 innovate-admin-vue:v1.2.3
 
+``
+linux 前端项目vue无法热更新 在启动时请使用 sudo npm run dev
+``
+
 

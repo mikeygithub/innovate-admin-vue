@@ -11,6 +11,7 @@
       <el-col :span="24">
         <el-form-item label="获奖证书">
           <el-upload
+            ref="upLoadFiles"
             class="upload-demo"
             :action="url"
             :data="{teacherId: dataForm.teacherId}"
@@ -94,6 +95,7 @@
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
+                this.$refs.upLoadFiles.clearFiles()
                 this.$message({
                   message: '操作成功',
                   type: 'success',

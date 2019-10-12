@@ -45,7 +45,6 @@
           <th>职称</th>
           <th colspan="2">邮箱</th>
           <th colspan="2">联系电话</th>
-          <!--<th colspan="2">身份证号</th>-->
         </tr>
         <template>
           <tr align="center">
@@ -92,6 +91,7 @@
         visible: false,
         dataListLoading: false,
         downloadLoading: false,
+        name: '',
         instituteList: this.$store.state.user.institute,
         gradeList: this.$store.state.user.grade,
         userTeacherInfoEntities: this.$store.state.userTeacherInfoEntities,
