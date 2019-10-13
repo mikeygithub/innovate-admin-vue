@@ -13,19 +13,26 @@
         </tr>
         <tr class="contents" align="center">
           <th colspan="10">
-            获奖基本信息
+            科研项目基本信息
           </th>
         </tr>
         <tr align='center'>
           <td colspan="10" style="height: 1.2rem"></td>
         </tr>
         <tr align='center' style="height: 2.5rem">
-          <th colspan="2">获奖内容</th>
-          <td colspan="3"><span style="font-size: 1.1rem; font-weight: bolder" v-text="entTeacherAchievementInfo.teaAchievementContent" align="center"></span></td>
-          <th colspan="2">获奖证书</th>
-          <td colspan="3">
-            <el-button type="success" @click="attachDown(entTeacherAchievementInfo.entTeacherAttachmentEntity)">下载附件</el-button>
+          <th colspan="2">科研内容</th>
+          <td colspan="8"><span style="font-size: 1.1rem; font-weight: bolder" v-text="entTeacherExperienceInfo.teaExperienceContent" align="center"></span></td>
+        </tr>
+        <tr v-for="item in entTeacherExperienceInfo.entTeacherAttachmentEntities">
+          <th colspan="2">附件</th>
+          <td align="center" colspan="5" v-text="item.teaAttachmentName"></td>
+          <td align="center" colspan="3">
+            <el-button type="success" @click="attachDown(item)">下载附件</el-button>
           </td>
+        </tr>
+        <tr v-if="entTeacherExperienceInfo.inApply === 3">
+          <th colspan="2">不通过意见</th>
+          <td colspan="8"><span v-text="entTeacherExperienceInfo.retreatOption"></span></td>
         </tr>
         <!--导师信息开始-->
         <tr align='center'>
@@ -49,7 +56,7 @@
         <template>
           <tr align="center">
             <td>
-              <span v-text="teacherInfo.sysUserEntity.name"></span>
+              <span v-text="teacherInfo.sysUserEntity!=null?teacherInfo.sysUserEntity.name:''"></span>
             </td>
             <td>
               <span v-for="sex in sexList"
@@ -59,18 +66,25 @@
 
               </span>
             </td>
-            <td colspan="2">
-              <span v-for="institute in instituteList"
-                v-if="teacherInfo.sysUserEntity.instituteId === institute.instituteId"
-                v-text="institute.instituteName">
+            <td colspan="2" >
+              <span v-if="teacherInfo.sysUserEntity != null">
+                <span v-for="institute in instituteList"
+                      v-if="teacherInfo.sysUserEntity.instituteId === institute.instituteId"
+                      v-text="institute.instituteName">
+              </span>
               </span>
             </td>
             <td> <span v-text="teacherInfo.teacherPost"></span></td>
             <td>
               <span v-for="teacherTitle in teacherTitleList" v-if="teacherInfo.teacherTitle === teacherTitle.titleId" v-text="teacherTitle.titleName"></span>
             </td>
-            <td colspan="2">{{teacherInfo.sysUserEntity.email}}</td>
-            <td colspan="2">{{teacherInfo.sysUserEntity.mobile}}</td>
+            <td colspan="2">
+              <span v-if="teacherInfo.sysUserEntity!=null" v-text="teacherInfo.sysUserEntity.email">
+              </span>
+            </td>
+            <td colspan="2">
+              <span v-if="teacherInfo.sysUserEntity!=null" v-text="teacherInfo.sysUserEntity.mobile"></span>
+            </td>
           </tr>
         </template>
       </table>
@@ -121,7 +135,7 @@
           teacherJob: '',
           teacherInstinct: ''
         },
-        entTeacherAchievementInfo: {},
+        entTeacherExperienceInfo: {},
         teacherInfo: {}
       }
     },
@@ -133,14 +147,13 @@
         this.dataForm.id = this.id || 0
         if (this.dataForm.id) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/teacher/achievement/info/${this.dataForm.id}`),
+            url: this.$http.adornUrl(`/enterprise/teacher/experience/info/${this.dataForm.id}`),
             params: this.$http.adornParams({
-              'teaAchievementId': this.dataForm.id
+              'teaExperienceId': this.dataForm.id
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              console.log(data)
-              this.entTeacherAchievementInfo = data.entTeacherAchievementInfo
+              this.entTeacherExperienceInfo = data.entTeacherExperienceInfo
               this.teacherInfo = data.teacherInfo
               this.dataListLoading = false
             }
@@ -152,7 +165,7 @@
       attachDown (attach) {
         this.downloadLoading = true
         this.$httpFile({
-          url: this.$httpFile.adornUrl(`/innovate/check/attach/download`),
+          url: this.$httpFile.adornUrl(`/enterprise/teacher/attachment/download`),
           method: 'post',
           params: this.$httpFile.adornParams({
             'filePath': attach.teaAttachmentUrl

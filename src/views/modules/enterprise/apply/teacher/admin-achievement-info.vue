@@ -65,7 +65,7 @@
         label="操作">
         <template slot-scope="scope">
           <el-button v-if="passVisiable(scope.row)" type="text" size="small" @click="applySubmitHandle(scope.row.teaAchievementId,2)">通过</el-button>
-          <el-button v-if="noPassVisiable(scope.row)" type="text" size="small" @click="applySubmitHandle(scope.row.teaAchievementId,3)">不通过</el-button>
+          <el-button v-if="noPassVisiable(scope.row)" type="text" size="small" @click="applyNoPassHandle(scope.row.teaAchievementId)">不通过</el-button>
           <!--<el-button v-if="submitVisiable(scope.row)" type="text" size="small" @click="applySubmitHandle(scope.row.teaAchievementId,1)">提交</el-button>-->
           <!--<el-button v-if="updateVisiable(scope.row)" type="text" size="small" @click="addOrUpdateHandle(scope.row.teaAchievementId)">修改</el-button>-->
           <el-button type="text" size="small" @click="detailHandle(scope.row.teaAchievementId)">详情</el-button>
@@ -85,12 +85,16 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <info-detail v-if="infoDetailVisiable" ref="infoDetail" @refreshDataList="getDataList"></info-detail>
+    <retreat v-if="retreatlVisiable" ref="retreat" @refreshDataList="getDataList"></retreat>
+
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './teacher-achievement-info-add-or-update'
-  import infoDetail from './info-detail'
+  import infoDetail from './ac-info-detail'
+  import Retreat from './ac-retreat-add-or-update'
+
   export default {
     data () {
       return {
@@ -104,13 +108,15 @@
         totalPage: 0,
         dataListLoading: false,
         infoDetailVisiable: false,
+        retreatlVisiable: false,
         dataListSelections: [],
         addOrUpdateVisible: false
       }
     },
     components: {
       AddOrUpdate,
-      infoDetail
+      infoDetail,
+      Retreat
     },
     activated () {
       this.getDataList()
@@ -208,7 +214,10 @@
         })
       },
       applyNoPassHandle (id) {
-
+        this.retreatlVisiable = true
+        this.$nextTick(() => {
+          this.$refs.retreat.init(id)
+        })
       },
       applyPassHandle (id) {
 

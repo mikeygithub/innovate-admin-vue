@@ -89,7 +89,7 @@
 
 <script>
   import AddOrUpdate from './teacher-achievement-info-add-or-update'
-  import infoDetail from './info-detail'
+  import infoDetail from './ac-info-detail'
   export default {
     data () {
       return {

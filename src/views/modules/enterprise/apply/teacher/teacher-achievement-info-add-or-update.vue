@@ -14,6 +14,7 @@
             ref="upLoadFiles"
             class="upload-demo"
             :action="url"
+            :limit="1"
             :data="{teacherId: dataForm.teacherId}"
             :on-success="successHandle">
             <el-button size="small" icon="el-icon-upload" type="primary">点击上传</el-button>
@@ -41,7 +42,7 @@
           teaAchievementContent: '',
           inApply: '',
           teacherId: this.$store.state.user.id,
-          entTeacherAttachmentEntity: {}
+          entTeacherAttachmentEntitys: {}
         },
         dataRule: {
           userTeacherId: [
@@ -90,7 +91,7 @@
                 'teaAchievementId': this.dataForm.teaAchievementId || undefined,
                 'userTeacherId': this.dataForm.teacherId,
                 'teaAchievementContent': this.dataForm.teaAchievementContent,
-                'inApply': this.dataForm.inApply,
+                'inApply': 0,
                 'entTeacherAttachmentEntity': this.dataForm.entTeacherAttachmentEntity
               })
             }).then(({data}) => {
