@@ -9,22 +9,22 @@
         <el-input v-model="dataForm.entEnterpriseInfo.entName" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="工作内容" prop="jobContent">
-        <el-input v-model="dataForm.jobContent" :readonly="true"></el-input>
+        <el-input type="textarea" v-model="dataForm.jobContent" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="招聘岗位" prop="recruitmentPost">
-        <el-input v-model="dataForm.recruitmentPost" :readonly="true"></el-input>
+        <el-input type="textarea" v-model="dataForm.recruitmentPost" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="招聘人数" prop="recruitmentPeopleNumber">
         <el-input v-model="dataForm.recruitmentPeopleNumber" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="招聘专业" prop="recruitmentSpecialty">
-        <el-input v-model="dataForm.recruitmentSpecialty" :readonly="true"></el-input>
+        <el-input type="textarea" v-model="dataForm.recruitmentSpecialty" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="岗位要求" prop="postRequire">
-        <el-input v-model="dataForm.postRequire" :readonly="true"></el-input>
+        <el-input type="textarea" v-model="dataForm.postRequire" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="工作方式" prop="workWay">
-        <el-input v-model="dataForm.workWay" :readonly="true"></el-input>
+        <el-input type="textarea" v-model="dataForm.workWay" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="是否高新区" prop="newHighZones">
         <el-radio-group v-model="dataForm.entEnterpriseInfo.newHighZones" size="small" :readonly="true">
@@ -35,8 +35,7 @@
 
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button type="primary" @click="visible = false">返回</el-button>
     </span>
   </el-dialog>
 </template>
@@ -48,7 +47,7 @@ export default {
       visible: false,
       dataList: [],
       dataForm: {
-        id: 0,
+        recruitmentInfoId: 0,
         entName: '',
         jobContent: '',
         recruitmentPost: '',

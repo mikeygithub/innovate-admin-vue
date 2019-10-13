@@ -14,18 +14,9 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
-      <el-form-item>
-        <el-button @click="addOrUpdateHandle()">新增</el-button>
-      </el-form-item>
-
     </el-form>
-<!--    <el-card>-->
-<!--      <el-radio-group v-model="hasApply" @change="getDataList">-->
-<!--        <el-radio label="0">未审批</el-radio>-->
-<!--        <el-radio label="1">已审批</el-radio>-->
-<!--      </el-radio-group>-->
-<!--    </el-card>-->
     <el-table
       :data="dataList"
       border
@@ -100,10 +91,12 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
+  import AddOrUpdate from './recruitment-add-or-update'
   export default {
     data () {
       return {
@@ -119,10 +112,13 @@
         pageSize: 10,
         totalPage: 0,
         dataListLoading: false,
+        addOrUpdateVisible: false,
         dataListSelections: []
       }
     },
-    components: {},
+    components: {
+      AddOrUpdate
+    },
     activated () {
       this.getDataList()
     },
@@ -156,6 +152,13 @@
             this.totalPage = 0
           }
           this.dataListLoading = false
+        })
+      },
+      // 新增 / 修改
+      addOrUpdateHandle (id) {
+        this.addOrUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate.init(id)
         })
       },
       //  每页数

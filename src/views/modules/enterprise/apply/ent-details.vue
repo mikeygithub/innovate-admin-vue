@@ -64,8 +64,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button type="primary" @click="visible = false">返回</el-button>
     </span>
   </el-dialog>
 </template>
@@ -77,7 +76,7 @@
         visible: false,
         dataList: [],
         dataForm: {
-          id: 0,
+          entInfoId: 0,
           entName: '',
           entCorporate: '',
           entBusiness: '',
@@ -98,14 +97,14 @@
     methods: {
       init (id) {
         this.visible = true
-        this.dataForm.id = id || 0
-        if (this.dataForm.id) {
+        this.dataForm.entInfoId = id || 0
+        if (this.dataForm.entInfoId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.id}/0`),
+            url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.entInfoId}/0`),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
-            console.log(this.dataForm.id)
+            console.log(this.dataForm.entInfoId)
             if (data && data.code === 0) {
               this.dataForm.entName = data.data.entName
               this.dataForm.entCorporate = data.data.entCorporate
