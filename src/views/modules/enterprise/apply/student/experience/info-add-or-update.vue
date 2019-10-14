@@ -132,13 +132,11 @@
                 let attachmentList = []
                 for (var index = 0; index < this.dataForm.entStudentAttachmentEntities.length; index++) {
                   attachmentList.push(new Attachment(
-                    this.dataForm.entStudentAttachmentEntities[index].stuAttachmentUrl,
                     this.dataForm.entStudentAttachmentEntities[index].stuAttachmentName,
+                    this.dataForm.entStudentAttachmentEntities[index].stuAttachmentUrl,
                     this.dataForm.entStudentAttachmentEntities[index]
                   ))
                 }
-                console.log(this.dataForm.entStudentAttachmentEntities)
-                console.log(attachmentList)
                 this.dataForm.entStudentAttachmentList = attachmentList
               }
             })

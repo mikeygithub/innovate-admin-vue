@@ -47,14 +47,14 @@
         <tr align='center'>
           <td colspan="10" style="height: 1.2rem"></td>
         </tr>
-        <tr class="contents"><th colspan="10">项目负责人信息</th></tr>
+        <tr class="contents"><th colspan="10">学生信息</th></tr>
         <tr align='center'>
           <td colspan="10" style="height: 1.2rem"></td>
         </tr>
-        <template>
+        <template v-if="perInfo != null">
           <tr align='center'>
             <th>姓名</th>
-            <td><span v-text="perInfo.sysUserEntity.name" align="center"></span></td>
+            <td><span v-if="perInfo.sysUserEntity != null" v-text="perInfo.sysUserEntity.name" align="center"></span></td>
             <th>性别</th>
             <template v-for="sex in sexList">
               <td v-if="perInfo.perSex === sex.value" v-text="sex.label"></td>
@@ -62,7 +62,7 @@
             <th>企业职务</th>
             <td><span v-text="perInfo.perPost" align="center"></span></td>
             <th>联系电话</th>
-            <td><span v-text="perInfo.sysUserEntity.mobile" align="center"></span></td>
+            <td><span v-if="perInfo.sysUserEntity != null" v-text="perInfo.sysUserEntity.mobile" align="center"></span></td>
             <th>QQ号码</th>
             <td><span v-text="perInfo.perQq" align="center"></span></td>
           </tr>
@@ -74,10 +74,12 @@
             <td><span v-text="perInfo.perStuNo" align="center"></span></td>
             <th>所在二级学院</th>
             <td>
+              <span v-if="perInfo.sysUserEntity != null">
               <span v-for="item in instituteList"
                     v-if="item.instituteId === perInfo.sysUserEntity.instituteId"
                     v-text="item.instituteName"
                     align="center"></span>
+              </span>
             </td>
             <th>所在年级</th>
             <td>
@@ -94,7 +96,7 @@
             <th>所在宿舍</th>
             <td><span v-text="perInfo.perCormNo" align="center"></span></td>
             <th>个人电子邮箱</th>
-            <td colspan="2"><span v-text="perInfo.sysUserEntity.email" align="center"></span></td>
+            <td colspan="2"><span v-if="perInfo.sysUserEntity != null" v-text="perInfo.sysUserEntity.email" align="center"></span></td>
             <th colspan="1">身份证号码</th>
             <td colspan="4"><span v-text="perInfo.perCardNo" align="center"></span></td>
           </tr>
@@ -174,7 +176,6 @@
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              console.log(data)
               this.entStudentAchievementInfo = data.entStudentAchievementInfo
               this.perInfo = data.perInfo
               this.dataListLoading = false

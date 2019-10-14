@@ -216,11 +216,11 @@
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
-            for (let index = 0; index < this.dataList.length; index++) {
-              if (this.applyMatchIsVisible(this.dataList[index].matchInfoEntity) === true) {
-                this.applyMatchHandle(this.dataList[index].matchInfoEntity.matchId)
-              }
-            }
+            // for (let index = 0; index < this.dataList.length; index++) {
+            //   if (this.applyMatchIsVisible(this.dataList[index].matchInfoEntity) === true) {
+            //     this.applyMatchHandle(this.dataList[index].matchInfoEntity.matchId)
+            //   }
+            // }
           } else {
             this.dataList = []
             this.totalPage = 0

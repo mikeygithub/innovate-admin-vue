@@ -3,7 +3,7 @@
     width="60%"
     @close="closeDialog"
     v-loading="dataListLoading"
-    :title="!dataForm.id ? '新增比赛信息' : '修改比赛信息'"
+    :title="dataForm.matchId === 0 ? '新增比赛信息' : '修改比赛信息'"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-row :gutter="20">
@@ -130,13 +130,12 @@
             <!--</template>-->
           <!--</el-form-item>-->
         <!--</el-col>-->
-        <el-col :span="24">
+        <el-col :span="24" style="padding-bottom: 2em">
           <template>
             <el-alert
               title="附件要求"
               type="success"
-              :description="fileAskContent"
-              show-icon>
+              :description="fileAskContent">
             </el-alert>
           </template>
         </el-col>
@@ -147,18 +146,17 @@
               ref="upLoadFiles"
               list-type="card"
               :data="upLoadData"
-              :action="upLoadUrl"
+              :action="url"
               :on-preview="upLoadPreview"
               :on-remove="upLoadRemove"
               :on-success="upLoadSuccess"
               :on-change="upLoadChange"
               :beforeUpload="beforeAvatarUpload"
-              :file-list="fileList"
-              :auto-upload="false">
+              :file-list="fileList">
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="upLoadSubmit">添加到附件上传列表</el-button>
-              <div slot="tip" class="el-upload__tip">注意文件需要添加到附件列表后确定保存才能添加成功</div>
-              <div slot="tip" class="el-upload__tip">上传文件大小需小于100M</div>
+              <!--<el-button style="margin-left: 10px;" size="small" type="success" @click="upLoadSubmit">添加到附件上传列表</el-button>-->
+              <!--<div slot="tip" class="el-upload__tip" style="color: red">注意文件需要添加到附件列表后确定保存才能添加成功</div>-->
+              <div slot="tip" class="el-upload__tip" style="color: red">上传文件大小需小于100M</div>
             </el-upload>
           </el-form-item>
         </el-col>
@@ -179,6 +177,15 @@
   import TeacherAddOrUpdate from './teacher-add-or-update'
   import StaffAddOrUpdate from './staff-add-or-update'
   import AlreadyAwardAddOrUpdate from './already-award-add-or-update'
+
+  class MatchAttachment {
+    constructor (file) {
+      this.name = file.attachName
+      this.url = file.attachPath
+      this.file = file
+    }
+  }
+
   export default {
     components: {
       StaffAddOrUpdate,
@@ -204,7 +211,7 @@
         }
       }
       return {
-        upLoadUrl: '',
+        url: '',
         upLoadData: {},
         fileAskContent: '无',
         tables: [],
@@ -212,6 +219,7 @@
         teacherLists: [],
         personInfoList: [],
         attachLists: [],
+        tempAttachLists: [],
         awardLists: [],
         staffInfoLists: [],
         eventLists: [],
@@ -305,6 +313,7 @@
     },
     methods: {
       init (id) {
+        this.url = this.$http.adornUrl(`/innovate/match/attach/upload?token=${this.$cookie.get('token')}`)
         this.eventLists = this.$store.state.eventLists
         this.visible = true
         this.dataListLoading = true
@@ -345,10 +354,16 @@
                 this.dataForm = data.matchInfo.matchInfoEntity
                 this.teacherLists = data.matchInfo.matchTeacherEntities
                 this.personInfoList = []
-                this.attachLists = data.matchInfo.matchAttachEntities
                 this.staffInfoLists = data.matchInfo.matchStaffInfoEntities
                 this.dataForm.matchNoPass = 0
                 this.isTeacherInfoNull()
+                this.attachLists = data.matchInfo.matchAttachEntities
+                // 附件回显
+                let tempMatchAtta = []
+                for (var i = 0; i < this.attachLists.length; i++) {
+                  tempMatchAtta.push(new MatchAttachment(this.attachLists[i]))
+                }
+                this.fileList = tempMatchAtta
                 this.dataListLoading = false
               }
             })
@@ -518,15 +533,6 @@
           this.staffInfoLists.push(data)
         }
       },
-      // delAttach: function (data, index) {
-      //   if (data.isDel !== 1) {
-      //     data.isDel = 1
-      //     this.attachLists[index] = data
-      //   } else {
-      //     this.attachLists.splice(index, 1)
-      //   }
-      // },
-
       upLoadSubmit () {
         this.$refs.upLoadFiles.submit()
       },
@@ -537,15 +543,28 @@
         }
         this.upLoadUrl = this.$http.adornUrl(`/innovate/match/attach/upload`)
       },
+      // 移除文件
       upLoadRemove (file, fileList) {
-        console.log(file, fileList)
+        let tempFileList = []
+        for (var index = 0; index < fileList.length; index++) {
+          tempFileList.push(fileList[index].file)
+        }
+        this.fileList = fileList
+        if (this.dataForm.matchId === 0) { // 新增
+          this.deleteFileHandle(file)
+        } else {
+          this.attachLists = tempFileList // 修改
+        }
+        this.$message.success('已移除')
       },
       upLoadPreview (file) {
         console.log(file)
       },
+      // 上传成功
       upLoadSuccess (data) {
         if (data && data.code === 0) {
           this.attachLists.push(data.matchAttachEntity)
+          this.tempAttachLists = this.attachLists // 临时存放
         } else {
           this.$message.error(data.msg)
         }
@@ -565,6 +584,17 @@
       closeDialog () {
         this.visible = false
         this.$emit('refreshDataList')
+      },
+      deleteFileHandle (file) {
+        var temp = []
+        for (var index = 0; index < this.tempAttachLists.length; index++) {
+          if (this.tempAttachLists[index].attachName === file.name) {
+            continue
+          }
+          temp.push(this.tempAttachLists[index])
+        }
+        this.tempAttachLists = temp
+        this.attachLists = temp
       }
 
     }

@@ -300,7 +300,7 @@
           <tr v-for="item in attachList"
               align="center">
             <td colspan="7" v-text="item.attachName"></td>
-            <td colspan="3"><button @click="attachDown(item)">下载</button></td>
+            <td colspan="3"><el-button @click="attachDown(item)">下载</el-button></td>
           </tr>
         </template>
         <tr align='center'>

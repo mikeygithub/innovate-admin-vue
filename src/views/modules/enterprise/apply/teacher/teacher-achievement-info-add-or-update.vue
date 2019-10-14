@@ -68,7 +68,6 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                console.log(JSON.stringify(data.entTeacherAchievementInfo))
                 this.dataForm.userTeacherId = data.entTeacherAchievementInfo.userTeacherId
                 this.dataForm.teaAchievementContent = data.entTeacherAchievementInfo.teaAchievementContent
                 this.dataForm.inApply = data.entTeacherAchievementInfo.inApply
