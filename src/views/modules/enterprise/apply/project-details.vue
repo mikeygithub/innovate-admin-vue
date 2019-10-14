@@ -36,6 +36,7 @@
       return {
         visible: false,
         dataList: [],
+        hasType: 'userPerId',
         dataForm: {
           proInfoId: 0,
           proName: '',
@@ -54,13 +55,13 @@
         this.dataForm.proInfoId = id || 0
         if (this.dataForm.proInfoId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/project/info/info/${this.dataForm.proInfoId}`),
+            url: this.$http.adornUrl(`/enterprise/project/info/info/${this.hasType}/${this.dataForm.proInfoId}`),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
             console.log(data)
             if (data && data.code === 0) {
-              this.dataForm = data.entProjectInfo
+              this.dataForm = data.data
             }
           })
         }

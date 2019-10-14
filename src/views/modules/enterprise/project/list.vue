@@ -2,7 +2,7 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -94,6 +94,8 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <!-- 弹窗, 新增 / 修改 -->
+    <project-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
   </div>
 </template>
 
@@ -106,6 +108,8 @@ export default {
       dataForm: {
         key: ''
       },
+      shenhe: false,
+      hasApply: '1',
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
@@ -133,7 +137,9 @@ export default {
         params: this.$http.adornParams({
           'page': this.pageIndex,
           'limit': this.pageSize,
-          'key': this.dataForm.key
+          'key': this.dataForm.key,
+          'inApply': this.hasApply,
+          'inType': this.hasType
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
@@ -151,6 +157,7 @@ export default {
       console.log(id)
       this.shenhe = true
       this.$nextTick(() => {
+        this.$refs.details.hasType = this.hasType
         this.$refs.details.init(id)
       })
     },
