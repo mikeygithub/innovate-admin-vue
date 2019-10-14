@@ -27,9 +27,9 @@
             <el-button v-if="entTeacherAchievementInfo.entTeacherAttachmentEntity!=null" type="success" @click="attachDown(entTeacherAchievementInfo.entTeacherAttachmentEntity)">下载附件</el-button>
           </td>
         </tr>
-        <tr v-if="entTeacherAchievementInfo.inApply === 3">
+        <tr align='center' v-if="entTeacherAchievementInfo.inApply === 3">
           <th colspan="2">不通过意见</th>
-          <td colspan="8"><span v-text="entTeacherAchievementInfo.retreatOption"></span></td>
+          <td colspan="8"><span style="color: red" v-text="entTeacherAchievementInfo.retreatOption"></span></td>
         </tr>
         <!--导师信息开始-->
         <tr align='center'>

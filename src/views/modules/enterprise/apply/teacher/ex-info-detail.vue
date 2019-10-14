@@ -30,9 +30,9 @@
             <el-button type="success" @click="attachDown(item)">下载附件</el-button>
           </td>
         </tr>
-        <tr v-if="entTeacherExperienceInfo.inApply === 3">
+        <tr align='center' v-if="entTeacherExperienceInfo.inApply === 3">
           <th colspan="2">不通过意见</th>
-          <td colspan="8"><span v-text="entTeacherExperienceInfo.retreatOption"></span></td>
+          <td colspan="8"><span style="color: red" v-text="entTeacherExperienceInfo.retreatOption"></span></td>
         </tr>
         <!--导师信息开始-->
         <tr align='center'>
