@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import EntDetails from './ent-details'
+import EntDetails from '../base/ent-details'
 
 export default {
   data: function () {

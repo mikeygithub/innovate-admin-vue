@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import EntRecuitmentDetails from './ent-recruitment-details'
+import EntRecuitmentDetails from '../recruitment/recruitment-details'
 
 export default {
   data () {

@@ -101,7 +101,7 @@
 
 <script>
 import AddOrUpdate from './project-add-or-update'
-import ProjectDetails from '../apply/project-details'
+import ProjectDetails from './project-details'
 export default {
   data () {
     return {

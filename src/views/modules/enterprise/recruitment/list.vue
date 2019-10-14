@@ -76,6 +76,7 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.recruitmentInfoId)">详情</el-button>
           <el-button v-if="scope.row.inApply == '1'" type="text" size="small" @click="deleteHandle(scope.row.recruitmentInfoId)">删除</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
@@ -91,12 +92,14 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
+    <ent-recuitment-details v-if="shenhe" ref="details"/>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './recruitment-add-or-update'
+  import EntRecuitmentDetails from '../recruitment/recruitment-details'
   export default {
     data () {
       return {
@@ -117,7 +120,8 @@
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      EntRecuitmentDetails
     },
     activated () {
       this.getDataList()
@@ -159,6 +163,14 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+        // 详情
+      detailHandle (id) {
+        console.log(id)
+        this.shenhe = true
+        this.$nextTick(() => {
+          this.$refs.details.init(id)
         })
       },
       //  每页数

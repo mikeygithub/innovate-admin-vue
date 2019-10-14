@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import ProjectDetails from './project-details'
+import ProjectDetails from '../project/project-details'
 export default {
   data () {
     return {

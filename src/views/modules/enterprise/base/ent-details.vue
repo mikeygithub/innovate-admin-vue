@@ -90,7 +90,7 @@
           entIntroduce: '',
           newHighZones: '',
           entInTime: '',
-          inApply: ''
+          inApply: '1'
         }
       }
     },
@@ -100,7 +100,7 @@
         this.dataForm.entInfoId = id || 0
         if (this.dataForm.entInfoId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.entInfoId}/0`),
+            url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.entInfoId}/${this.dataForm.inApply}`),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
