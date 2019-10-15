@@ -72,7 +72,8 @@
       init (hasType, id) {
         this.visible = true
         this.dataForm.proInfoId = id
-        this.dataForm.hasType = hasType
+        this.hasType = hasType
+        console.log(`${this.hasType}/${this.dataForm.proInfoId}`)
         if (this.dataForm.proInfoId) {
           this.$http({
             url: this.$http.adornUrl(`/enterprise/project/info/info/${this.hasType}/${this.dataForm.proInfoId}`),
