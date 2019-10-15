@@ -89,7 +89,7 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">详情</el-button>
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(hasType, scope.row.proInfoId)">详情</el-button>
           <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">通过</el-button>
           <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">不通过</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
@@ -175,11 +175,11 @@ export default {
       return cellValue === '0' ? '是' : '否'
     },
         // 详情
-    detailHandle (id) {
-      console.log(id)
+    detailHandle (hasType, id) {
+      console.log(hasType, id)
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(id)
+        this.$refs.details.init(hasType, id)
       })
     },
         // 通过
