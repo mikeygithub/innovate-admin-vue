@@ -3,6 +3,7 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-date-picker
+          @change="getDataList"
           v-model="dataForm.matchTime"
           align="right"
           type="year"

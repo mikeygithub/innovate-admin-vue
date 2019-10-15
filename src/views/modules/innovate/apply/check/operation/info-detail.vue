@@ -258,28 +258,28 @@
         <!--<tr align='center'>-->
           <!--<td colspan="10" style="height: 1.2rem"></td>-->
         <!--</tr>-->
-        <!--<tr>-->
-          <!--<th colspan="1">获奖等级</th>-->
-          <!--<th colspan="3">所获总奖金（元）</th>-->
-          <!--<th colspan="3">所获区级奖金（元）</th>-->
-          <!--<th colspan="3">所获校级奖金（元）</th>-->
-          <!--&lt;!&ndash;<th colspan="1">操作</th>&ndash;&gt;-->
-        <!--</tr>-->
-        <!--<template>-->
-          <!--<tr v-for="item in awardList" align="center">-->
-            <!--<td colspan="1"-->
-                <!--v-for="type in awardTypeList"-->
-                <!--:key="type.value"-->
-                <!--v-if="type.value === item.awardType"-->
-                <!--v-text="type.label">-->
-            <!--</td>-->
-            <!--<td colspan="3" v-text="item.awardMoneyAll"></td>-->
-            <!--<td colspan="3" v-text="item.awardMoneyDistrict"></td>-->
-            <!--<td colspan="3" v-text="item.awardMoneySchool"></td>-->
-            <!--&lt;!&ndash;<td colspan="1" v-text="item.awardFileName"></td>&ndash;&gt;-->
-          <!--</tr>-->
-        <!--</template>-->
-        <!--&lt;!&ndash;成果/奖项结束&ndash;&gt;-->
+        <tr>
+          <th colspan="1">获奖等级</th>
+          <th colspan="3">所获总奖金（元）</th>
+          <th colspan="3">所获区级奖金（元）</th>
+          <th colspan="3">所获校级奖金（元）</th>
+          <!--<th colspan="1">操作</th>-->
+        </tr>
+        <template>
+          <tr v-for="item in awardList" align="center">
+            <td colspan="1"
+                v-for="type in awardTypeList"
+                :key="type.value"
+                v-if="type.value === item.awardType"
+                v-text="type.label">
+            </td>
+            <td colspan="3" v-text="item.awardMoneyAll"></td>
+            <td colspan="3" v-text="item.awardMoneyDistrict"></td>
+            <td colspan="3" v-text="item.awardMoneySchool"></td>
+            <!--<td colspan="1" v-text="item.awardFileName"></td>-->
+          </tr>
+        </template>
+        <!--成果/奖项结束-->
 
         <!--&lt;!&ndash;附件开始&ndash;&gt;-->
         <!--<tr align='center'>-->
@@ -447,7 +447,7 @@
                 <tr v-for="item in items.innovateCheckAttachEntities"
                     align="center">
                   <td colspan="7" v-text="item.attachName"></td>
-                  <td colspan="3"><el-button type="info" @click="attachDown(item)" :loading="downloadLoading">下载</el-button></td>
+                  <td colspan="3"><el-button @click="attachDown(item)" :loading="downloadLoading">下载</el-button></td>
                 </tr>
               </template>
               <tr align='center'>
@@ -615,7 +615,6 @@
                 })
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  console.log(data)
                   this.checkInfoModelList = data.page.list
                   if (data.page.list.length > 0) {
                     this.checkInfoVisiable = true

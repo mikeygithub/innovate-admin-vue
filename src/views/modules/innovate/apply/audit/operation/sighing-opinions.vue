@@ -17,7 +17,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消审批</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定并提交到二级学院</el-button>
+      <el-button type="primary" @click="dataFormSubmit()" :loading="submitLoading">确定并提交到二级学院</el-button>
     </span>
   </el-dialog>
 </template>
@@ -29,6 +29,7 @@
       return {
         visible: false,
         loading: false,
+        submitLoading: false,
         userMap: [],
         id: 0,
         // apply: '',
@@ -60,6 +61,7 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.submitLoading = true
             this.$confirm('此操作将使该项目进入下一个审批流程，是否继续?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
@@ -90,12 +92,14 @@
                 } else {
                   this.$message.error(data.msg)
                 }
+                this.submitLoading = false
               })
             }).catch(() => {
               this.$message({
                 type: 'info',
                 message: '已取消申请'
               })
+              this.submitLoading = false
             })
           }
         })

@@ -37,7 +37,7 @@
       <el-radio-group v-model="hasApply" @change="getDataList">
         <el-radio label="1">未提交</el-radio>
         <el-radio label="2">已提交</el-radio>
-        <el-radio label="3">全部</el-radio>
+        <el-radio label="5">全部</el-radio>
       </el-radio-group>
     </el-card>
     <el-table

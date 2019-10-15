@@ -276,7 +276,7 @@
             <td colspan="2" v-text="item.awardMoney"></td>
             <td colspan="2" v-text="(item.awardTime || '').split(' ')[0]"></td>
             <!--<td colspan="1" v-text="item.awardFileName"></td>-->
-            <td colspan="1"><button v-if="item.awardPath!==''" @click="awardDown(item)">下载</button></td>
+            <td colspan="1"><el-button v-if="item.awardPath!==''" @click="awardDown(item)">下载</el-button></td>
           </tr>
         </template>
         <!--成果/奖项结束-->
@@ -492,7 +492,6 @@
           method: 'post',
           params: this.$httpFile.adornParams({
             'filePath': award.awardPath
-            // 'apply': 'project_base_apply_status'
           })
         }).then(response => {
           if (!response) {
@@ -510,13 +509,11 @@
         })
       },
       attachDown (attach) {
-        // let url = this.$http.adornUrl(`/innovate/match/attach/download?token=${this.$cookie.get('token')}&filePath=${attach.attachPath}`)
         this.$httpFile({
           url: this.$httpFile.adornUrl(`/innovate/match/attach/download`),
           method: 'post',
           params: this.$httpFile.adornParams({
             'filePath': attach.attachPath
-            // 'apply': 'project_base_apply_status'
           })
         }).then(response => {
           if (!response) {

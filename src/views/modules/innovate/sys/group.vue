@@ -2,7 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.userName" placeholder="年级" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="组别" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -33,7 +33,7 @@
         prop="groupName"
         header-align="center"
         align="center"
-        label="年级">
+        label="组别">
       </el-table-column>
       <el-table-column
         prop="groupContent"
@@ -73,7 +73,7 @@
     data () {
       return {
         dataForm: {
-          userName: ''
+          key: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -101,7 +101,7 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'username': this.dataForm.userName
+            'key': this.dataForm.key
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

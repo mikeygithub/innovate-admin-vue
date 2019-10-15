@@ -218,7 +218,7 @@
       successHandle (response, file, fileList) {
         if (response && response.code === 0) {
           this.dataForm.awardFileName = file.name
-          this.dataForm.awardPath = response.filePath
+          this.dataForm.awardPath = response.matchAttachEntity.attachPath
         } else {
           this.$message.error(response.msg)
         }

@@ -3,6 +3,7 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-date-picker
+          @change="getDataList"
           v-model="dataForm.declareTime"
           align="right"
           type="year"
@@ -237,7 +238,7 @@
             'noPass': 'audit_no_pass',
             'noPassStatus': 0,
             'apply': 'project_audit_apply_status',
-            'applyStatus': 5,
+            'project_audit_apply_status_more': 4,
             'isDel': 0
           })
         }).then(({data}) => {

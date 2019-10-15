@@ -99,7 +99,6 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.visible = false
-            console.info(this.dataForm)
             this.$emit('refreshDataList', this.dataForm, this.id)
           }
         })
@@ -109,7 +108,6 @@
           this.loading = true
           setTimeout(() => {
             this.loading = false
-            console.info(query)
             this.$http({
               url: this.$http.adornUrl(`/innovate/use/teacher/teacher`),
               method: 'get',

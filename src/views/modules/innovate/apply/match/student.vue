@@ -4,6 +4,7 @@
       <el-form-item>
         <el-date-picker
           v-model="dataForm.matchTime"
+          @change="getDataList"
           align="right"
           type="year"
           placeholder="请选择年度">

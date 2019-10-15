@@ -113,11 +113,14 @@
 
         <el-col :span="24">
           <template>
-            <el-alert
-              title="附件要求"
-              type="success"
-              :description="fileAskContent">
-            </el-alert>
+            <el-form-item label="附件要求">
+              <el-alert
+                title="附件要求"
+                :closable=false
+                type="success"
+                :description="fileAskContent">
+              </el-alert>
+            </el-form-item>
           </template>
         </el-col>
         <!--独立附件start-->
@@ -127,7 +130,9 @@
             class="upload-demo"
             :action="url"
             :data="{declareName: dataForm.declareName}"
-            :on-success="successHandle1">
+            :on-remove="removeFileHandle"
+            :on-success="successHandle1"
+            :file-list="fileList">
             <el-button size="small" icon="el-icon-upload" type="primary">点击上传</el-button>
           </el-upload>
         </el-form-item>
@@ -213,6 +218,15 @@
 <script>
   import TeacherAddOrUpdate from './teacher-add-or-update'
   import StaffAddOrUpdate from './staff-add-or-update'
+
+  class DeclareAttachment {
+    constructor (file) {
+      this.name = file.attachName
+      this.url = file.attachPath
+      this.file = file
+    }
+  }
+
   export default {
     components: {
       StaffAddOrUpdate, // 项目参与者
@@ -331,7 +345,7 @@
           // ],
           // matchExpect: [
           //   { required: true, message: '项目预期或已取得的成果不能为空', trigger: 'blur' }
-          // ],,
+          // ],
           attachLists: [
             { validator: validateAttach, trigger: 'blur' }
           ],
@@ -374,11 +388,17 @@
                 this.dataForm = data.declareInfo.declareInfoEntity
                 this.teacherLists = data.declareInfo.declareTeacherEntities
                 this.personInfoList = data.declareInfo.userPersonInfoEntities
-                this.attachLists = data.declareInfo.declareAttachEntities
                 this.staffInfoLists = data.declareInfo.declareStaffInfoEntities
                 this.awardInfoLists = data.declareInfo.declareAwardEntities
                 this.dataForm.auditNoPass = 0
                 this.isTeacherInfoNull()
+                this.attachLists = data.declareInfo.declareAttachEntities
+                // 附件回显
+                let tempDeclareAtta = []
+                for (var i = 0; i < this.attachLists.length; i++) {
+                  tempDeclareAtta.push(new DeclareAttachment(this.attachLists[i]))
+                }
+                this.fileList = tempDeclareAtta
                 this.dataListLoading = false
               }
             })
@@ -600,10 +620,20 @@
           this.$message.error(data.msg)
         }
       },
-
       closeDialog () {
         this.visible = false
         this.$emit('refreshDataList')
+      },
+      // 文件移除
+      removeFileHandle (file, fileList) {
+        // 移除attachList中的附件
+        let tempFileList = []
+        for (var index = 0; index < this.attachLists.length; index++) {
+          if (this.attachLists[index].attachName !== file.name) {
+            tempFileList.push(this.attachLists[index])
+          }
+        }
+        this.attachLists = tempFileList
       },
       // 上传成功
       successHandle1 (response, file, fileList) {
@@ -613,21 +643,6 @@
           this.$message.error(response.msg)
         }
       }
-      // successHandle2 (response, file, fileList) {
-      //   if (response && response.code === 0) {
-      //     this.attachLists.push(response.declareAttachEntity)
-      //   } else {
-      //     this.$message.error(response.msg)
-      //   }
-      // },
-      // successHandle3 (response, file, fileList) {
-      //   if (response && response.code === 0) {
-      //     this.attachLists.push(response.declareAttachEntity)
-      //   } else {
-      //     this.$message.error(response.msg)
-      //   }
-      // }
-
     }
   }
 </script>

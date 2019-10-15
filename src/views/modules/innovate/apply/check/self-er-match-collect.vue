@@ -13,6 +13,7 @@
         <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <!--年度 start-->
         <el-date-picker
+          @change="getDataList"
           v-model="dataForm.declareTime"
           align="right"
           type="year"

@@ -5,9 +5,9 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
-      <!--<el-form-item label="项目编号" prop="declareNum">-->
-        <!--<el-input v-model="declareNum" placeholder="请输入"></el-input>-->
-      <!--</el-form-item>-->
+      <el-form-item label="编号" prop="declareNum">
+        <el-input v-model="dataForm.declareNum" placeholder="请输入"></el-input>
+      </el-form-item>
       <el-form-item label="奖金类型" prop="awardType">
         <el-select v-model="dataForm.awardType" placeholder="请选择">
           <el-option
@@ -18,13 +18,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="所获总奖金（元）" prop="awardMoney">
+      <el-form-item label="所获总奖金（元）" prop="awardMoneyAll">
         <el-input v-model="dataForm.awardMoneyAll" placeholder="请输入"></el-input>
       </el-form-item>
-      <el-form-item label="所获区级奖金（元）" prop="awardMoney">
+      <el-form-item label="所获区级奖金（元）" prop="awardMoneyDistrict">
         <el-input v-model="dataForm.awardMoneyDistrict" placeholder="请输入"></el-input>
       </el-form-item>
-      <el-form-item label="所获校级奖金（元）" prop="awardMoney">
+      <el-form-item label="所获校级奖金（元）" prop="awardMoneySchool">
         <el-input v-model="dataForm.awardMoneySchool" placeholder="请输入"></el-input>
       </el-form-item>
       <!--<el-upload-->
@@ -102,9 +102,9 @@
           awardType: [
             { required: true, message: '请选择奖金类型', trigger: 'blur' }
           ],
-          // declareNum: [
-          //   { required: true, message: '请输入项目编号', trigger: 'blur' }
-          // ],
+          declareNum: [
+            { required: true, message: '请输入编号', trigger: 'blur' }
+          ],
           awardMoneyAll: [
             { required: true, message: '不能为空', trigger: 'blur' },
             { validator: validateFloatNumber, trigger: 'blur' }
@@ -126,7 +126,7 @@
         this.visible = true
         this.id = index || 0
         // this.$nextTick(() => {
-        //   this.$refs['dataForm'].resetFields()
+        this.$refs['dataForm'].resetFields()
         //   if (this.id) {
         //     this.$http({
         //       url: this.$http.adornUrl(`/innovate/check/info`),

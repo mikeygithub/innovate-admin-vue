@@ -14,6 +14,7 @@
       <el-form-item>
         <!--年度 start-->
         <el-date-picker
+          @change="getDataList"
           v-model="dataForm.declareTime"
           align="right"
           type="year"
