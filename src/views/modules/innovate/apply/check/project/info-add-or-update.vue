@@ -349,7 +349,6 @@
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              console.log(data.info)
               this.dataForm = data.info
               this.attachLists = data.info.innovateCheckAttachEntities
               this.dataListLoading = false

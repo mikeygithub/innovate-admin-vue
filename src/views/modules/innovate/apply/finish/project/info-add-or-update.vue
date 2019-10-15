@@ -58,16 +58,17 @@
             </template>
           </el-form-item>
         </el-col>
-
         <el-col :span="24">
-          <template>
-            <el-alert
-              title="附件要求"
-              type="success"
-              :description="fileAskContent"
-              show-icon>
-            </el-alert>
-          </template>
+          <el-form-item label="附件要求">
+            <template>
+              <el-alert
+                title=""
+                type="success"
+                :closable="false"
+                :description="fileAskContent">
+              </el-alert>
+            </template>
+          </el-form-item>
         </el-col>
         <!--独立附件start-->
         <el-col :span="24">
@@ -76,7 +77,9 @@
               class="upload-demo"
               :action="url"
               :data="{finishName: dataForm.finishName}"
-              :on-success="successHandle1">
+              :on-success="successHandle1"
+              :on-remove="fileRemoveHandler"
+              :file-list="fileList">
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-form-item>
@@ -97,6 +100,15 @@
 <script>
   import TeacherAddOrUpdate from './teacher-add-or-update'
   import StaffAddOrUpdate from './staff-add-or-update'
+
+  class FinishAttachment {
+    constructor (file) {
+      this.name = file.attachName
+      this.url = file.attachPath
+      this.file = file
+    }
+  }
+
   export default {
     components: {
       StaffAddOrUpdate,
@@ -225,6 +237,12 @@
                 this.attachLists = data.finishInfo.finishAttachEntities
                 this.staffInfoLists = data.finishInfo.finishStaffInfoEntities
                 this.dataForm.finishNoPass = 0
+                // 附件回显
+                let tempFinishAtta = []
+                for (var i = 0; i < this.attachLists.length; i++) {
+                  tempFinishAtta.push(new FinishAttachment(this.attachLists[i]))
+                }
+                this.fileList = tempFinishAtta
                 this.isTeacherInfoNull()
                 this.dataListLoading = false
               }
@@ -437,8 +455,17 @@
         } else {
           this.$message.error(response.msg)
         }
+      },
+      fileRemoveHandler (file, fileList) {
+        // 移除attachList中的附件
+        let tempFileList = []
+        for (var index = 0; index < this.attachLists.length; index++) {
+          if (this.attachLists[index].attachName !== file.name) {
+            tempFileList.push(this.attachLists[index])
+          }
+        }
+        this.attachLists = tempFileList
       }
-
     }
   }
 </script>

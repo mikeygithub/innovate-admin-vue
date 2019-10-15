@@ -3,6 +3,7 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-date-picker
+          @change="getDataList"
           v-model="dataForm.finishTime"
           align="right"
           type="year"
@@ -218,11 +219,11 @@
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
-            for (let index = 0; index < this.dataList.length; index++) {
-              if (this.applyFinishIsVisible(this.dataList[index].finishInfoEntity) === true) {
-                this.applyFinishHandle(this.dataList[index].finishInfoEntity.finishId)
-              }
-            }
+            // for (let index = 0; index < this.dataList.length; index++) {
+            //   if (this.applyFinishIsVisible(this.dataList[index].finishInfoEntity) === true) {
+            //     this.applyFinishHandle(this.dataList[index].finishInfoEntity.finishId)
+            //   }
+            // }
           } else {
             this.dataList = []
             this.totalPage = 0

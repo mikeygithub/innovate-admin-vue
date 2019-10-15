@@ -116,6 +116,10 @@
         align="center"
         width="80"
         label="平均得分">
+        <template slot-scope="scope">
+          <el-tag type="small" v-if="scope.row.matchInfoEntity.matchScoreAvg === null || scope.row.matchInfoEntity.matchScoreAvg === ''">未评分</el-tag>
+          <el-tag type="small" v-if="scope.row.matchInfoEntity.matchScoreAvg != null" v-text="scope.row.matchInfoEntity.matchScoreAvg"></el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"

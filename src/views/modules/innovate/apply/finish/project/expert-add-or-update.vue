@@ -139,7 +139,7 @@
             { required: true, message: '政治面貌不能为空', trigger: 'blur' }
           ],
           perQq: [
-            { required: true, message: '原密码不能为空', trigger: 'blur' },
+            { required: true, message: 'QQ号不能为空', trigger: 'blur' },
             {type: 'number', message: '请输入正确的QQ号码'}
           ],
           perSchoolPost: [
