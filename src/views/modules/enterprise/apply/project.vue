@@ -176,10 +176,10 @@ export default {
     },
         // 详情
     detailHandle (id) {
-      console.log(id)
+      console.log(this.hasType, id)
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(id)
+        this.$refs.details.init(this.hasType, id)
       })
     },
         // 通过

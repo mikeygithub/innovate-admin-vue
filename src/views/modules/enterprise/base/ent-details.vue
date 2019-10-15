@@ -95,9 +95,10 @@
       }
     },
     methods: {
-      init (id) {
+      init (id, hasApply) {
         this.visible = true
         this.dataForm.entInfoId = id || 0
+        this.dataForm.inApply = hasApply
         if (this.dataForm.entInfoId) {
           this.$http({
             url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.entInfoId}/${this.dataForm.inApply}`),
@@ -105,6 +106,7 @@
             params: this.$http.adornParams()
           }).then(({data}) => {
             console.log(this.dataForm.entInfoId)
+            console.log(this.dataForm.inApply)
             if (data && data.code === 0) {
               this.dataForm.entName = data.data.entName
               this.dataForm.entCorporate = data.data.entCorporate

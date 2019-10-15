@@ -1,13 +1,20 @@
 <template>
-  <div class="mod-config">
+  <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="项目名" clearable></el-input>
+        <el-date-picker
+          v-model="dataForm.matchTime"
+          align="right"
+          type="year"
+          placeholder="请选择年度">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.projectName" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('enterprise:entprojectinfo:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('enterprise:entprojectinfo:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
     <el-card>
@@ -21,6 +28,7 @@
       :data="dataList"
       border
       v-loading="dataListLoading"
+      :default-sort="{prop: 'proInfoId', order: 'ascending'}"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
@@ -30,42 +38,45 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="proInfoId"
-        header-align="center"
-        align="center"
-        label="项目信息主键">
-      </el-table-column>
-      <el-table-column
+        sortable
         prop="proName"
         header-align="center"
         align="center"
         label="项目名称">
       </el-table-column>
       <el-table-column
+        sortable
         prop="proRegister"
         header-align="center"
         align="center"
+        width="110"
         label="项目登记">
       </el-table-column>
       <el-table-column
+        sortable
         prop="proOrigin"
         header-align="center"
         align="center"
         label="项目来源">
       </el-table-column>
       <el-table-column
+        sortable
         prop="proOutlay"
         header-align="center"
         align="center"
         label="项目经费">
       </el-table-column>
       <el-table-column
+        sortable
         prop="proType"
         header-align="center"
         align="center"
+        width="120"
+        :formatter="formatterZone"
         label="项目类型">
       </el-table-column>
       <el-table-column
+        sortable
         prop="proIntroduce"
         header-align="center"
         align="center"
@@ -75,11 +86,13 @@
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="210"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">详情</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.proInfoId)">删除</el-button>
+          <!-- isAuth('enterprise:info:shenhe') -->
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(hasType, scope.row.proInfoId)">详情</el-button>
+          <el-button v-if="true" type="text" size="small" @click="deleteHandle(scope.row.proInfoId)">删除</el-button>
+          <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,37 +100,40 @@
       @size-change="sizeChangeHandle"
       @current-change="currentChangeHandle"
       :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
+      :page-sizes="[5, 10, 20, 50, 100]"
       :page-size="pageSize"
       :total="totalPage"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
-    <!-- 弹窗, 新增 / 修改 -->
     <project-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
+import ProjectDetails from '../project/project-details'
 import AddOrUpdate from './project-add-or-update'
-import ProjectDetails from './project-details'
 export default {
   data () {
     return {
-      dataForm: {
-        key: ''
-      },
+      tempPro: null, // 项目临时信息
       shenhe: false,
+      addOrUpdateVisible: false,
       hasApply: '1',
+      hasType: 'userPerId',
+      dataForm: {
+        baseId: '',
+        projectName: '',
+        matchTime: new Date(),
+        idDel: 0
+      },
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
       totalPage: 0,
       dataListLoading: false,
-      dataListSelections: [],
-      addOrUpdateVisible: false,
-      hasType: 'userPerId'
+      dataListSelections: []
     }
   },
   components: {
@@ -128,6 +144,22 @@ export default {
     this.getDataList()
   },
   methods: {
+        // 格式化区域显示
+    formatterZone (row, column, cellValue) {
+      return cellValue === '0' ? '是' : '否'
+    },
+        // 详情
+    detailHandle (hasType, id) {
+      console.log(hasType, id)
+      this.shenhe = true
+      this.$nextTick(() => {
+        this.$refs.details.init(hasType, id)
+      })
+    },
+        // 获取详情信息
+    getDetailsInfo () {
+
+    },
         // 获取数据列表
     getDataList () {
       this.dataListLoading = true
@@ -135,13 +167,16 @@ export default {
         url: this.$http.adornUrl('/enterprise/project/info/list'),
         method: 'get',
         params: this.$http.adornParams({
-          'page': this.pageIndex,
-          'limit': this.pageSize,
-          'key': this.dataForm.key,
+          'currPage': this.pageIndex,
+          'pageSize': this.pageSize,
           'inApply': this.hasApply,
           'inType': this.hasType
         })
       }).then(({data}) => {
+        console.log(data)
+        if (data.code === 500) {
+          this.$message.error(data.msg)
+        }
         if (data && data.code === 0) {
           this.dataList = data.page.list
           this.totalPage = data.page.totalCount
@@ -152,16 +187,7 @@ export default {
         this.dataListLoading = false
       })
     },
-      // 详情
-    detailHandle (id) {
-      console.log(id)
-      this.shenhe = true
-      this.$nextTick(() => {
-        this.$refs.details.hasType = this.hasType
-        this.$refs.details.init(id)
-      })
-    },
-        // 每页数
+        //  每页数
     sizeChangeHandle (val) {
       this.pageSize = val
       this.pageIndex = 1
@@ -176,7 +202,13 @@ export default {
     selectionChangeHandle (val) {
       this.dataListSelections = val
     },
-        // 新增 / 修改
+    isDelete (item) {
+      if ((item.projectMatchApplyStatus === 0) &&
+                this.isAuth('innovate:match:delete')) {
+        return true
+      }
+    },
+      // 新增 / 修改
     addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
@@ -185,34 +217,63 @@ export default {
     },
         // 删除
     deleteHandle (id) {
-      var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.proInfoId
+      var canDelete = true
+      var matchIds = id ? [id] : this.dataListSelections.map(item => {
+        if ((item.projectInfoEntity.projectMatchApplyStatus > 0) ||
+                    !this.isAuth('innovate:match:delete')) {
+          canDelete = false
+        } else {
+          canDelete = false
+        }
+        return item.projectInfoEntity.matchId
       })
-      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      this.$confirm(`确定要进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http({
-          url: this.$http.adornUrl('/enterprise/entprojectinfo/delete'),
-          method: 'post',
-          data: this.$http.adornData(ids, false)
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
+        if (canDelete) {
+          this.$http({
+            url: this.$http.adornUrl('/innovate/match/info/delete'),
+            method: 'post',
+            data: this.$http.adornData(matchIds, false)
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        } else {
+          this.$message({
+            message: '包含不可删除项目',
+            type: 'error',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
+        }
+      }).catch(() => {
       })
     }
   }
 }
 </script>
+<style>
+  .el-step__title {
+    font-size: 12px;
+    line-height: 28px;
+  }
+
+  .el-table__expanded-cell[class*=cell] {
+    padding: 5px 5px;
+  }
+</style>

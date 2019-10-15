@@ -116,6 +116,7 @@
         totalPage: 0,
         dataListLoading: false,
         addOrUpdateVisible: false,
+        shenhe: false,
         dataListSelections: []
       }
     },
