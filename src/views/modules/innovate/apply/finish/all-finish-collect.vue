@@ -49,7 +49,7 @@
         prop="finishInfoEntity.finishName"
         header-align="center"
         align="center"
-        width="200"
+        width="250"
         label="申报名称">
       </el-table-column>
       <el-table-column
@@ -63,6 +63,7 @@
         prop="userPersonInfoEntities[0].perStuNo"
         header-align="center"
         align="center"
+        width="180"
         label="学号">
       </el-table-column>
       <el-table-column
@@ -94,7 +95,7 @@
         prop="finishUserTeacherInfoEntities"
         header-align="center"
         align="center"
-        width="80"
+        width="180"
         label="指导老师">
         <template slot-scope="scope">
           <span v-for="teacher in scope.row.finishUserTeacherInfoEntities" v-text="teacher.sysUserEntity.name+' '"></span>
@@ -127,6 +128,10 @@
         align="center"
         width="80"
         label="平均分">
+        <template slot-scope="scope">
+          <el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg === null || scope.row.finishInfoEntity.finishScoreAvg === ''">未评分</el-tag>
+          <el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg != null" v-text="scope.row.finishInfoEntity.finishScoreAvg"></el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"

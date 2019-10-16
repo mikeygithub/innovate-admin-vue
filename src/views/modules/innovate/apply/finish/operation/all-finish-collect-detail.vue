@@ -12,7 +12,7 @@
           <td colspan="20" style="height: 1.2rem"></td>
         </tr>
         <tr class="contents" align="center">
-          <th colspan="20">梧州学院2019“互联网+”大学生创新创业结题项目汇总表</th>
+          <th colspan="20">梧州学院 “互联网+” 大学生创新创业结题项目汇总表</th>
           <!--<th colspan="20">梧州学院{{finishYear}}“互联网+”大学生创新创业结题项目汇总表</th>-->
         </tr>
         <tr align='center' style="height: 3.0rem">

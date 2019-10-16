@@ -248,4 +248,12 @@
       cursor: pointer;
     }
   }
+  .el-tree{
+    height: 500px;
+    overflow-y: auto;
+  }
+  .el-tree>.el-tree-node{
+    display: inline-block !important;
+    min-width: 100%;
+  }
 </style>
