@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column
         sortable
-        prop="proName"
+        prop="projectInfo.proName"
         header-align="center"
         align="center"
         label="项目名称">
@@ -79,12 +79,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <cooperation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
-
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
 import CooperationDetails from '../cooperation/cooperation-details'
+import AddOrUpdate from './cooperation-add-or-update'
 export default {
   data () {
     return {
@@ -104,7 +105,8 @@ export default {
     }
   },
   components: {
-    CooperationDetails
+    CooperationDetails,
+    AddOrUpdate
   },
   activated () {
     this.getDataList()
@@ -161,7 +163,7 @@ export default {
     detailHandle: function (id) {
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(id)
+        this.$refs.details.init(id, this.hasType)
       })
     },
         // 删除

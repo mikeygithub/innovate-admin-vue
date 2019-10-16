@@ -24,17 +24,53 @@
         <el-input type="textarea" v-model="dataForm.proIntroduce" :readonly="true"></el-input>
       </el-form-item>
     </el-form>
+
     <el-collapse v-if="dataForm.entInfoId" v-model="activeNames" @change="handleChange">
       <el-collapse-item title="企业详情" name="1">
         <div>
           <el-form :model="dataForm" ref="dataForm" label-width="150px">
-            <el-form-item label="发布者姓名" prop="name">
-              <el-input v-model="dataForm.userTeacherInfo.SysUserEntity.name" :readonly="true"></el-input>
+            <el-form-item label="企业名称" prop="name">
+              <el-input v-model="dataForm.entEnterpriseInfo.entName" :readonly="true"></el-input>
             </el-form-item>
-            <el-form-item label="教师职务" prop="teacherPost">
-              <el-input v-model="dataForm.userTeacherInfo.teacherPost" :readonly="true"></el-input>
+            <el-form-item label="法人代表" prop="entCorporate">
+              <el-input v-model="dataForm.entEnterpriseInfo.entCorporate" :readonly="true"></el-input>
             </el-form-item>
-
+            <el-form-item label="经营范围" prop="entBusiness">
+              <el-input v-model="dataForm.entEnterpriseInfo.entBusiness" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="统一信用代码" prop="entCode">
+              <el-input v-model="dataForm.entEnterpriseInfo.entCode" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="注册资本" prop="entRegister">
+              <el-input v-model="dataForm.entEnterpriseInfo.entRegister" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="成立时间" prop="entFoundingTime">
+              <el-input v-model="dataForm.entEnterpriseInfo.entFoundingTime" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="企业类型" prop="entType">
+              <el-input v-model="dataForm.entEnterpriseInfo.entType" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="经营状态" prop="entStatus">
+              <el-input v-model="dataForm.entEnterpriseInfo.entStatus" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="注册地址" prop="entRegisterAddress">
+              <el-input v-model="dataForm.entEnterpriseInfo.entRegisterAddress" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="企业地址" prop="entAddress">
+              <el-input v-model="dataForm.entEnterpriseInfo.entAddress" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="企业介绍" prop="entIntroduce">
+              <el-input v-model="dataForm.entEnterpriseInfo.entIntroduce" :readonly="true"></el-input>
+            </el-form-item>
+            <el-form-item label="是否高新区" prop="newHighZones">
+              <el-radio-group v-model="dataForm.newHighZones" size="small" :readonly="true">
+                <el-radio border label="0" :readonly="true">是</el-radio>
+                <el-radio border label="1" :readonly="true">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="申请入驻时间" prop="entInTime">
+              <el-input v-model="dataForm.entEnterpriseInfo.entInTime" :readonly="true"></el-input>
+            </el-form-item>
           </el-form>
         </div>
       </el-collapse-item>
@@ -45,7 +81,7 @@
         <div>
           <el-form :model="dataForm" ref="dataForm" label-width="150px">
             <el-form-item label="发布者姓名" prop="name">
-            <el-input v-model="dataForm.userPersonInfo.SysUserEntity.name" :readonly="true"></el-input>
+            <el-input v-model="dataForm.sysUser.name" :readonly="true"></el-input>
             </el-form-item>
             <el-form-item label="政治面貌" prop="perPoliticsType">
               <el-input v-model="dataForm.userPersonInfo.perPoliticsType" :readonly="true"></el-input>
@@ -105,7 +141,7 @@
         <div>
           <el-form :model="dataForm" ref="dataForm" label-width="150px">
             <el-form-item label="发布者姓名" prop="name">
-              <el-input v-model="dataForm.userTeacherInfo.SysUserEntity.name" :readonly="true"></el-input>
+              <el-input v-model="dataForm.sysUser.name" :readonly="true"></el-input>
             </el-form-item>
             <el-form-item label="教师职务" prop="teacherPost">
               <el-input v-model="dataForm.userTeacherInfo.teacherPost" :readonly="true"></el-input>

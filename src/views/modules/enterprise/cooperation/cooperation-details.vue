@@ -5,7 +5,7 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="80px">
       <el-form-item label="项目名称" prop="proName">
-        <el-input v-model="dataForm.proName" :readonly="true"></el-input>
+        <el-input v-model="dataForm.projectInfo.proName" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="合作内容" prop="cooperationContent">
         <el-input v-model="dataForm.cooperationContent" placeholder="合作内容"></el-input>
@@ -44,26 +44,22 @@ export default {
     }
   },
   methods: {
-    init (id) {
+    init (id, hasType) {
       this.dataForm.proCooperationInfoId = id || 0
       this.visible = true
+      this.hasType = hasType
+      console.log(`${this.hasType}/${this.dataForm.proCooperationInfoId}`)
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (this.dataForm.proCooperationInfoId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/entprojectcooperationinfo/info/${this.dataForm.proCooperationInfoId}`),
+            url: this.$http.adornUrl(`/enterprise/project/cooperation/info/${this.dataForm.proCooperationInfoId}/${this.hasType}`),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
+            console.log(data)
             if (data && data.code === 0) {
-              this.dataForm.proInfoId = data.entprojectcooperationinfo.proInfoId
-              this.dataForm.cooperationContent = data.entprojectcooperationinfo.cooperationContent
-              this.dataForm.cooperationType = data.entprojectcooperationinfo.cooperationType
-              this.dataForm.cooperationRequire = data.entprojectcooperationinfo.cooperationRequire
-              this.dataForm.userPerId = data.entprojectcooperationinfo.userPerId
-              this.dataForm.userTeacherId = data.entprojectcooperationinfo.userTeacherId
-              this.dataForm.entInfoId = data.entprojectcooperationinfo.entInfoId
-              this.dataForm.inApply = data.entprojectcooperationinfo.inApply
+              this.dataForm = data.data
             }
           })
         }

@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column
         sortable
-        prop="proName"
+        prop="projectInfo.proName"
         header-align="center"
         align="center"
         label="项目名称">
@@ -186,7 +186,7 @@ export default {
     detailHandle: function (id) {
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(id)
+        this.$refs.details.init(id, this.hasType)
       })
     },
       // 通过

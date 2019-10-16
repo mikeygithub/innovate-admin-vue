@@ -29,6 +29,12 @@
         label="项目名称">
       </el-table-column>
       <el-table-column
+        prop="sysUser.name"
+        header-align="center"
+        align="center"
+        label="发布者">
+      </el-table-column>
+      <el-table-column
         fixed="right"
         header-align="center"
         align="center"

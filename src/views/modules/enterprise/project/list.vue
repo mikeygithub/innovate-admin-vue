@@ -149,11 +149,10 @@ export default {
       return cellValue === '0' ? '是' : '否'
     },
         // 详情
-    detailHandle (hasType, id) {
-      console.log(hasType, id)
+    detailHandle (id) {
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(hasType, id)
+        this.$refs.details.init(this.hasType, id)
       })
     },
         // 获取详情信息

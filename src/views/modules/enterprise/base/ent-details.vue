@@ -46,7 +46,6 @@
         <el-input type="textarea" v-model="dataForm.entIntroduce" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="是否高新区" prop="newHighZones">
-<!--        <el-input v-model="dataForm.newHighZones" :readonly="true"></el-input>-->
         <el-radio-group v-model="dataForm.newHighZones" size="small" :readonly="true">
           <el-radio border label="0" :readonly="true">是</el-radio>
           <el-radio border label="1" :readonly="true">否</el-radio>
@@ -98,7 +97,7 @@
       init (id, hasApply) {
         this.visible = true
         this.dataForm.entInfoId = id || 0
-        this.dataForm.inApply = hasApply
+        this.dataForm.inApply = hasApply || 1
         if (this.dataForm.entInfoId) {
           this.$http({
             url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.entInfoId}/${this.dataForm.inApply}`),
