@@ -256,7 +256,7 @@ export default {
           type: 'success',
           message: '提交成功!'
         })
-        this.retreatVisible = false
+        this.consentVisible = false
         this.getDataList()
       })
     },

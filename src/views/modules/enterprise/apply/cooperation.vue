@@ -6,7 +6,6 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('enterprise:entprojectcooperationinfo:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('enterprise:entprojectcooperationinfo:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -114,6 +113,11 @@ import CooperationDetails from '../cooperation/cooperation-details'
 export default {
   data () {
     return {
+      tempCoo: null,
+      consenttip: '您确认要通过该审核吗？该操作不可撤回！',
+      retreattip: '您确认不通过该审核吗？该操作不可撤回！',
+      consentVisible: false,
+      retreatVisible: false,
       dataForm: {
         key: ''
       },
@@ -192,7 +196,7 @@ export default {
       // 通过
     consentHandle (item) {
       this.consentVisible = true
-      this.tempEnt = item
+      this.tempCoo = item
           // this.$nextTick(() => {
           //     this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
           // })
@@ -200,7 +204,7 @@ export default {
       // 不通过
     retreatHandle (item) {
       this.retreatVisible = true
-      this.tempEnt = item
+      this.tempCoo = item
           // this.$nextTick(() => {
           //     this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
           // })
@@ -208,10 +212,10 @@ export default {
       // 审批通过
     applyConsentHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/info/entExamine'),
+        url: this.$http.adornUrl('/enterprise/project/cooperation/entExamine'),
         method: 'post',
         params: this.$http.adornParams({
-          'proInfoId': this.tempPro.proInfoId,
+          'proCooperationInfoId': this.tempCoo.proCooperationInfoId,
           'inApply': '1'
         }, false)
       }).then(({data}) => {
@@ -219,17 +223,17 @@ export default {
           type: 'success',
           message: '提交成功!'
         })
-        this.retreatVisible = false
+        this.consentVisible = false
         this.getDataList()
       })
     },
       // 审批不通过
     applyRetreatHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/info/entExamine'),
+        url: this.$http.adornUrl('/enterprise/project/cooperation/entExamine'),
         method: 'post',
         params: this.$http.adornParams({
-          'proInfoId': this.tempPro.proInfoId,
+          'proCooperationInfoId': this.tempCoo.proCooperationInfoId,
           'inApply': '0'
         }, false)
       }).then(({data}) => {

@@ -90,7 +90,7 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(hasType, scope.row.proInfoId)">详情</el-button>
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">详情</el-button>
           <el-button v-if="true" type="text" size="small" @click="deleteHandle(scope.row.proInfoId)">删除</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
