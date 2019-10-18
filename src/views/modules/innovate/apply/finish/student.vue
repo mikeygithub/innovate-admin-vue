@@ -4,6 +4,7 @@
       <el-form-item>
         <el-date-picker
           @change="getDataList"
+          :editable="false"
           v-model="dataForm.finishTime"
           align="right"
           type="year"

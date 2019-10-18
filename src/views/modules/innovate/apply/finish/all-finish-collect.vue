@@ -16,6 +16,7 @@
         <el-date-picker
           v-model="dataForm.finishTime"
           align="right"
+          :editable="false"
           type="year"
           placeholder="请选择年度">
         </el-date-picker>

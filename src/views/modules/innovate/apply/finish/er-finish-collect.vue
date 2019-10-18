@@ -4,6 +4,7 @@
       <el-form-item>
         <el-select v-model="dataForm.instituteId" placeholder="请选择二级学院" disabled="">
           <el-option
+            :editable="false"
             v-for="inst in instituteList"
             :key="inst.instituteName"
             :label="inst.instituteName"

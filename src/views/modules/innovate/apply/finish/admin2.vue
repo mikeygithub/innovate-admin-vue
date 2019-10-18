@@ -6,6 +6,7 @@
           v-model="dataForm.finishTime"
           align="right"
           type="year"
+          :editable="false"
           placeholder="请选择年度">
         </el-date-picker>
       </el-form-item>

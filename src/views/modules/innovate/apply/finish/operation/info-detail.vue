@@ -408,32 +408,6 @@
           {value: 1, label: '男'}, {value: 2, label: '女'}
         ],
         teacherTitleList: this.$store.state.user.title,
-        // teacherTitleList: [{
-        //   value: '1',
-        //   label: '正高级'
-        // }, {
-        //   value: '2',
-        //   label: '副高级'
-        // }, {
-        //   value: '3',
-        //   label: '中级'
-        // }, {
-        //   value: '4',
-        //   label: '初级'
-        // }, {
-        //   value: '5',
-        //   label: '无职称'
-        // }],
-        // awardTypeList: [
-        //   {value: 1, label: '国际级'}, {value: 2, label: '国家级'},
-        //   {value: 3, label: '省级'}, {value: 4, label: '市厅级'},
-        //   {value: 5, label: '县局级'}, {value: 6, label: '校级'}
-        // ],
-        // awardRankList: [
-        //   {value: 1, label: '特等奖'}, {value: 2, label: '一等奖'},
-        //   {value: 3, label: '二等奖'}, {value: 4, label: '三等奖'},
-        //   {value: 5, label: '优秀奖'}
-        // ],
         dataForm: {
           id: 0,
           teacherName: '',
@@ -493,11 +467,6 @@
               } else {
                 this.staffList = []
               }
-              // if (data.finishInfo.finishAwardEntities.length > 0) {
-              //   this.awardList = data.finishInfo.finishAwardEntities
-              // } else {
-              //   this.awardList = []
-              // }
               if (data.finishInfo.finishReviewEntities.length > 0) {
                 this.reviewList = data.finishInfo.finishReviewEntities
               } else {
