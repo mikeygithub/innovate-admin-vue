@@ -10,6 +10,13 @@
         <el-button v-if="isAuth('enterprise:entpersoncooperationinfo:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
+    <el-card>
+      <el-radio-group v-model="hasType" @change="getDataList">
+        <el-radio label="userPerId">学生</el-radio>
+        <el-radio label="userTeacherId">教师</el-radio>
+        <el-radio label="entInfoId">企业</el-radio>
+      </el-radio-group>
+    </el-card>
     <el-table
       :data="dataList"
       border
@@ -60,6 +67,7 @@
 </template>
 
 <script>
+import RelationDedails from './relation-details'
 export default {
   data () {
     return {
@@ -72,10 +80,12 @@ export default {
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
+      hasType: 'userPerId',
       addOrUpdateVisible: false
     }
   },
   components: {
+    RelationDedails
   },
   activated () {
     this.getDataList()
@@ -85,12 +95,13 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/project/info/list'),
+        url: this.$http.adornUrl('/enterprise/person/cooperation/list'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
           'limit': this.pageSize,
-          'key': this.dataForm.key
+          'key': this.dataForm.key,
+          'inType': this.hasType
         })
       }).then(({data}) => {
         if (data && data.code === 0) {

@@ -56,7 +56,7 @@
     <info-recruitment :hide="false"/>
 
     <!-- 企业信息 -->
-    <hot-company :hide="false"/>
+    <hot-company :hide="true"/>
 
     <!-- 城市热招 -->
     <hot-recruitment :hide="false"/>

@@ -4,8 +4,16 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="项目名称" prop="proName">
-        <el-input v-model="dataForm.proName" :readonly="true"></el-input>
+      <el-form-item  label="项目名称" prop="proName">
+        <el-select v-if="!dataForm.id" v-model="value" filterable placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <el-input v-if="dataForm.id" v-model="dataForm.proName" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="合作内容" prop="cooperationContent">
         <el-input v-model="dataForm.cooperationContent" placeholder="合作内容"></el-input>
@@ -40,6 +48,22 @@ export default {
         entInfoId: '',
         inApply: ''
       },
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
       dataRule: {
         proInfoId: [
                     { required: true, message: '项目信息外键不能为空', trigger: 'blur' }

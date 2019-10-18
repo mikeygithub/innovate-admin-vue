@@ -74,7 +74,7 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <project-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
+    <relation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
 
     <!-- 通过按钮 -->
     <el-dialog
@@ -106,6 +106,7 @@
 
 <script>
 import ProjectDetails from '../project/project-details'
+import RelationDetails from '../cooperation/relation-details'
 export default {
   data () {
     return {
@@ -132,7 +133,8 @@ export default {
     }
   },
   components: {
-    ProjectDetails
+    ProjectDetails,
+    RelationDetails
   },
   activated () {
     this.getDataList()
@@ -147,7 +149,7 @@ export default {
       console.log(id)
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(id)
+        this.$refs.details.init(id, this.hasType)
       })
     },
         // 通过
@@ -174,7 +176,7 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/project/info/list'),
+        url: this.$http.adornUrl('/enterprise/person/cooperation/list'),
         method: 'get',
         params: this.$http.adornParams({
           'currPage': this.pageIndex,
@@ -226,7 +228,7 @@ export default {
           type: 'success',
           message: '提交成功!'
         })
-        this.retreatVisible = false
+        this.consentVisible = false
         this.getDataList()
       })
     },

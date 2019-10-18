@@ -101,7 +101,7 @@ export default {
       addOrUpdateVisible: false,
       shenhe: false,
       hasType: 'userPerId',
-      hasApply: '0'
+      hasApply: '1'
     }
   },
   components: {

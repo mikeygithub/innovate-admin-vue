@@ -247,7 +247,7 @@ export default {
         // 审批通过
     applyConsentHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/info/entExamine'),
+        url: this.$http.adornUrl('/enterprise/project/info/entExamine'),
         method: 'post',
         params: this.$http.adornParams({
           'proInfoId': this.tempPro.proInfoId,
@@ -258,14 +258,14 @@ export default {
           type: 'success',
           message: '提交成功!'
         })
-        this.retreatVisible = false
+        this.consentVisible = false
         this.getDataList()
       })
     },
         // 审批不通过
     applyRetreatHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/info/entExamine'),
+        url: this.$http.adornUrl('/enterprise/project/info/entExamine'),
         method: 'post',
         params: this.$http.adornParams({
           'proInfoId': this.tempPro.proInfoId,

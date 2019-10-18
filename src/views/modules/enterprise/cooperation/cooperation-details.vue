@@ -48,13 +48,10 @@ export default {
       this.dataForm.proCooperationInfoId = id || 0
       this.visible = true
       this.hasType = hasType
-      console.log(`${this.hasType}/${this.dataForm.proCooperationInfoId}`)
       this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
         if (this.dataForm.proCooperationInfoId) {
           this.$http({
             url: this.$http.adornUrl(`/enterprise/project/cooperation/info/${this.dataForm.proCooperationInfoId}/${this.hasType}`),
-            method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
             console.log(data)
