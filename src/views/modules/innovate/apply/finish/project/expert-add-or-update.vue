@@ -29,7 +29,7 @@
   </el-dialog>
 </template>
 <script>
-  // import { isMobile } from '@/utils/validate'
+  import { isMobile } from '@/utils/validate'
   export default {
     name: 'expert-add-or-update',
     data () {
@@ -66,7 +66,7 @@
             { required: true, message: '单位不能为空', trigger: 'blur' }
           ],
           expertPhone: [
-            { required: true, message: '联系电话不能为空', trigger: 'blur' }
+            { required: true, message: '联系电话不能为空', trigger: 'blur' },
             {validator: validateMobile, trigger: 'blur'}
           ],
           expertIdentity: [
