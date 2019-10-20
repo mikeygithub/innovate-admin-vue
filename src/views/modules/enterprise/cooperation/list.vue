@@ -157,6 +157,7 @@ export default {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
+        this.$refs.addOrUpdate.selectProject()
       })
     },
         // 详情

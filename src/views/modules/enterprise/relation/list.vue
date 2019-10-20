@@ -39,7 +39,15 @@
         prop="sysUser.name"
         header-align="center"
         align="center"
+        v-if="hasType == 'userPerId' || hasType == 'userTeacherId'"
         label="发布者">
+      </el-table-column>
+      <el-table-column
+        prop="entEnterpriseInfo.entName"
+        header-align="center"
+        align="center"
+        v-if="hasType == 'entInfoId'"
+        label="发布企业">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -48,7 +56,7 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.proCooperationId)">修改</el-button>
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">合作列表</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.proCooperationId)">删除</el-button>
         </template>
       </el-table-column>
@@ -63,17 +71,19 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
+    <relation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
   </div>
 </template>
 
 <script>
-import RelationDedails from './relation-details'
+import RelationDetails from './relation-details'
 export default {
   data () {
     return {
       dataForm: {
         key: ''
       },
+      shenhe: false,
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
@@ -85,7 +95,7 @@ export default {
     }
   },
   components: {
-    RelationDedails
+    RelationDetails
   },
   activated () {
     this.getDataList()
@@ -112,6 +122,14 @@ export default {
           this.totalPage = 0
         }
         this.dataListLoading = false
+      })
+    },
+      // 详情
+    detailHandle (id) {
+      console.log(id)
+      this.shenhe = true
+      this.$nextTick(() => {
+        this.$refs.details.init(id, this.hasType)
       })
     },
         // 每页数

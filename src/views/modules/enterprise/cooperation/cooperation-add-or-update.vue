@@ -48,22 +48,8 @@ export default {
         entInfoId: '',
         inApply: ''
       },
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
+      options: null,
+      value: '',
       dataRule: {
         proInfoId: [
                     { required: true, message: '项目信息外键不能为空', trigger: 'blur' }
@@ -106,12 +92,35 @@ export default {
         }
       })
     },
+      // 查询用户对应项目信息
+    selectProject () {
+      this.$nextTick(() => {
+        this.$refs['dataForm'].resetFields()
+        if (!this.dataForm.proCooperationInfoId) {
+          this.$http({
+            url: this.$http.adornUrl(`/enterprise/project/info/queryPeojects`),
+            method: 'get',
+            params: this.$http.adornParams()
+          }).then(({data}) => {
+            console.log(data)
+            const arr = []
+            if (data && data.code === 0) {
+              data.data && data.data.forEach(function (item, index, a) {
+                arr.push({value: item.proInfoId, label: item.proName})
+              })
+              this.options = arr
+              console.log(this.options)
+            }
+          })
+        }
+      })
+    },
         // 表单提交
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/entprojectcooperationinfo/${!this.dataForm.proCooperationInfoId ? 'save' : 'update'}`),
+            url: this.$http.adornUrl(`/enterprise/project/cooperation/${!this.dataForm.proCooperationInfoId ? 'save' : 'update'}`),
             method: 'post',
             data: this.$http.adornData({
               'proCooperationInfoId': this.dataForm.proCooperationInfoId || undefined,

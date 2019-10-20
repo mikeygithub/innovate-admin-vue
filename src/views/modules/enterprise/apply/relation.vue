@@ -47,7 +47,15 @@
         prop="sysUser.name"
         header-align="center"
         align="center"
+        v-if="hasType == 'userPerId' || hasType == 'userTeacherId'"
         label="发布者">
+      </el-table-column>
+      <el-table-column
+        prop="entEnterpriseInfo.entName"
+        header-align="center"
+        align="center"
+        v-if="hasType == 'entInfoId'"
+        label="发布企业">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -57,7 +65,7 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">详情</el-button>
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">申请合作列表</el-button>
           <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">通过</el-button>
           <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">不通过</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
@@ -106,7 +114,7 @@
 
 <script>
 import ProjectDetails from '../project/project-details'
-import RelationDetails from '../cooperation/relation-details'
+import RelationDetails from '../relation/relation-details'
 export default {
   data () {
     return {
