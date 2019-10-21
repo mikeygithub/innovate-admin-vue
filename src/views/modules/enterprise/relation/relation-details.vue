@@ -14,7 +14,7 @@
       </el-form-item>
     </el-form>
     <el-card>
-      <el-radio-group v-model="hasType" @change="getDataList">
+      <el-radio-group v-model="hasType" @change="changeType(hasType)">
         <el-radio label="userPerId">学生</el-radio>
         <el-radio label="userTeacherId">教师</el-radio>
         <el-radio label="entInfoId">企业</el-radio>
@@ -33,11 +33,24 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="sysUser.name"
+        prop="userPersonInfo.sysUserEntity.name"
         header-align="center"
         align="center"
-        v-if="hasType == 'userPerId' || hasType == 'userTeacherId'"
+        v-if="hasType == 'userPerId'"
         label="申请者">
+<!--        <template slot-scope="scope">-->
+<!--          <el-button type="text" plain size="small" @click="details(scope.row.userPersonInfo.sysUserEntity.name)">{{scope.row.userPersonInfo}}</el-button>-->
+<!--        </template>-->
+      </el-table-column>
+      <el-table-column
+        prop="userTeacherInfo.sysUserEntity.name"
+        header-align="center"
+        align="center"
+        v-if="hasType == 'userTeacherId'"
+        label="申请者">
+        <!--        <template slot-scope="scope">-->
+        <!--          <el-button type="text" plain size="small" @click="details(scope.row.userPersonInfo.sysUserEntity.name)">{{scope.row.userPersonInfo}}</el-button>-->
+        <!--        </template>-->
       </el-table-column>
       <el-table-column
         prop="entEnterpriseInfo.entName"
@@ -72,14 +85,17 @@ export default {
   data () {
     return {
       visible: false,
-      hasType: false,
+      proInfoId: '',
+      applyName: '',
       dataList: [],
+      dataStuList: [],
+      dataTeaList: [],
+      dataEntList: [],
       dataListSelections: [],
       dataForm: {
         key: '',
         proName: '',
         proCooperationInfoId: 0,
-        proInfoId: '',
         cooperationContent: '',
         cooperationType: '',
         cooperationRequire: '',
@@ -87,27 +103,97 @@ export default {
         userTeacherId: '',
         entInfoId: '',
         inApply: ''
-      }
+      },
+      pageIndex: 1,
+      pageSize: 10,
+      totalPage: 0,
+      dataListLoading: false,
+      hasType: 'userPerId'
     }
+  },
+  components: {
   },
   methods: {
     init (id, hasType) {
-      this.dataForm.proCooperationInfoId = id || 0
+      this.proInfoId = id || 0
       this.visible = true
       this.hasType = hasType
+      console.log(this.proInfoId)
+      console.log(this.hasType)
       this.$nextTick(() => {
-        if (this.dataForm.proCooperationInfoId) {
+        if (this.proInfoId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/project/cooperation/info/${this.dataForm.proCooperationInfoId}/${this.hasType}`),
-            params: this.$http.adornParams()
+            url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proInfoId}/${this.hasType}`),
+            params: this.$http.adornParams({
+              'page': this.pageIndex,
+              'limit': this.pageSize,
+              'key': this.dataForm.key,
+              'inType': this.hasType
+            })
           }).then(({data}) => {
             console.log(data)
             if (data && data.code === 0) {
-              this.dataForm = data.data
+              this.dataList = data.data.projectCooperationInfo.personCooperationPer
+              this.dataStuList = data.data.projectCooperationInfo.personCooperationPer
+              this.dataTeaList = data.data.projectCooperationInfo.personCooperationTeacher
+              this.dataEntList = data.data.projectCooperationInfo.personCooperationEnt
+              this.totalPage = data.page.totalCount
+            } else {
+              this.dataList = []
+              this.totalPage = 0
             }
+            this.dataListLoading = false
+            console.log(this.dataList)
           })
         }
       })
+    },
+      // 获取数据列表
+    getDataList () {
+      this.dataListLoading = true
+      console.log(this.proInfoId + this.hasType)
+      this.$http({
+        url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proInfoId}/${this.hasType}`),
+        method: 'get',
+        params: this.$http.adornParams({
+          'page': this.pageIndex,
+          'limit': this.pageSize,
+          'key': this.dataForm.key,
+          'inType': this.hasType
+        })
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          if (this.hasType === 'userPerId') {
+            this.dataList = data.data.projectCooperationInfo.personCooperationPer
+          }
+          if (this.hasType === 'userTeacherId') {
+            this.dataList = data.data.projectCooperationInfo.personCooperationTeacher
+          }
+          if (this.hasType === 'entInfoId') {
+            this.dataList = data.data.projectCooperationInfo.personCooperationEnt
+          }
+          this.totalPage = data.page.totalCount
+        } else {
+          this.dataList = []
+          this.totalPage = 0
+        }
+        this.dataListLoading = false
+      })
+    },
+    changeType (hasType) {
+      console.log(this.dataList)
+      if (hasType === 'userPerId') {
+        this.dataList = this.dataStuList
+      }
+      if (hasType === 'userTeacherId') {
+        this.dataList = this.dataTeaList
+      }
+      if (hasType === 'entInfoId') {
+        this.dataList = this.dataEntList
+      }
+    },
+    details (id) {
+      console.log(id)
     },
       // 删除
     deleteHandle (id) {

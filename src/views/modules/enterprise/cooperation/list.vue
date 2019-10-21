@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle(null, proInfoId)">新增</el-button>
         <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -93,6 +93,7 @@ export default {
         key: ''
       },
       dataList: [],
+      proInfoId: '',
       pageIndex: 1,
       pageSize: 10,
       totalPage: 0,
