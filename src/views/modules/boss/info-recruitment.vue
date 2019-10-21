@@ -12,13 +12,13 @@
           <li v-for="(item, index) in list" :key="index">
             <div class="sub-li">
               <a :href="item.url" class="job-info" :target="item.target || '_blank'">
-                <p>{{item.title && item.title.name}}<span class="salary">{{item.title && item.title.value}}</span></p>
-                <p class="job-text">{{item.job && item.job.name}}<span class="vline"></span>{{item.job && item.job.years}}<span class="vline"></span>{{item.job && item.job.value}}</p>
+                <p>{{item.data && item.data.proName}}<span class="salary">{{item.data && item.data.proOutlay}}</span></p>
+                <p class="job-text">{{item.data && item.data.proOrigin}}<span class="vline"></span>{{item.data && item.data.proIntroduce}}</p>
               </a>
               <a :href="item.url" class="user-info" :target="item.target || '_blank'">
                 <p>
-                  <img :src="item.company && item.company.img" :alt="item.company && item.company.img" :title="item.company && item.company.img">{{item.company && item.company.name}}
-                  <span class="user-text">{{item.company && item.company.link}}<span class="vline"></span>{{item.company && item.company.position}}</span>
+                  <img :src="item.data && item.data.entEnterpriseInfo.entLogo" :alt="'企业Logo'" :title="企业Logo">{{item.data && item.data.entEnterpriseInfo.entName}} -
+                  <span class="user-text">{{item.data && item.data.entEnterpriseInfo.entCorporate}}<span class="vline"></span>{{item.data && item.data.entEnterpriseInfo.entType}}</span>
                 </p>
               </a>
             </div>
@@ -36,26 +36,57 @@
     props: {hide: Boolean},
     data () {
       return {
-        list: [{url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}},
-          {url: '#', target: '_blank', title: {name: '课程顾问/招生顾问/课程销售+教育培训行业', value: '10-15K'}, job: {name: '上海', value: '学历不限', years: '1-3年'}, company: {img: '/src/assets/img/users.jpg', name: '看看童话', link: '吴莹', position: '人事经理'}}],
+        list: null,
         menu: [{name: 'IT·互联网', cur: true}, {name: '金融', cur: false}, {name: '房地产·建筑', cur: false}, {name: '教育培训', cur: false}, {name: '汽车', cur: false},
           {name: '娱乐传媒', cur: false}, {name: '医疗健康', cur: false}, {name: '法律咨询', cur: false}, {name: '供应链·物流', cur: false}, {name: '采购贸易', cur: false}],
-        more: {name: '查看更多', url: '#'}
+        more: {name: '查看更多', url: '#'},
+        pageIndex: 1,
+        pageSize: 12,
+        hasApply: '1'
       }
     },
+    mounted () {
+      this.getListInfo(0, 0)
+    },
     methods: {
+      // 处理数据格式
+      invokeDatas (data) {
+        return {
+          url: '#',
+          target: '_blank',
+          data: data
+        }
+      },
+      getPeojectInfos (proType) {
+        let nu = parseInt(proType) + 1
+        this.$http({
+          url: this.$http.adornUrl('/webpage/projectInfos'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'inApply': this.hasApply,
+            'proType': nu
+          })
+        }).then(({data}) => {
+          // console.log(data)
+          if (data.code === 500) {
+            this.$message.error(data.msg)
+          } else {
+            if (data.data) {
+              let that = this
+              const result = []
+              data.data.records && data.data.records.forEach(function (item, index, arr) {
+                result.push(that.invokeDatas(item))
+              })
+              this.list = result
+             // console.log(this.list)
+            }
+          }
+        })
+      },
       getListInfo (type, index) {
-        // console.log(type, index)
+        console.log(type, index)
         let that = this
         this.menu.forEach((item, aindex, arr) => {
           // console.log(item, aindex, arr)
@@ -63,6 +94,7 @@
           if (index === aindex) {
             that.menu[aindex].cur = true
             // TODO请求网络数据，回填list
+            that.getPeojectInfos(index)
           }
         })
       }
