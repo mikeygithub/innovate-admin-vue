@@ -1,22 +1,22 @@
 <template>
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
-      <el-form-item>
-        <el-date-picker
-          v-model="dataForm.matchTime"
-          align="right"
-          type="year"
-          placeholder="请选择年度">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.recruitmentPost" placeholder="招聘岗位" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
-      </el-form-item>
-    </el-form>
+    <el-form-item>
+      <el-date-picker
+        v-model="dataForm.matchTime"
+        align="right"
+        type="year"
+        placeholder="请选择年度">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item>
+      <el-input v-model="dataForm.recruitmentPost" placeholder="招聘岗位" clearable></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button @click="getDataList()">查询</el-button>
+      <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+    </el-form-item>
+  </el-form>
     <el-table
       :data="dataList"
       border

@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :title="'详情'"
-    :close-on-click-modal="false"
+    :close-on-click-modal="visible = false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" label-width="80px">
       <el-form-item label="项目名称" prop="proName">

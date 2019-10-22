@@ -91,6 +91,7 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       hasType: 'userPerId',
+      inApply: '1',
       addOrUpdateVisible: false
     }
   },
@@ -111,7 +112,8 @@ export default {
           'page': this.pageIndex,
           'limit': this.pageSize,
           'key': this.dataForm.key,
-          'inType': this.hasType
+          'inType': this.hasType,
+          'inApply': this.inApply
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
