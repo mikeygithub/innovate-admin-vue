@@ -16,18 +16,21 @@
     <!--<tr align='center'>-->
       <!--<td colspan="24" style="height: 1.2rem"></td>-->
     <!--</tr>-->
-    <tr align='center'>
-      <th colspan="2">评审要点</th>
-      <th colspan="20">评审内容</th>
-      <th colspan="2">分值</th>
+    <tr align='center' style="height: 3rem">
+      <th colspan="17">评审要点文件名</th>
+      <th colspan="7">操作</th>
     </tr>
-    <template v-for="item in matchReviewPointEntityList">
-      <tr align="center">
-        <td colspan="2" v-text="item.reviewPoint"></td>
-        <td colspan="20" v-text="item.reviewContent"></td>
-        <td colspan="2" v-text="item.reviewScores"></td>
-      </tr>
-    </template>
+    <!--<template v-for="item in matchReviewPointEntityList">-->
+      <!--<tr align="center">-->
+        <!--<td colspan="2" v-text="item.reviewPoint"></td>-->
+        <!--<td colspan="20" v-text="item.reviewContent"></td>-->
+        <!--<td colspan="2" v-text="item.reviewScores"></td>-->
+      <!--</tr>-->
+    <!--</template>-->
+    <tr align="center">
+      <td colspan="17" align="center"><el-tag type="small" v-text="eventEntity.attachName"></el-tag></td>
+      <td colspan="7" align="center"><el-button v-if="eventEntity.awardPath!==''" @click="awardDown(eventEntity)">下载</el-button></td>
+    </tr>
     </table>
     </el-row>
     <!--评分指标结束-->
@@ -91,6 +94,7 @@
         loading: false,
         userMap: [],
         matchReviewPointEntityList: [],
+        eventEntity: {},
         id: 0,
         dataForm: {
           reviewId: '',
@@ -140,7 +144,7 @@
       }
     },
     methods: {
-      init (index, reviewType) {
+      init (index, eventId, reviewType) {
         this.visible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
@@ -161,6 +165,21 @@
               }
             })
           }
+        })
+        // 获取赛事信息
+        this.$nextTick(() => {
+          this.$http({
+            url: this.$http.adornUrl(`/innovate/match/event/info/` + eventId),
+            method: 'get',
+            params: this.$http.adornParams({
+              'eventId': this.eventId,
+              'apply': 'project_match_apply_status'
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.eventEntity = data.matchEventEntity
+            }
+          })
         })
         this.$nextTick(() => {
           this.$http({
@@ -209,6 +228,29 @@
         if (isNumber(this.dataForm.indexOne) && isNumber(this.dataForm.indexTwo) && isNumber(this.dataForm.indexThirty) && isNumber(this.dataForm.indexFour)) {
           this.dataForm.score = this.dataForm.indexOne + this.dataForm.indexTwo + this.dataForm.indexThirty + this.dataForm.indexFour
         }
+      },
+      // 文件下载
+      awardDown (award) {
+        this.$httpFile({
+          url: this.$httpFile.adornUrl(`/innovate/match/attach/download`),
+          method: 'post',
+          params: this.$httpFile.adornParams({
+            'filePath': award.attachPath
+          })
+        }).then(response => {
+          if (!response) {
+            return
+          }
+          let url = window.URL.createObjectURL(new Blob([response.data]))
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', award.attachName)
+          document.body.appendChild(link)
+          link.click()
+        }).catch(err => {
+          console.log(err)
+        })
       }
     }
   }

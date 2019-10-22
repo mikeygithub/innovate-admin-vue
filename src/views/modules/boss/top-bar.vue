@@ -5,7 +5,7 @@
       <div class="app-pleft fl-l clearfix">
         <!-- logo -->
         <div class="app-plogo fl-l">
-          <a href="#"><img :src="logo" alt="logo" title="logo"></a>
+          <a href="#"><img :src="logo"  alt="logo" title="logo"></a>
         </div>
         <!-- 定位区域 -->
         <div class="app-pposition fl-l position-r">
@@ -66,13 +66,14 @@
 </template>
 
 <script>
+  import TopBarImg from '@/assets/img/logo-2x.png'
   // 公共区域
   export default {
     name: 'top-bar',
     props: ['hide', 'login', 'register', 'logout', 'manager'],
     data () {
       return {
-        logo: '/src/assets/img/logo-2x.png',
+        logo: TopBarImg,
         menu: [{name: '首页', url: '#', target: '_blank', cur: true}, {name: '职位', url: '#', target: '_blank', cur: false}, {name: '公司', url: '#', target: '_blank', cur: false},
           {name: 'APP', url: '#', target: '_blank', cur: false}, {name: '资讯', url: '#', target: '_blank', cur: false}],
         isLogin: false,
@@ -114,5 +115,7 @@
 </script>
 
 <style scoped>
-
+  .top-bg {
+    background-image: url("~@/assets/img/logo-2x.png");
+  }
 </style>

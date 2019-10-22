@@ -2,7 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.projectName" placeholder="二级学院" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="赛事名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -67,7 +67,7 @@
     data () {
       return {
         dataForm: {
-          projectName: ''
+          key: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -92,6 +92,7 @@
           url: this.$http.adornUrl('/innovate/match/event/list'),
           method: 'get',
           params: this.$http.adornParams({
+            'key': this.dataForm.key,
             'page': this.pageIndex,
             'limit': this.pageSize,
             'projectName': this.dataForm.projectName

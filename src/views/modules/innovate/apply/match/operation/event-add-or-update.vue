@@ -9,9 +9,30 @@
       <el-form-item label="赛事名称" prop="eventName">
         <el-input v-model="dataForm.eventName" placeholder="请输入"></el-input>
       </el-form-item>
-      <!--<el-form-item label="比赛参加人数" prop="eventPeople">-->
-        <!--<el-input v-model.number="dataForm.eventPeople" placeholder="请输入"></el-input>-->
-      <!--</el-form-item>-->
+
+      <el-col>
+        <el-form-item label="赛事上传文件要求" prop="fileAskContent">
+          <el-input v-model="dataForm.fileAskContent" placeholder="请输入赛事上传文件要求" type="textarea"></el-input>
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="24">
+        <el-form-item label="赛事评分规则" prop="reportSalesName">
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            :action="url"
+            :data="{matchName: dataForm.eventName}"
+            :on-success="successHandle"
+            :on-remove="fileRemoveHandler"
+            :on-exceed="fileExceed"
+            :limit="1"
+            :file-list="fileList">
+            <el-button size="small" type="primary">点击上传</el-button>
+          </el-upload>
+        </el-form-item>
+      </el-col>
+
       <!--<el-form-item label="获奖数量" prop="eventAwardNum">-->
         <!--<el-input v-model.number="dataForm.eventAwardNum" placeholder="请输入"></el-input>-->
       <!--</el-form-item>-->
@@ -31,6 +52,14 @@
 
 <script>
   // import { isFloatNumber } from '@/utils/validate'
+  class MatchAttachment {
+    constructor (file) {
+      this.name = file.attachName
+      this.url = file.attachPath
+      this.file = file
+    }
+  }
+
   export default {
     name: 'event-add-or-update',
     data () {
@@ -42,113 +71,34 @@
       //   }
       // }
       return {
+        url: '',
         addLoading: false,
         visible: false,
-        // awardFileName: {
-        //   matchName: ''
-        // },
-        // typeList: [{
-        //   value: 1,
-        //   label: '国际级'
-        // }, {
-        //   value: 2,
-        //   label: '国家级'
-        // }, {
-        //   value: 3,
-        //   label: '省级'
-        // }, {
-        //   value: 4,
-        //   label: '市厅级'
-        // }, {
-        //   value: 5,
-        //   label: '县局级'
-        // }, {
-        //   value: 6,
-        //   label: '校级'
-        // }],
-        // rankList: [{
-        //   value: 1,
-        //   label: '特等奖'
-        // }, {
-        //   value: 2,
-        //   label: '一等奖'
-        // }, {
-        //   value: 3,
-        //   label: '二等奖'
-        // }, {
-        //   value: 4,
-        //   label: '三等奖'
-        // }, {
-        //   value: 5,
-        //   label: '优秀奖'
-        // }, {
-        //   value: 6,
-        //   label: '金奖'
-        // }, {
-        //   value: 7,
-        //   label: '银奖'
-        // }, {
-        //   value: 8,
-        //   label: '铜奖'
-        // }, {
-        //   value: 9,
-        //   label: '第一名'
-        // }, {
-        //   value: 10,
-        //   label: '第二名'
-        // }, {
-        //   value: 11,
-        //   label: '第三名'
-        // }, {
-        //   value: 12,
-        //   label: '第四名'
-        // }, {
-        //   value: 13,
-        //   label: '第五名'
-        // }, {
-        //   value: 14,
-        //   label: '其他'
-        // }],
         id: 0,
         fileList: [],
+        attachLists: [],
         dataForm: {
           eventId: '',
-          eventName: ''
-          // eventPeople: '',
-          // eventAwardNum: '',
-          // eventProjectNum: '',
-          // eventAwardMoney: ''
+          eventName: '',
+          fileAskContent: '',
+          attachName: '',
+          attachPath: ''
         },
         dataRule: {
           eventName: [
             { required: true, message: '赛事名称不能为空', trigger: 'blur' }
           ]
-          // eventPeople: [
-          //   { required: true, message: '比赛参加人数不能为空', trigger: 'blur' },
-          //   {type: 'number', message: '必须为数字', trigger: 'blur'}
-          // ],
-          // eventAwardNum: [
-          //   { required: true, message: '获奖数量不能为空', trigger: 'blur' },
-          //   {type: 'number', message: '必须为数字', trigger: 'blur'}
-          // ],
-          // eventProjectNum: [
-          //   { required: true, message: '项目团队数量不能为空', trigger: 'blur' },
-          //   {type: 'number', message: '必须为数字', trigger: 'blur'}
-          // ],
-          // eventAwardMoney: [
-          //   { required: true, message: '奖金数量不能为空', trigger: 'blur' },
-          //   {type: 'number', message: '必须为数字', trigger: 'blur'},
-          //   { validator: validateFloatNumber, trigger: 'blur' }
-          // ]
         }
       }
     },
     methods: {
       init (index) {
+        this.url = this.$http.adornUrl(`/innovate/match/attach/upload?token=${this.$cookie.get('token')}`)
         this.visible = true
         this.id = index || 0
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
+          this.$refs.upload.clearFiles()
           if (this.id) {
             this.$http({
               url: this.$http.adornUrl(`/innovate/match/event/info/` + index),
@@ -160,6 +110,11 @@
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.dataForm = data.matchEventEntity
+                if (data.matchEventEntity.attachName !== null) {
+                  var tempFile = []
+                  tempFile.push(new MatchAttachment(data.matchEventEntity))
+                  this.fileList = tempFile
+                }
               }
             })
           }
@@ -169,6 +124,10 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           this.dataForm.eventId = this.id || undefined
+          if (this.dataForm.attachPath === '' || this.dataForm.attachName === '') {
+            this.$message.error('请上传评分规则')
+            return
+          }
           if (valid) {
             this.addLoading = true
             this.$http({
@@ -182,16 +141,34 @@
                   type: 'success',
                   duration: 1500,
                   onClose: () => {
+                    this.addLoading = false
                     this.visible = false
                     this.$emit('refreshDataList')
                   }
                 })
               } else {
+                this.addLoading = false
                 this.$message.error(data.msg)
               }
             })
           }
         })
+      },
+      // 上传成功
+      successHandle (response, file, fileList) {
+        if (response && response.code === 0) {
+          this.dataForm.attachName = response.matchAttachEntity.attachName
+          this.dataForm.attachPath = response.matchAttachEntity.attachPath
+        } else {
+          this.$message.error(response.msg)
+        }
+      },
+      fileRemoveHandler (file, fileList) {
+        this.dataForm.attachName = ''
+        this.dataForm.attachPath = ''
+      },
+      fileExceed (files, fileList) {
+        this.$message.error('文件超出个数限制')
       }
     }
   }

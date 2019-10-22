@@ -20,7 +20,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="比赛赛事名" prop="eventId">
-            <el-select v-model="dataForm.eventId"  placeholder="请选择">
+            <el-select v-model="dataForm.eventId"  placeholder="请选择" @change="fileAskContentHandler($event)" >
               <el-option v-for="item in eventLists" :key="item.eventId" :label="item.eventName" :value="item.eventId">
               </el-option>
             </el-select>
@@ -371,20 +371,20 @@
             this.dataListLoading = false
           }
           // 获取文件要求：类型=>1 大创,2 中期检查,3 赛事,4 结题
-          this.dataListLoading = true
-          this.$http({
-            url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
-            method: 'get',
-            params: this.$http.adornParams({
-              'fileAskType': 3,
-              'fileAskTime': new Date().getFullYear()
-            })
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.fileAskContent = data.fileAsk == null ? '无' : data.fileAsk.fileAskContent
-              this.dataListLoading = false
-            }
-          })
+          // this.dataListLoading = true
+          // this.$http({
+          //   url: this.$http.adornUrl(`/innovate/sys/file/ask/query`),
+          //   method: 'get',
+          //   params: this.$http.adornParams({
+          //     'fileAskType': 3,
+          //     'fileAskTime': new Date().getFullYear()
+          //   })
+          // }).then(({data}) => {
+          //   if (data && data.code === 0) {
+          //     this.fileAskContent = data.fileAsk == null ? '无' : data.fileAsk.fileAskContent
+          //     this.dataListLoading = false
+          //   }
+          // })
         })
       },
       // 表单提交
@@ -595,8 +595,10 @@
         }
         this.tempAttachLists = temp
         this.attachLists = temp
+      },
+      fileAskContentHandler (event) {
+        this.fileAskContent = this.eventLists[event - 1].fileAskContent
       }
-
     }
   }
 </script>

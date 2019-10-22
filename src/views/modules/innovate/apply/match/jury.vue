@@ -114,7 +114,7 @@
         label="操作">
         <template slot-scope="scope">
           <el-button v-if="isAuth('innovate:match:list')" type="text" size="small" @click="detailHandle(scope.row.matchInfoEntity.matchId)">详情</el-button>
-          <el-button v-if="applyIsVisible(scope.row.matchInfoEntity)" type="text" size="small" @click="applyHandle(scope.row.matchInfoEntity.matchId,scope.row.matchInfoEntity.matchGroupType)">评分</el-button>
+          <el-button v-if="applyIsVisible(scope.row.matchInfoEntity)" type="text" size="small" @click="applyHandle(scope.row.matchInfoEntity,scope.row.matchInfoEntity.matchGroupType)">评分</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -289,10 +289,10 @@
         })
       },
       // 审批
-      applyHandle (id, type) {
+      applyHandle (entity, type) {
         this.scoreVisible = true
         this.$nextTick(() => {
-          this.$refs.score.init(id, type)
+          this.$refs.score.init(entity.id, entity.eventId, type)
         })
       }
     }
