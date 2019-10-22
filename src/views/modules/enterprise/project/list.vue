@@ -14,10 +14,10 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button type="primary" v-if="isAuth('enterprise:project:info:save')" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
-    <el-card>
+    <el-card v-if="!isAuth('enterprise:project:info:save')">
       <el-radio-group v-model="hasType" @change="getDataList">
         <el-radio label="userPerId">学生</el-radio>
         <el-radio label="userTeacherId">教师</el-radio>

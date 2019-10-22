@@ -1,4 +1,5 @@
 <template>
+  <div class="mod-user">
   <el-dialog
     :title="'申请合作列表'"
     :close-on-click-modal="false"
@@ -38,9 +39,9 @@
         align="center"
         v-if="hasType == 'userPerId'"
         label="申请者">
-<!--        <template slot-scope="scope">-->
-<!--          <el-button type="text" plain size="small" @click="details(scope.row.userPersonInfo.sysUserEntity.name)">{{scope.row.userPersonInfo}}</el-button>-->
-<!--        </template>-->
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="details(scope.row.userPersonInfo.sysUserEntity.name)">{{scope.row.userPersonInfo.sysUserEntity.name}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         prop="userTeacherInfo.sysUserEntity.name"
@@ -48,9 +49,9 @@
         align="center"
         v-if="hasType == 'userTeacherId'"
         label="申请者">
-        <!--        <template slot-scope="scope">-->
-        <!--          <el-button type="text" plain size="small" @click="details(scope.row.userPersonInfo.sysUserEntity.name)">{{scope.row.userPersonInfo}}</el-button>-->
-        <!--        </template>-->
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="details(scope.row.userTeacherInfo.sysUserEntity.name)">{{scope.row.userTeacherInfo.sysUserEntity.name}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         prop="entEnterpriseInfo.entName"
@@ -58,6 +59,9 @@
         align="center"
         v-if="hasType == 'entInfoId'"
         label="申请企业">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="getEntDetailsInfo(scope.row.entEnterpriseInfo.entInfoId, scope.row.entEnterpriseInfo.inApply)">{{scope.row.entEnterpriseInfo.entName}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -68,7 +72,7 @@
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
-          <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
+          <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">移除</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
@@ -78,13 +82,27 @@
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
   </el-dialog>
+    <el-pagination
+      @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle"
+      :current-page="pageIndex"
+      :page-sizes="[5, 10, 20, 50, 100]"
+      :page-size="pageSize"
+      :total="totalPage"
+      layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
+    <!-- 弹窗, 学生 / 教师 / 企业详情 -->
+    <ent-details v-if="entDetails" ref="entDetails" @refreshDataList="getEntDetailsInfo()"/>
+  </div>
 </template>
 
 <script>
+import EntDetails from '../base/ent-details'
 export default {
   data () {
     return {
       visible: false,
+      entDetails: false,
       proInfoId: '',
       applyName: '',
       dataList: [],
@@ -112,6 +130,7 @@ export default {
     }
   },
   components: {
+    EntDetails
   },
   methods: {
     init (id, hasType) {
@@ -192,39 +211,47 @@ export default {
         this.dataList = this.dataEntList
       }
     },
-    details (id) {
-      console.log(id)
-    },
-      // 删除
-    deleteHandle (id) {
-      var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.proCooperationId
-      })
-      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$http({
-          url: this.$http.adornUrl('/enterprise/entpersoncooperationinfo/delete'),
-          method: 'post',
-          data: this.$http.adornData(ids, false)
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
+      // 企业详情弹窗
+    getEntDetailsInfo (id, hasApply) {
+      console.log(id + hasApply)
+      this.entDetails = true
+      this.$nextTick(() => {
+        this.$refs.entDetails.init(id, hasApply)
       })
     }
+  },
+  details (id) {
+    console.log(id)
+  },
+      // 删除
+  deleteHandle (id) {
+    var ids = id ? [id] : this.dataListSelections.map(item => {
+      return item.proCooperationId
+    })
+    this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      this.$http({
+        url: this.$http.adornUrl('/enterprise/entpersoncooperationinfo/delete'),
+        method: 'post',
+        data: this.$http.adornData(ids, false)
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.getDataList()
+            }
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    })
   }
 }
 </script>

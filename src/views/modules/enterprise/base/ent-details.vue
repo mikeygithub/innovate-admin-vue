@@ -98,6 +98,7 @@
         this.visible = true
         this.dataForm.entInfoId = id || 0
         this.dataForm.inApply = hasApply || 1
+        console.log(id + hasApply)
         if (this.dataForm.entInfoId) {
           this.$http({
             url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.entInfoId}/${this.dataForm.inApply}`),

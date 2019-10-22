@@ -10,7 +10,7 @@
         <el-button v-if="isAuth('enterprise:entpersoncooperationinfo:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
-    <el-card>
+    <el-card v-if="!isAuth('enterprise:project:info:save')">
       <el-radio-group v-model="hasType" @change="getDataList">
         <el-radio label="userPerId">学生</el-radio>
         <el-radio label="userTeacherId">教师</el-radio>
@@ -48,6 +48,9 @@
         align="center"
         v-if="hasType == 'entInfoId'"
         label="发布企业">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="getEntDetailsInfo(scope.row.entEnterpriseInfo.entInfoId, scope.row.entEnterpriseInfo.inApply)">{{scope.row.entEnterpriseInfo.entName}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -72,11 +75,14 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <relation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
+    <!-- 弹窗, 学生 / 教师 / 企业详情 -->
+    <ent-details v-if="entDetails" ref="entDetails" @refreshDataList="getEntDetailsInfo()"/>
   </div>
 </template>
 
 <script>
 import RelationDetails from './relation-details'
+import EntDetails from '../base/ent-details'
 export default {
   data () {
     return {
@@ -84,6 +90,7 @@ export default {
         key: ''
       },
       shenhe: false,
+      entDetails: false,
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
@@ -96,7 +103,8 @@ export default {
     }
   },
   components: {
-    RelationDetails
+    RelationDetails,
+    EntDetails
   },
   activated () {
     this.getDataList()
@@ -132,6 +140,14 @@ export default {
       this.shenhe = true
       this.$nextTick(() => {
         this.$refs.details.init(id, this.hasType)
+      })
+    },
+      // 企业详情弹窗
+    getEntDetailsInfo (id, hasApply) {
+      console.log(id + hasApply)
+      this.entDetails = true
+      this.$nextTick(() => {
+        this.$refs.entDetails.init(id, hasApply)
       })
     },
         // 每页数
