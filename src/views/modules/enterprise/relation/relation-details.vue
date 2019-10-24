@@ -38,9 +38,9 @@
         header-align="center"
         align="center"
         v-if="hasType == 'userPerId'"
-        label="申请者">
+        label="项目负责人">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="details(scope.row.userPersonInfo.sysUserEntity.name)">{{scope.row.userPersonInfo.sysUserEntity.name}}</el-button>
+          <el-button type="text" size="small" @click="getStuDetailsInfo(scope.row.userPersonInfo.userPerId)">{{scope.row.userPersonInfo.sysUserEntity.name}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -48,9 +48,9 @@
         header-align="center"
         align="center"
         v-if="hasType == 'userTeacherId'"
-        label="申请者">
+        label="项目负责人">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="details(scope.row.userTeacherInfo.sysUserEntity.name)">{{scope.row.userTeacherInfo.sysUserEntity.name}}</el-button>
+          <el-button type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherInfo.userTeacherId)">{{scope.row.userTeacherInfo.sysUserEntity.name}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -93,16 +93,22 @@
     </el-pagination>
     <!-- 弹窗, 学生 / 教师 / 企业详情 -->
     <ent-details v-if="entDetails" ref="entDetails" @refreshDataList="getEntDetailsInfo()"/>
+    <tea-details v-if="teaDetails" ref="teaDetails"/>
+    <stu-details v-if="stuDetails" ref="stuDetails"/>
   </div>
 </template>
 
 <script>
 import EntDetails from '../base/ent-details'
+import TeaDetails from '../base/tea-details'
+import StuDetails from '../base/stu-details'
 export default {
   data () {
     return {
       visible: false,
       entDetails: false,
+      teaDetails: false,
+      stuDetails: false,
       proInfoId: '',
       applyName: '',
       dataList: [],
@@ -130,7 +136,9 @@ export default {
     }
   },
   components: {
-    EntDetails
+    EntDetails,
+    TeaDetails,
+    StuDetails
   },
   methods: {
     init (id, hasType) {
@@ -200,7 +208,6 @@ export default {
       })
     },
     changeType (hasType) {
-      console.log(this.dataList)
       if (hasType === 'userPerId') {
         this.dataList = this.dataStuList
       }
@@ -217,6 +224,22 @@ export default {
       this.entDetails = true
       this.$nextTick(() => {
         this.$refs.entDetails.init(id, hasApply)
+      })
+    },
+      // 教师详情弹窗
+    getTeaDetailsInfo (id) {
+      console.log(id)
+      this.teaDetails = true
+      this.$nextTick(() => {
+        this.$refs.teaDetails.init(id)
+      })
+    },
+      // 教师详情弹窗
+    getStuDetailsInfo (id) {
+      console.log(id)
+      this.stuDetails = true
+      this.$nextTick(() => {
+        this.$refs.stuDetails.init(id)
       })
     }
   },

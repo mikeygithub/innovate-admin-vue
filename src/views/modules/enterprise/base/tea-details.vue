@@ -1,38 +1,60 @@
 <template>
   <el-dialog
-    :title="'企业审核'"
+    :title="'教师基本信息'"
     :close-on-click-modal="false"
     width="60%"
     :visible.sync="visible">
-    <el-form :model="dataForm" ref="dataForm" label-width="150px">
-      <el-form-item label="发布者姓名" prop="name">
-        <el-input v-model="dataForm.sysUser.name" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item label="教师职务" prop="teacherPost">
-        <el-input v-model="dataForm.userTeacherInfo.teacherPost" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item label="身份证号" prop="teacherCardNo">
-        <el-input v-model="dataForm.userTeacherInfo.teacherCardNo" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item label="性别" prop="teacherSex">
-        <el-input v-model="dataForm.userTeacherInfo.teacherSex" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item label="教师职称" prop="teacherTitle">
-        <el-input v-model="dataForm.userTeacherInfo.teacherTitle" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item label="教师学历" prop="teacherBackground">
-        <el-input v-model="dataForm.userTeacherInfo.teacherBackground" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item label="教师学位" prop="teacherDegree">
-        <el-input v-model="dataForm.userTeacherInfo.teacherDegree" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item label="所学方向" prop="teacherStudy">
-        <el-input v-model="dataForm.userTeacherInfo.teacherStudy" :readonly="true"></el-input>
-      </el-form-item>
-      <el-form-item label="从事科研领域" prop="teacherScientific">
-        <el-input v-model="dataForm.userTeacherInfo.teacherScientific" :readonly="true"></el-input>
-      </el-form-item>
-    </el-form>
+    <el-row>
+      <table border="1" align="center" cellpadding="10" width="100%">
+        <tr>
+          <th colspan="7">负责人详情</th>
+        </tr>
+
+        <tr>
+          <th>姓名:</th>
+          <td><span v-text="dataForm.sysUserEntity.name" align="center"></span></td>
+          <th>性别:</th>
+          <td><span v-text="dataForm.perAge" align="center"></span></td>
+          <th>手机号:</th>
+          <td><span v-text="dataForm.sysUserEntity.mobile" align="center"></span></td>
+          <td rowspan="3" width="100"> <p><a href=""><img border="0" src="http://" />
+          </a></p></td>
+        </tr>
+
+        <tr>
+          <th>学院:</th>
+          <td><span v-text="dataForm.sysUserEntity.instituteId" align="center"></span></td>
+          <th>职务:</th>
+          <td><span v-text="dataForm.teacherPost" align="center"></span></td>
+          <th>职称:</th>
+          <td><span v-text="dataForm.teacherTitle" align="center"></span></td>
+        </tr>
+
+        <tr>
+          <th>学历:</th>
+          <td><span v-text="dataForm.teacherBackground" align="center"></span></td>
+          <th>学位:</th>
+          <td><span v-text="dataForm.teacherDegree" align="center"></span></td>
+          <th>身份证号:</th>
+          <td><span v-text="dataForm.gradeId" align="center"></span></td>
+        </tr>
+
+        <tr>
+          <th>电子邮箱:</th>
+          <td colspan="7"><span v-text="dataForm.sysUserEntity.email" align="center"></span></td>
+        </tr>
+
+        <tr>
+          <th height="160">所学方向:</th>
+          <td colspan="6"><span v-text="dataForm.teacherStudy" align="center"></span></td>
+        </tr>
+
+        <tr>
+          <th height="160">从事科研领域:</th>
+          <td colspan="6"><span v-text="dataForm.teacherScientific" align="center"></span></td>
+        </tr>
+      </table>
+    </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="visible = false">返回</el-button>
     </span>
@@ -45,24 +67,23 @@
       return {
         visible: false,
         dataList: [],
+        teacherId: '',
         dataForm: {
         }
       }
     },
     methods: {
-      init (id, hasApply) {
+      init (id) {
         this.visible = true
-        this.dataForm.entInfoId = id || 0
-        this.dataForm.inApply = hasApply || 1
-        console.log(id + hasApply)
-        if (this.dataForm.entInfoId) {
+        this.teacherId = id
+        console.log(id)
+        if (this.teacherId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/info/info/${this.dataForm.entInfoId}/${this.dataForm.inApply}`),
+            url: this.$http.adornUrl(`/innovate/use/teacher/teacherInfo/${this.teacherId}`),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
-            console.log(this.dataForm.entInfoId)
-            console.log(this.dataForm.inApply)
+            console.log(data)
             if (data && data.code === 0) {
               this.dataForm = data.data
             }

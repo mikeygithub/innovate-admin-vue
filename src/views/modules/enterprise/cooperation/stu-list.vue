@@ -10,6 +10,12 @@
         <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
+    <el-card>
+      <el-radio-group v-model="cooType" @change="getDataList">
+        <el-radio label="0">我发布的</el-radio>
+        <el-radio label="1">我参与的</el-radio>
+      </el-radio-group>
+    </el-card>
     <el-table
       :data="dataList"
       border
@@ -86,6 +92,7 @@ export default {
         key: ''
       },
       dataList: [],
+      cooType: '0',
       proInfoId: '',
       pageIndex: 1,
       pageSize: 10,

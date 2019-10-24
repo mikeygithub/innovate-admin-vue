@@ -1,7 +1,6 @@
 <template>
   <el-dialog
     :title="'项目信息详情'"
-    :close-on-click-modal="false"
     width="60%"
     :visible.sync="visible">
     <el-form :model="dataForm" ref="dataForm" label-width="150px">
