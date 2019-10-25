@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :title="'学生基本信息'"
-    :close-on-click-modal="false"
+    :modal-append-to-body='false'
     width="60%"
     :visible.sync="visible">
     <el-row>

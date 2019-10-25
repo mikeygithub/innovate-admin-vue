@@ -82,15 +82,6 @@
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
   </el-dialog>
-    <el-pagination
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-      :current-page="pageIndex"
-      :page-sizes="[5, 10, 20, 50, 100]"
-      :page-size="pageSize"
-      :total="totalPage"
-      layout="total, sizes, prev, pager, next, jumper">
-    </el-pagination>
     <!-- 弹窗, 学生 / 教师 / 企业详情 -->
     <ent-details v-if="entDetails" ref="entDetails" @refreshDataList="getEntDetailsInfo()"/>
     <tea-details v-if="teaDetails" ref="teaDetails"/>
@@ -234,7 +225,7 @@ export default {
         this.$refs.teaDetails.init(id)
       })
     },
-      // 教师详情弹窗
+      // 学生详情弹窗
     getStuDetailsInfo (id) {
       console.log(id)
       this.stuDetails = true

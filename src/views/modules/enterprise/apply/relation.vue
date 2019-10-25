@@ -47,15 +47,31 @@
         prop="sysUser.name"
         header-align="center"
         align="center"
-        v-if="hasType == 'userPerId' || hasType == 'userTeacherId'"
-        label="发布者">
+        v-if="hasType == 'userPerId'"
+        label="项目负责人">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">{{scope.row.sysUser.name}}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="sysUser.name"
+        header-align="center"
+        align="center"
+        v-if="hasType == 'userTeacherId'"
+        label="项目负责人">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">{{scope.row.sysUser.name}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         prop="entEnterpriseInfo.entName"
         header-align="center"
         align="center"
         v-if="hasType == 'entInfoId'"
-        label="发布企业">
+        label="申请企业">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="getEntDetailsInfo(scope.row.entEnterpriseInfo.entInfoId, scope.row.entEnterpriseInfo.inApply)">{{scope.row.entEnterpriseInfo.entName}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -83,6 +99,10 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <relation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
+    <!-- 弹窗, 学生 / 教师 / 企业详情 -->
+    <ent-details v-if="entDetails" ref="entDetails" @refreshDataList="getEntDetailsInfo()"/>
+    <tea-details v-if="teaDetails" ref="teaDetails"/>
+    <stu-details v-if="stuDetails" ref="stuDetails"/>
 
     <!-- 通过按钮 -->
     <el-dialog
@@ -115,6 +135,9 @@
 <script>
 import ProjectDetails from '../project/project-details'
 import RelationDetails from '../relation/relation-details'
+import EntDetails from '../base/ent-details'
+import TeaDetails from '../base/tea-details'
+import StuDetails from '../base/stu-details'
 export default {
   data () {
     return {
@@ -124,6 +147,9 @@ export default {
       shenhe: false,
       consentVisible: false,
       retreatVisible: false,
+      entDetails: false,
+      teaDetails: false,
+      stuDetails: false,
       hasApply: '0',
       hasType: 'userPerId',
       dataForm: {
@@ -142,7 +168,10 @@ export default {
   },
   components: {
     ProjectDetails,
-    RelationDetails
+    RelationDetails,
+    EntDetails,
+    TeaDetails,
+    StuDetails
   },
   activated () {
     this.getDataList()
@@ -179,6 +208,41 @@ export default {
         // 获取详情信息
     getDetailsInfo () {
 
+    },
+    changeType (hasType) {
+      if (hasType === 'userPerId') {
+        this.dataList = this.dataStuList
+      }
+      if (hasType === 'userTeacherId') {
+        this.dataList = this.dataTeaList
+      }
+      if (hasType === 'entInfoId') {
+        this.dataList = this.dataEntList
+      }
+    },
+      // 企业详情弹窗
+    getEntDetailsInfo (id, hasApply) {
+      console.log(id + hasApply)
+      this.entDetails = true
+      this.$nextTick(() => {
+        this.$refs.entDetails.init(id, hasApply)
+      })
+    },
+      // 教师详情弹窗
+    getTeaDetailsInfo (id) {
+      console.log(id)
+      this.teaDetails = true
+      this.$nextTick(() => {
+        this.$refs.teaDetails.init(id)
+      })
+    },
+      // 学生详情弹窗
+    getStuDetailsInfo (id) {
+      console.log(id)
+      this.stuDetails = true
+      this.$nextTick(() => {
+        this.$refs.stuDetails.init(id)
+      })
     },
         // 获取数据列表
     getDataList () {
