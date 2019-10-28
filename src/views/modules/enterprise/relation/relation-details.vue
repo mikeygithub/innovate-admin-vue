@@ -122,6 +122,7 @@ export default {
       consentVisible: false,
       retreatVisible: false,
       proInfoId: '',
+      inApply: '1',
       applyName: '',
       dataList: [],
       dataStuList: [],
@@ -153,16 +154,17 @@ export default {
     StuDetails
   },
   methods: {
-    init (id, hasType) {
+    init (id, hasType, inApply) {
       this.proInfoId = id || 0
       this.visible = true
       this.hasType = hasType
+      this.inApply = inApply
       console.log(this.proInfoId)
       console.log(this.hasType)
       this.$nextTick(() => {
         if (this.proInfoId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proInfoId}/${this.hasType}`),
+            url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proInfoId}/${this.hasType}/${this.inApply}`),
             params: this.$http.adornParams({
               'page': this.pageIndex,
               'limit': this.pageSize,
@@ -192,7 +194,7 @@ export default {
       this.dataListLoading = true
       console.log(this.proInfoId + this.hasType)
       this.$http({
-        url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proInfoId}/${this.hasType}`),
+        url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proInfoId}/${this.hasType}/${this.inApply}`),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,

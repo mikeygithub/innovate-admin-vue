@@ -186,7 +186,7 @@ export default {
       console.log(id)
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(id, this.hasType)
+        this.$refs.details.init(id, this.hasType, this.hasApply)
       })
     },
         // 通过
