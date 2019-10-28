@@ -248,7 +248,8 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/person/cooperation/list'),
+        // url: this.$http.adornUrl('/enterprise/person/cooperation/list'),
+        url: this.$http.adornUrl('/enterprise/person/cooperation/proList'),
         method: 'get',
         params: this.$http.adornParams({
           'currPage': this.pageIndex,
