@@ -5,8 +5,8 @@
     width="60%"
     :modal-append-to-body='false'
     :visible.sync="visible">
-    <el-row v-if="!isAuth('enterprise:project:info:save')">
-      <el-button type="primary" v-if="dataForm.userPerId" @click="getStuDetailsInfo(dataForm.userPerId)">负责人详情</el-button>
+    <el-row v-if="!isAuth('enterprise:project:info:save')" :gutter="20">
+      <el-col :offset="20"><el-button type="primary" v-if="dataForm.userPerId" @click="getStuDetailsInfo(dataForm.userPerId)">负责人详情</el-button></el-col>
     </el-row>
     <el-row v-if="!isAuth('enterprise:project:info:save')">
       <el-button type="primary" v-if="dataForm.userTeacherId" @click="getTeaDetailsInfo(dataForm.userTeacherId)">负责人详情</el-button>
@@ -14,6 +14,7 @@
     <el-row v-if="!isAuth('enterprise:project:info:save')">
       <el-button type="primary" v-if="dataForm.entInfoId" @click="getEntDetailsInfo(dataForm.entInfoId)">企业详情</el-button>
     </el-row>
+    <div class="d1"></div>
     <el-form :model="dataForm" ref="dataForm" label-width="150px">
       <el-form-item label="项目名称" prop="proName">
         <el-input v-model="dataForm.proName" :readonly="true"></el-input>
@@ -126,3 +127,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.d1{
+  padding-bottom: 15px;
+}
+</style>

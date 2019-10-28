@@ -77,13 +77,13 @@
         fixed="right"
         header-align="center"
         align="center"
-        width="210"
+        width="300"
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">申请合作列表</el-button>
-          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">通过</el-button>
-          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">不通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">截止申请</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">全部通过</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
