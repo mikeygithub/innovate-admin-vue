@@ -29,7 +29,7 @@
     data () {
       return {
         datas: {
-          title: '城市热招',
+          title: '创新创业教育相关连接',
           list: ['/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png',
             '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png']
         }

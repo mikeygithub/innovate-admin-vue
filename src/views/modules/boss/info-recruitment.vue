@@ -41,7 +41,7 @@
           </li>
         </ul>
       </div>
-      <p class="common-tab-more"  v-if="more"><a class="btn btn-outline" :href="more.url" :target="more.target || '_blank'">{{more.name}}</a></p>
+      <p class="common-tab-more" v-if="false && more"><a class="btn btn-outline" :href="more.url" :target="more.target || '_blank'">{{more.name}}</a></p>
     </div>
     <!-- 详情 -->
     <project-join v-if="xiangqing" ref="pj"/>
@@ -57,8 +57,8 @@
       return {
         xiangqing: false,
         list: null,
-        menu: [{name: 'IT·互联网', cur: true}, {name: '金融', cur: false}, {name: '房地产·建筑', cur: false}, {name: '教育培训', cur: false}, {name: '汽车', cur: false},
-          {name: '娱乐传媒', cur: false}, {name: '医疗健康', cur: false}, {name: '法律咨询', cur: false}, {name: '供应链·物流', cur: false}, {name: '采购贸易', cur: false}],
+        menu: [{name: '全部', cur: true}, {name: '科研项目', cur: false}, {name: '横向项目', cur: false}, {name: '企业项目', cur: false}, {name: '大创项目', cur: false}, {name: '企业招聘', cur: false},
+          {name: '实习项目对接', cur: false}],
         more: {name: '查看更多', url: '#'},
         pageIndex: 1,
         pageSize: 12,

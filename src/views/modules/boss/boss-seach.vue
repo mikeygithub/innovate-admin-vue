@@ -4,7 +4,7 @@
     <div class="app-w app-index-seach mar-t20">
       <!-- 搜素表单 -->
       <div class="app-form">
-        <form action="#" class="position-a" method="POST" onsubmit="return false;">
+        <div action="#" class="position-a" method="POST" onsubmit="return false;">
           <!-- 类型 -->
           <div class="app-ftype" v-if="form">
             <p class="app-ftxt" v-if="form.select && form.select.title" @click="showOrHide">{{form.select.title}}</p>
@@ -15,7 +15,7 @@
                   <li v-for="(item, index) in form.select.first" :class="{cur: item.cur}" :key="index" :data-seach="item.data">{{item.name}}</li>
                 </ul>
                 <!-- 二级菜单 -->
-                <div class="dorpdown-city">
+                <div v-if="false" class="dorpdown-city">
                   <ul v-if="form.select.second">
                     <li v-for="(item, index) in form.select.second" :class="{cur: item.cur}" :key="index" :data-seach="item.data">{{item.name}}</li>
                   </ul>
@@ -25,10 +25,10 @@
           </div>
           <input name="keywords" v-model="form.keywords" class="app-finput" type="text" :placeholder="form.placeholder">
           <input class="app-seach" :type="form.type" :value="form.submit">
-        </form>
+        </div>
       </div>
       <!-- 热门职位 -->
-      <div class="app-hot-produ" v-if="jobs">
+      <div  class="app-hot-produ" v-if="false">
         <span class="text app-hot-a" v-if="jobs.title">{{jobs.title}}</span>
         <div class="app-hot-produbox text-not-wrap">
           <a class="app-hot-a" v-if="jobs.list" v-for="(item, index) in jobs.list" :target="item.target || '_blank'" :href="item.url" :key="index">{{item.name}}</a>
@@ -48,7 +48,7 @@
         form: {
           select: {
             show: false,
-            title: '职位类型',
+            title: '项目类型',
             first: [{cur: true, name: '不限', data: ''}, {cur: false, name: '高级管理', data: ''}, {cur: false, name: '技术', data: ''}, {cur: false, name: '产品', data: ''}, {cur: false, name: '设计', data: ''},
              {cur: false, name: '运营', data: ''}, {cur: false, name: '市场', data: ''}, {cur: false, name: '销售', data: ''}, {cur: false, name: '传媒', data: ''}, {cur: false, name: '金融', data: ''}],
             second: [{cur: true, name: '后端开发', data: ''}, {cur: false, name: '移动开发', data: ''}, {cur: false, name: '测试', data: ''}, {cur: false, name: '运维技术支持', data: ''}, {cur: false, name: '数据', data: ''},

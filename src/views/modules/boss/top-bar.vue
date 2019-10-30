@@ -8,7 +8,7 @@
           <a href="#"><img :src="logo"  alt="logo" title="logo"></a>
         </div>
         <!-- 定位区域 -->
-        <div class="app-pposition fl-l position-r">
+        <div v-if="false" class="app-pposition fl-l position-r">
           <p class="nav-city">
             <i class="icon-poi"></i>
             <span class="nav-city-selected">深圳</span>
@@ -29,7 +29,7 @@
           </div>
         </div>
         <!-- 快捷菜单 -->
-        <div class="app-pnav">
+        <div v-if="false" class="app-pnav">
           <ul>
             <li v-for="(item, index) in menu" :key="index" @click="openMenuItem(index)"><a :class="{cur: item.cur}" :href="item.url" :target="item.target || '_blank'">{{item.name}}</a></li>
           </ul>
@@ -40,18 +40,18 @@
         <!-- 用户信息 -->
         <div class="user-nav position-r">
           <ul>
-            <li class="position-r"><a href="#">信息<span class="nav-chat-num"></span></a></li>
-            <li class="position-r"><a href="#">简历</a></li>
+            <li v-if="false" class="position-r"><a href="#">信息<span class="nav-chat-num"></span></a></li>
+            <li v-if="false" class="position-r"><a href="#">简历</a></li>
             <li class="position-r nav-figure" v-if="isLogin">
               <a href="javascript:;" @click="showInfo(true)">
-                <span class="label-text">双创直聘</span>
+                <span class="label-text">{{this.getUserInfo() && this.$store.state.user.name }}</span>
                 <img src="/src/assets/img/avatar_13.png" alt="头像" title="头像">
               </a>
               <div class="self-box position-a" v-show="showUserInfo" @mouseleave="showInfo(false)">
-                <a href="#" >个人中心<span>推荐职位、编辑在线简历</span></a>
-                <a href="#" >账号设置<span>修改密码、打招呼语和常用语</span></a>
-                <a href="#" >隐私设置</a>
-                <a href="#" class="link-mall" >求职助手</a>
+                <a v-if="false" href="#" >个人中心<span>推荐职位、编辑在线简历</span></a>
+                <a v-if="false" href="#" >账号设置<span>修改密码、打招呼语和常用语</span></a>
+                <a v-if="false" href="#" >隐私设置</a>
+                <a v-if="false" href="#" class="link-mall" >求职助手</a>
                 <a href="javascript:;" class="link-recruit" @click="manager">进入后台管理系统</a>
                 <a href="javascript:;" class="link-logout" @click="logout">退出登录</a>
               </div>
@@ -91,6 +91,24 @@
       }
     },
     methods: {
+      // 获取当前管理员信息
+      getUserInfo () {
+        this.$http({
+          url: this.$http.adornUrl('/sys/user/info'),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          // console.log(data)
+          if (data && data.code === 0) {
+            this.loading = false
+            this.$store.state.user.username = data.user.username
+            this.$store.state.user.name = data.user.name
+            this.$store.state.user.instituteId = data.user.instituteId
+            this.$store.state.user.roleIdList = data.user.roleIdList
+          }
+        })
+        return true
+      },
       showInfo (flag) {
         if (flag) {
           this.showUserInfo = true
