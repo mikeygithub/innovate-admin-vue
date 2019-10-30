@@ -5,7 +5,7 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item  label="项目名称" prop="proName">
-        <el-select v-if="!dataForm.id" v-model="value" filterable placeholder="请选择">
+        <el-select v-model="value" @change="getProInfoId(value)" filterable placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -13,7 +13,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-        <el-input v-if="dataForm.id" v-model="dataForm.proName" :readonly="true"></el-input>
       </el-form-item>
       <el-form-item label="合作内容" prop="cooperationContent">
         <el-input v-model="dataForm.cooperationContent" placeholder="合作内容"></el-input>
@@ -115,8 +114,12 @@ export default {
         }
       })
     },
+    getProInfoId (proInfoId) {
+      this.dataForm.proInfoId = proInfoId
+    },
         // 表单提交
     dataFormSubmit () {
+      console.log('111')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({

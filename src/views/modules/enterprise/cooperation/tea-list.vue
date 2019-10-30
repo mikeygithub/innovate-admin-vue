@@ -6,15 +6,14 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('enterprise:entpersoncooperationinfo:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('enterprise:entpersoncooperationinfo:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button type="primary" v-if="isAuth('enterprise:project:cooperation:save')" @click="addOrUpdateHandle(null, proInfoId)">发布合作</el-button>
+        <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
-    <el-card v-if="!isAuth('enterprise:project:info:save')">
-      <el-radio-group v-model="hasType" @change="getDataList">
-        <el-radio label="userPerId">学生</el-radio>
-        <el-radio label="userTeacherId">教师</el-radio>
-        <el-radio label="entInfoId">企业</el-radio>
+    <el-card>
+      <el-radio-group v-model="cooType" @change="getDataList">
+        <el-radio label="0">我发布的</el-radio>
+        <el-radio label="1">我参与的</el-radio>
       </el-radio-group>
     </el-card>
     <el-table
@@ -30,40 +29,29 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="proName"
+        sortable
+        prop="projectInfo.proName"
         header-align="center"
         align="center"
         label="项目名称">
       </el-table-column>
       <el-table-column
-        prop="sysUser.name"
+        prop="cooperationContent"
         header-align="center"
         align="center"
-        v-if="hasType == 'userPerId'"
-        label="项目负责人">
-        <template slot-scope="scope">
-          <el-button type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">{{scope.row.sysUser.name}}</el-button>
-        </template>
+        label="合作内容">
       </el-table-column>
       <el-table-column
-        prop="sysUser.name"
+        prop="cooperationType"
         header-align="center"
         align="center"
-        v-if="hasType == 'userTeacherId'"
-        label="项目负责人">
-        <template slot-scope="scope">
-          <el-button type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">{{scope.row.sysUser.name}}</el-button>
-        </template>
+        label="合作方式">
       </el-table-column>
       <el-table-column
-        prop="entEnterpriseInfo.entName"
+        prop="cooperationRequire"
         header-align="center"
         align="center"
-        v-if="hasType == 'entInfoId'"
-        label="发布企业">
-        <template slot-scope="scope">
-          <el-button type="text" size="small" @click="getEntDetailsInfo(scope.row.entEnterpriseInfo.entInfoId, scope.row.entEnterpriseInfo.inApply)">{{scope.row.entEnterpriseInfo.entName}}</el-button>
-        </template>
+        label="合作要求">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -72,8 +60,10 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">合作列表</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.proCooperationId)">删除</el-button>
+          <!-- isAuth('enterprise:info:shenhe') -->
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
+          <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
+          <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,45 +77,37 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <relation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
-    <!-- 弹窗, 学生 / 教师 / 企业详情 -->
-    <ent-details v-if="entDetails" ref="entDetails" @refreshDataList="getEntDetailsInfo()"/>
-    <tea-details v-if="teaDetails" ref="teaDetails"/>
-    <stu-details v-if="stuDetails" ref="stuDetails"/>
+    <cooperation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
-import RelationDetails from './relation-details'
-import EntDetails from '../base/ent-details'
-import TeaDetails from '../base/tea-details'
-import StuDetails from '../base/stu-details'
+import CooperationDetails from '../cooperation/cooperation-details'
+import AddOrUpdate from './cooperation-add-or-update'
 export default {
   data () {
     return {
       dataForm: {
         key: ''
       },
-      shenhe: false,
-      entDetails: false,
-      teaDetails: false,
-      stuDetails: false,
       dataList: [],
+      cooType: '0',
+      proInfoId: '',
       pageIndex: 1,
       pageSize: 10,
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
-      hasType: 'userPerId',
-      inApply: '1',
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      shenhe: false,
+      hasType: 'userTeacherId',
+      hasApply: '1'
     }
   },
   components: {
-    RelationDetails,
-    EntDetails,
-    TeaDetails,
-    StuDetails
+    CooperationDetails,
+    AddOrUpdate
   },
   activated () {
     this.getDataList()
@@ -135,16 +117,17 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/person/cooperation/list'),
+        url: this.$http.adornUrl('/enterprise/project/cooperation/list'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
           'limit': this.pageSize,
           'key': this.dataForm.key,
-          'inType': this.hasType,
-          'inApply': this.inApply
+          'inApply': this.hasApply,
+          'inType': this.hasType
         })
       }).then(({data}) => {
+        console.log(data)
         if (data && data.code === 0) {
           this.dataList = data.page.list
           this.totalPage = data.page.totalCount
@@ -153,38 +136,6 @@ export default {
           this.totalPage = 0
         }
         this.dataListLoading = false
-      })
-    },
-      // 详情
-    detailHandle (id) {
-      console.log(id)
-      this.shenhe = true
-      this.$nextTick(() => {
-        this.$refs.details.init(id, this.hasType)
-      })
-    },
-      // 企业详情弹窗
-    getEntDetailsInfo (id, hasApply) {
-      console.log(id + hasApply)
-      this.entDetails = true
-      this.$nextTick(() => {
-        this.$refs.entDetails.init(id, hasApply)
-      })
-    },
-      // 教师详情弹窗
-    getTeaDetailsInfo (id) {
-      console.log(id)
-      this.teaDetails = true
-      this.$nextTick(() => {
-        this.$refs.teaDetails.init(id)
-      })
-    },
-      // 学生详情弹窗
-    getStuDetailsInfo (id) {
-      console.log(id)
-      this.stuDetails = true
-      this.$nextTick(() => {
-        this.$refs.stuDetails.init(id)
       })
     },
         // 每页数
@@ -207,12 +158,20 @@ export default {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
+        this.$refs.addOrUpdate.selectProject()
+      })
+    },
+        // 详情
+    detailHandle: function (id) {
+      this.shenhe = true
+      this.$nextTick(() => {
+        this.$refs.details.init(id, this.hasType)
       })
     },
         // 删除
     deleteHandle (id) {
       var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.proCooperationId
+        return item.proCooperationInfoId
       })
       this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
@@ -220,7 +179,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/enterprise/entpersoncooperationinfo/delete'),
+          url: this.$http.adornUrl('/enterprise/entprojectcooperationinfo/delete'),
           method: 'post',
           data: this.$http.adornData(ids, false)
         }).then(({data}) => {

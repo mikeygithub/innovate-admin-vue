@@ -1,49 +1,81 @@
 <template>
-  <div>
   <el-dialog
-    :close-on-click-modal=" visible = false"
-    width="60%"
+    :title="'项目信息'"
+    :width="'60%'"
+    v-loading="loading"
     :visible.sync="visible">
     <!-- 详情 -->
-    <div class="info-box">
+    <div class="info-box" v-if="result">
       <!-- 顶部 -->
       <div class="info-top">
         <!-- 左边 -->
         <div class="top-left s">
-          <h4>java（银行项目）java（银行项目）java（银行项目）java（银行项目）</h4>
-          <p>软通动力。招聘顾问。操红雷软通动力。招聘顾问。操红雷软通动力。招聘顾问。操红雷软通动力。招聘顾问。操红雷</p>
+          <h4>{{result.proName}}</h4>
+          <p>项目类型:{{result.proType}} - 项目来源:{{result.proOrigin}} - 项目经费:{{result.proutlay}}</p>
         </div>
         <!-- 右边 -->
         <div class="top-right s">
           <div class="t-r-b">
-            <span class="info-btn">立即加入</span>
+            <span class="info-btn" @click="join2">立即加入</span>
           </div>
         </div>
         <div style="clear: both;"></div>
         <!-- 主要主题项目内容 -->
         <div class="info-content">
-          <div class="detail-bottom-title">职位描述</div>
-          <div class="detail-bottom-text">1.大专及以上学历，计算机、管理类专业优先<br>2.熟悉掌握PPT、Word、Excel表格等办公软件<br>3.抗压能力强，有良好的沟通协调能力和团队协<br>助精神<br>4.有较强的推动能力<br>5.能够适应较高的工作强度<br>1）项目计划及进度任务、风险问题跟进<br>2）项目过程数据收集整理<br>3）项目规范流程建设<br>4）项目团队建设<br>5）项目过程风险识别及优化建议提出<br>6）项目规范化审计<br>7）项目会议组织<br>8）项目过程交付文档存档
-          </div>
+          <div class="detail-bottom-title">项目介绍</div>
+          <div class="detail-bottom-text">{{result.proIntroduce}}</div>
         </div>
       </div>
-      <!--  -->
     </div>
+
   </el-dialog>
-  </div>
 </template>
 
 <script>
   export default {
     data () {
       return {
-        visible: false
+        loading: true,
+        visible: false,
+        proInfoId: 0,
+        result: null
       }
     },
     methods: {
+      // 加入项目
+      join2 () {
+        console.log('加入项目', this.result.proInfoId)
+        this.$http({
+          url: this.$http.adornUrl(`/enterprise/person/cooperation/save`),
+          method: 'get',
+          params: this.$http.adornParams({
+            'proInfoId': this.result.proInfoId
+          })
+        }).then(({data}) => {
+          console.log(data)
+          this.loading = false
+          if (data && data.code === 0) {
+            this.$message.success(data.msg)
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      },
       init (hasType, id) {
+        console.log(hasType, id)
         this.visible = true
         this.proInfoId = id
+        this.$http({
+          url: this.$http.adornUrl(`/webpage/projectInfo/${this.proInfoId}/`),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          console.log(data)
+          this.loading = false
+          if (data && data.code === 0) {
+            this.result = data.data
+          }
+        })
       }
     }
   }
@@ -51,7 +83,7 @@
 
 <style >
   .s{box-sizing: border-box;}
-  .info-box{width: 100%;height: 400px;margin: 100px auto;background-color: pink;}
+  .info-box{width: 100%;}
   .info-top{padding: 20px;background-color: #f5f8fc;}
   .top-left{float: left;width: 50%;color: #666;font-size: 22px;}
   .top-left h4{font-weight: 400;line-height: 50px;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}

@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" v-if="isAuth('enterprise:project:info:save')" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button type="primary" v-if="isAuth('enterprise:project:info:save')" @click="addOrUpdateHandle()">新增项目</el-button>
       </el-form-item>
     </el-form>
     <el-card v-if="!isAuth('enterprise:project:info:save')">

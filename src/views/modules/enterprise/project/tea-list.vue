@@ -6,16 +6,9 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" v-if="isAuth('enterprise:project:info:save')" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button type="primary" v-if="isAuth('enterprise:project:info:save')" @click="addOrUpdateHandle()">新增项目</el-button>
       </el-form-item>
     </el-form>
-    <el-card v-if="!isAuth('enterprise:project:info:save')">
-      <el-radio-group v-model="hasType" @change="getDataList">
-        <el-radio label="userPerId">学生</el-radio>
-        <el-radio label="userTeacherId">教师</el-radio>
-        <el-radio label="entInfoId">企业</el-radio>
-      </el-radio-group>
-    </el-card>
     <el-table
       :data="dataList"
       border
@@ -113,7 +106,7 @@ export default {
       shenhe: false,
       addOrUpdateVisible: false,
       hasApply: '1',
-      hasType: 'userPerId',
+      hasType: 'userTeacherId',
       dataForm: {
         baseId: '',
         projectName: '',

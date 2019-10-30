@@ -1,9 +1,20 @@
 <template>
+  <div class="mod-user">
   <el-dialog
     :title="'项目信息详情'"
-    :close-on-click-modal="false"
     width="60%"
+    :modal-append-to-body='false'
     :visible.sync="visible">
+    <el-row v-if="!isAuth('enterprise:project:info:save')" :gutter="20">
+      <el-col :offset="20"><el-button type="primary" v-if="dataForm.userPerId" @click="getStuDetailsInfo(dataForm.userPerId)">负责人详情</el-button></el-col>
+    </el-row>
+    <el-row v-if="!isAuth('enterprise:project:info:save')">
+      <el-button type="primary" v-if="dataForm.userTeacherId" @click="getTeaDetailsInfo(dataForm.userTeacherId)">负责人详情</el-button>
+    </el-row>
+    <el-row v-if="!isAuth('enterprise:project:info:save')">
+      <el-button type="primary" v-if="dataForm.entInfoId" @click="getEntDetailsInfo(dataForm.entInfoId)">企业详情</el-button>
+    </el-row>
+    <div class="d1"></div>
     <el-form :model="dataForm" ref="dataForm" label-width="150px">
       <el-form-item label="项目名称" prop="proName">
         <el-input v-model="dataForm.proName" :readonly="true"></el-input>
@@ -25,201 +36,100 @@
       </el-form-item>
     </el-form>
 
-    <el-collapse v-if="dataForm.entInfoId" v-model="activeNames" @change="handleChange">
-      <el-collapse-item title="企业详情" name="1">
-        <div>
-          <el-form :model="dataForm" ref="dataForm" label-width="150px">
-            <el-form-item label="企业名称" prop="name">
-              <el-input v-model="dataForm.entEnterpriseInfo.entName" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="法人代表" prop="entCorporate">
-              <el-input v-model="dataForm.entEnterpriseInfo.entCorporate" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="经营范围" prop="entBusiness">
-              <el-input v-model="dataForm.entEnterpriseInfo.entBusiness" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="统一信用代码" prop="entCode">
-              <el-input v-model="dataForm.entEnterpriseInfo.entCode" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="注册资本" prop="entRegister">
-              <el-input v-model="dataForm.entEnterpriseInfo.entRegister" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="成立时间" prop="entFoundingTime">
-              <el-input v-model="dataForm.entEnterpriseInfo.entFoundingTime" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="企业类型" prop="entType">
-              <el-input v-model="dataForm.entEnterpriseInfo.entType" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="经营状态" prop="entStatus">
-              <el-input v-model="dataForm.entEnterpriseInfo.entStatus" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="注册地址" prop="entRegisterAddress">
-              <el-input v-model="dataForm.entEnterpriseInfo.entRegisterAddress" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="企业地址" prop="entAddress">
-              <el-input v-model="dataForm.entEnterpriseInfo.entAddress" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="企业介绍" prop="entIntroduce">
-              <el-input v-model="dataForm.entEnterpriseInfo.entIntroduce" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="是否高新区" prop="newHighZones">
-              <el-radio-group v-model="dataForm.newHighZones" size="small" :readonly="true">
-                <el-radio border label="0" :readonly="true">是</el-radio>
-                <el-radio border label="1" :readonly="true">否</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="申请入驻时间" prop="entInTime">
-              <el-input v-model="dataForm.entEnterpriseInfo.entInTime" :readonly="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
-
-    <el-collapse v-if="dataForm.userPerId" v-model="activeNames" @change="handleChange">
-      <el-collapse-item title="发布者详情" name="2">
-        <div>
-          <el-form :model="dataForm" ref="dataForm" label-width="150px">
-            <el-form-item label="发布者姓名" prop="name">
-            <el-input v-model="dataForm.sysUser.name" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="政治面貌" prop="perPoliticsType">
-              <el-input v-model="dataForm.userPersonInfo.perPoliticsType" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="学号" prop="perStuNo">
-              <el-input v-model="dataForm.userPersonInfo.perStuNo" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="籍贯" prop="perNative">
-              <el-input v-model="dataForm.userPersonInfo.perNative" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="年级" prop="gradeId">
-              <el-input v-model="dataForm.userPersonInfo.gradeId" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="班级" prop="perClassNo">
-              <el-input v-model="dataForm.userPersonInfo.perClassNo" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="宿舍" prop="perCormNo">
-              <el-input v-model="dataForm.userPersonInfo.perCormNo" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="身份证号" prop="perCardNo">
-              <el-input v-model="dataForm.userPersonInfo.perCardNo" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" prop="perSex">
-              <el-input v-model="dataForm.userPersonInfo.perSex" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="在校职务" prop="perSchoolPost">
-              <el-input v-model="dataForm.userPersonInfo.perSchoolPost" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="兴趣爱好" prop="perInterest">
-              <el-input v-model="dataForm.userPersonInfo.perInterest" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="年龄" prop="perAge">
-              <el-input v-model="dataForm.userPersonInfo.perAge" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="所获荣誉" prop="perSchoolHonor">
-              <el-input v-model="dataForm.userPersonInfo.perSchoolHonor" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="社会实践" prop="perSocialPractice">
-              <el-input v-model="dataForm.userPersonInfo.perSocialPractice" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="工作方式" prop="perWorking">
-              <el-input v-model="dataForm.userPersonInfo.perWorking" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="企业职务" prop="perPost">
-              <el-input v-model="dataForm.userPersonInfo.perPost" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="QQ" prop="perQq">
-              <el-input v-model="dataForm.userPersonInfo.perQq" :readonly="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
-
-    <el-collapse v-if="dataForm.userTeacherId" v-model="activeNames" content="true" @change="handleChange">
-      <el-collapse-item title="发布者详情" name="3">
-        <div>
-          <el-form :model="dataForm" ref="dataForm" label-width="150px">
-            <el-form-item label="发布者姓名" prop="name">
-              <el-input v-model="dataForm.sysUser.name" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="教师职务" prop="teacherPost">
-              <el-input v-model="dataForm.userTeacherInfo.teacherPost" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="身份证号" prop="teacherCardNo">
-              <el-input v-model="dataForm.userTeacherInfo.teacherCardNo" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" prop="teacherSex">
-              <el-input v-model="dataForm.userTeacherInfo.teacherSex" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="教师职称" prop="teacherTitle">
-              <el-input v-model="dataForm.userTeacherInfo.teacherTitle" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="教师学历" prop="teacherBackground">
-              <el-input v-model="dataForm.userTeacherInfo.teacherBackground" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="教师学位" prop="teacherDegree">
-              <el-input v-model="dataForm.userTeacherInfo.teacherDegree" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="所学方向" prop="teacherStudy">
-              <el-input v-model="dataForm.userTeacherInfo.teacherStudy" :readonly="true"></el-input>
-            </el-form-item>
-            <el-form-item label="从事科研领域" prop="teacherScientific">
-              <el-input v-model="dataForm.userTeacherInfo.teacherScientific" :readonly="true"></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
-
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="visible = false">返回</el-button>
     </span>
+    <!-- 弹窗, 学生 / 教师 / 企业详情 -->
+    <ent-details v-if="entDetails" ref="entDetails" @refreshDataList="getEntDetailsInfo()"/>
+    <tea-details v-if="teaDetails" ref="teaDetails"/>
+    <stu-details v-if="stuDetails" ref="stuDetails"/>
   </el-dialog>
+  </div>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        visible: false,
-        dataList: [],
-        activeNames: ['1'],
-        hasType: 'userPerId',
-        dataForm: {
-          proInfoId: 0,
-          proName: '',
-          proRegister: '',
-          proOrigin: '',
-          proOutlay: '',
-          proType: '',
-          proIntroduce: '',
-          inApply: ''
-        }
-      }
-    },
-    methods: {
-      init (hasType, id) {
-        this.visible = true
-        this.dataForm.proInfoId = id
-        this.hasType = hasType
-        console.log(`${this.hasType}/${this.dataForm.proInfoId}`)
-        if (this.dataForm.proInfoId) {
-          this.$http({
-            url: this.$http.adornUrl(`/enterprise/project/info/info/${this.hasType}/${this.dataForm.proInfoId}`),
-            method: 'get',
-            params: this.$http.adornParams()
-          }).then(({data}) => {
-            console.log(data)
-            if (data && data.code === 0) {
-              this.dataForm = data.data
-            }
-          })
-        }
-      },
-      handleChange (val) {
-        console.log(val)
+import EntDetails from '../base/ent-details'
+import TeaDetails from '../base/tea-details'
+import StuDetails from '../base/stu-details'
+export default {
+  data () {
+    return {
+      visible: false,
+      entDetails: false,
+      teaDetails: false,
+      stuDetails: false,
+      dataList: [],
+      activeNames: ['1'],
+      hasType: 'userPerId',
+      dataForm: {
+        proInfoId: 0,
+        proName: '',
+        proRegister: '',
+        proOrigin: '',
+        proOutlay: '',
+        proType: '',
+        proIntroduce: '',
+        inApply: ''
       }
     }
+  },
+  components: {
+    EntDetails,
+    TeaDetails,
+    StuDetails
+  },
+  methods: {
+    init (hasType, id) {
+      this.visible = true
+      this.dataForm.proInfoId = id
+      this.hasType = hasType
+      console.log(`${this.hasType}/${this.dataForm.proInfoId}`)
+      if (this.dataForm.proInfoId) {
+        this.$http({
+          url: this.$http.adornUrl(`/enterprise/project/info/info/${this.hasType}/${this.dataForm.proInfoId}`),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          console.log(data)
+          if (data && data.code === 0) {
+            this.dataForm = data.data
+          }
+        })
+      }
+    },
+      // 企业详情弹窗
+    getEntDetailsInfo (id, hasApply) {
+      console.log(id + hasApply)
+      this.entDetails = true
+      this.$nextTick(() => {
+        this.$refs.entDetails.init(id, hasApply)
+      })
+    },
+      // 教师详情弹窗
+    getTeaDetailsInfo (id) {
+      console.log(id)
+      this.teaDetails = true
+      this.$nextTick(() => {
+        this.$refs.teaDetails.init(id)
+      })
+    },
+      // 学生详情弹窗
+    getStuDetailsInfo (id) {
+      console.log(id)
+      this.stuDetails = true
+      this.$nextTick(() => {
+        this.$refs.stuDetails.init(id)
+      })
+    },
+    handleChange (val) {
+      console.log(val)
+    }
   }
+}
 </script>
+
+<style>
+.d1{
+  padding-bottom: 15px;
+}
+</style>

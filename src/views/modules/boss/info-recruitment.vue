@@ -10,16 +10,32 @@
         <ul class="show clearfix">
           <!-- 子项 -->
           <li v-for="(item, index) in list" :key="index">
-            <div class="sub-li" @click="join2project(item.data.proInfoId)">
-              <a :href="'javascript:void(1)'" class="job-info" :target="item.target || '_blank'">
+            <div class="sub-li" >
+              <a :href="'javascript:void(1)'" @click="join2project(item.data.proInfoId)" class="job-info" >
                 <p>{{item.data && item.data.proName}}<span class="salary">{{item.data && item.data.proOutlay}}</span></p>
                 <p class="job-text">{{item.data && item.data.proOrigin}}<span class="vline"></span>{{item.data && item.data.proIntroduce}}</p>
               </a>
-              <a :href="'javascript:void(1)'" class="user-info" :target="item.target || '_blank'">
+              <!-- 企业 -->
+              <a v-if="item.data.entEnterpriseInfo && false" @click="join2project(item.data.proInfoId)" :href="'javascript:void(1)'" class="user-info" >
                 <p>
-                  <img :src="item.data && item.data.entEnterpriseInfo.entLogo" :alt="'企业Logo'" :title="企业Logo">{{item.data && item.data.entEnterpriseInfo.entName}} -
-                  <span class="user-text">{{item.data && item.data.entEnterpriseInfo.entCorporate}}<span class="vline"></span>{{item.data && item.data.entEnterpriseInfo.entType}}</span>
+                  <img :src="item.data.entEnterpriseInfo.entLogo" :alt="'企业Logo'" title="企业Logo">{{item.data.entEnterpriseInfo.entName}} -
+                  <span class="user-text">{{item.data.entEnterpriseInfo.entCorporate}}<span class="vline"></span>{{item.data.entEnterpriseInfo.entType}}</span>
                 </p>
+              </a>
+              <!-- 学生 -->
+              <a v-if="item.data.userPersonInfo && false" @click="join2project(item.data.proInfoId)" :href="'javascript:void(1)'" class="user-info" >
+                <p>
+                  <span class="user-text">{{item.data.userPersonInfo.sysUserEntity.name}}<span class="vline"></span>{{item.data.userPersonInfo.perSchoolPost}}</span>
+                </p>
+              </a>
+              <!-- 教师 -->
+              <a v-if="item.data.userTeacherInfo && false" @click="join2project(item.data.proInfoId)" :href="'javascript:void(1)'" class="user-info" >
+                <p>
+                  <span class="user-text">{{item.data.userTeacherInfo.sysUserEntity.name}}<span class="vline"></span>{{ item.data.userTeacherInfo.teacherPost}}</span>
+                </p>
+              </a>
+              <a class="user-info" @click="join2project(item.data.proInfoId)" href="javascript:void(1)">
+                <p><sapn class="user-text">点击查看项目</sapn></p>
               </a>
             </div>
           </li>
@@ -57,9 +73,16 @@
     },
     methods: {
       // 加入项目详情
-      join2project (id) {
+      join2project: function (id) {
+        console.log(this.$cookie.get('token'))
+        if (!this.$cookie.get('token')) {
+          this.$message.warning('您还未登入,不能查看加入项目')
+          return
+        }
         this.xiangqing = true
-        this.$refs.pj.init('', id)
+        this.$nextTick(() => {
+          this.$refs.pj.init('加入项目详情', id)
+        })
       },
       // 处理数据格式
       invokeDatas (data) {
@@ -81,7 +104,7 @@
             'proType': nu
           })
         }).then(({data}) => {
-          // console.log(data)
+          console.log(data)
           if (data.code === 500) {
             this.$message.error(data.msg)
           } else {
@@ -92,7 +115,7 @@
                 result.push(that.invokeDatas(item))
               })
               this.list = result
-             // console.log(this.list)
+              console.log('list', this.list)
             }
           }
         })
