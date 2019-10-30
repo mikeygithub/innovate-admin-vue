@@ -96,6 +96,7 @@
           <el-tag v-if="scope.row.finishInfoEntity.finishType === 1" size="small">创新训练项目</el-tag>
           <el-tag v-if="scope.row.finishInfoEntity.finishType === 2" size="small">创业训练项目</el-tag>
           <el-tag v-if="scope.row.finishInfoEntity.finishType === 3" size="small">创业实践项目</el-tag>
+          <el-tag v-if="scope.row.finishInfoEntity.finishType === null" size="small">无</el-tag>
         </template>
       </el-table-column>
       <el-table-column

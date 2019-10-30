@@ -13,12 +13,21 @@
             <el-input v-model="dataForm.finishName" placeholder="请输入申报名称"></el-input>
           </el-form-item>
         </el-col>
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="申报类型" prop="finishType">-->
+            <!--<el-select v-model="dataForm.finishType"  placeholder="请选择">-->
+              <!--<el-option v-for="item in finishTypeList" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
         <el-col :span="24">
-          <el-form-item label="申报类型" prop="finishType">
-            <el-select v-model="dataForm.finishType"  placeholder="请选择">
-              <el-option v-for="item in finishTypeList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
+          <el-form-item label="项目简介(300字之内)" prop="finishDescribe">
+
+            <el-input type="textarea" maxlength="400"
+                      :rows="5"
+                      v-model="dataForm.finishDescribe"
+                      placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -72,7 +81,7 @@
         </el-col>
         <!--独立附件start-->
         <el-col :span="24">
-          <el-form-item label="项目进展报告" prop="reportSalesName">
+          <el-form-item label="相关附件" prop="reportSalesName">
             <el-upload
               class="upload-demo"
               :action="url"
@@ -170,6 +179,7 @@
           finishId: '',
           projectUserId: this.$store.state.user.id,
           finishName: '',
+          finishDescribe: '',
           finishType: '',
           finishExpect: '',
           projectFinishApplyStatus: 0,
@@ -185,6 +195,9 @@
           // ],
           finishType: [
             { required: true, message: '请选择结题类型', trigger: 'blur' }
+          ],
+          finishDescribe: [
+            { required: true, message: '请填写项目简介', trigger: 'blur' }
           ],
           teacherLists: [
             { validator: validateTeacher, trigger: 'blur' }

@@ -31,14 +31,14 @@
             <!--<span v-text="item.eventName" align="center"></span>-->
           <!--</td>-->
         <!--</tr>-->
-        <tr align='center'>
-          <th colspan="2">申报类型</th>
-          <td colspan="8" v-for="item in finishTypeList"
-              :key="item.value"
-              v-if="item.value === finishInfo.finishType">
-            <span v-text="item.label" align="center"></span>
-          </td>
-        </tr>
+        <!--<tr align='center'>-->
+          <!--<th colspan="2">申报类型</th>-->
+          <!--<td colspan="8" v-for="item in finishTypeList"-->
+              <!--:key="item.value"-->
+              <!--v-if="item.value === finishInfo.finishType">-->
+            <!--<span v-text="item.label" align="center"></span>-->
+          <!--</td>-->
+        <!--</tr>-->
         <tr align='center' style="height: 2.5rem">
           <th colspan="2">申报时间</th>
           <td colspan="3"><span style="font-size: 1.1rem; font-weight: bolder" v-text="finishInfo.finishTime" align="center"></span></td>
@@ -47,12 +47,12 @@
           <th colspan="2">申报平均分</th>
           <td colspan="3"><span style="font-size: 1.1rem; font-weight: bolder" v-text="finishInfo.finishScoreAvg" align="center"></span></td>
         </tr>
-        <!--<tr align='center'>-->
-          <!--<th colspan="2">项目概述</th>-->
-          <!--<td colspan="8">-->
-            <!--<span v-text="finishInfo.finishDescribe" align="center"></span>-->
-          <!--</td>-->
-        <!--</tr>-->
+        <tr align='center' style="height: 10rem">
+          <th colspan="2">项目概述</th>
+          <td colspan="8">
+            <span v-text="finishInfo.finishDescribe" align="center"></span>
+          </td>
+        </tr>
         <!--<tr align='center'>-->
           <!--<th colspan="2">项目创新之处和亮点</th>-->
           <!--<td colspan="8">-->
@@ -137,54 +137,54 @@
         <!--项目负责人结束-->
 
         <!--员工信息开始-->
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr class="contents"><th colspan="10">项目参与者信息</th></tr>
-        <tr align='center'>
-          <td colspan="10" style="height: 1.2rem"></td>
-        </tr>
-        <tr align='center'>
-          <th>姓名</th>
-          <th>性别</th>
-          <th>学号</th>
-          <th>所在二级学院</th>
-          <th>所在年级</th>
-          <th>所在班级</th>
-          <th>所在宿舍</th>
-          <th>联系电话</th>
-          <th>QQ号</th>
-          <th>个人电子邮箱</th>
-        </tr>
-        <template>
-          <tr v-for="item in staffList" align="center">
-            <td v-text="item.staffName"></td>
-            <td v-for="sex in sexList"
-                :key="sex.value"
-                v-if="item.staffSex=== sex.value"
-                v-text="sex.label">
-            </td>
-            <td v-text="item.staffStuNo"></td>
-            <td>
-              <span v-for="institute in instituteList"
-                    v-if="item.instituteId === institute.instituteId"
-                    v-text="institute.instituteName"
-                    align="center"></span>
-            </td>
-            <td>
-              <span v-for="grade in gradeList"
-                    v-if="item.gradeId === grade.gradeId"
-                    v-text="grade.gradeName"
-                    align="center">
-              </span>
-            </td>
-            <td colspan="1" v-text="item.staffClassNo"></td>
-            <td colspan="1" v-text="item.staffCormNo"></td>
-            <td colspan="1" v-text="item.staffTel"></td>
-            <td colspan="1" v-text="item.staffQq"></td>
-            <td colspan="1" v-text="item.staffEmail"></td>
-          </tr>
-        </template>
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr class="contents"><th colspan="10">项目参与者信息</th></tr>-->
+        <!--<tr align='center'>-->
+          <!--<td colspan="10" style="height: 1.2rem"></td>-->
+        <!--</tr>-->
+        <!--<tr align='center'>-->
+          <!--<th>姓名</th>-->
+          <!--<th>性别</th>-->
+          <!--<th>学号</th>-->
+          <!--<th>所在二级学院</th>-->
+          <!--<th>所在年级</th>-->
+          <!--<th>所在班级</th>-->
+          <!--<th>所在宿舍</th>-->
+          <!--<th>联系电话</th>-->
+          <!--<th>QQ号</th>-->
+          <!--<th>个人电子邮箱</th>-->
+        <!--</tr>-->
+        <!--<template>-->
+          <!--<tr v-for="item in staffList" align="center">-->
+            <!--<td v-text="item.staffName"></td>-->
+            <!--<td v-for="sex in sexList"-->
+                <!--:key="sex.value"-->
+                <!--v-if="item.staffSex=== sex.value"-->
+                <!--v-text="sex.label">-->
+            <!--</td>-->
+            <!--<td v-text="item.staffStuNo"></td>-->
+            <!--<td>-->
+              <!--<span v-for="institute in instituteList"-->
+                    <!--v-if="item.instituteId === institute.instituteId"-->
+                    <!--v-text="institute.instituteName"-->
+                    <!--align="center"></span>-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--<span v-for="grade in gradeList"-->
+                    <!--v-if="item.gradeId === grade.gradeId"-->
+                    <!--v-text="grade.gradeName"-->
+                    <!--align="center">-->
+              <!--</span>-->
+            <!--</td>-->
+            <!--<td colspan="1" v-text="item.staffClassNo"></td>-->
+            <!--<td colspan="1" v-text="item.staffCormNo"></td>-->
+            <!--<td colspan="1" v-text="item.staffTel"></td>-->
+            <!--<td colspan="1" v-text="item.staffQq"></td>-->
+            <!--<td colspan="1" v-text="item.staffEmail"></td>-->
+          <!--</tr>-->
+        <!--</template>-->
         <!--员工信息结束-->
 
         <!--导师信息开始-->
