@@ -294,7 +294,7 @@ export default {
         url: this.$http.adornUrl('/enterprise/person/cooperation/update'),
         method: 'post',
         params: this.$http.adornParams({
-          'proCooperationInfoId': this.tempPro.proCooperationInfoId,
+          'proCooperationInfoId': this.proCooperationInfoId,
           'inApply': '1'
         }, false)
       }).then(({data}) => {
