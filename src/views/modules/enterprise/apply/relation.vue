@@ -38,36 +38,36 @@
       </el-table-column>
       <el-table-column
         sortable
-        prop="proName"
+        prop="projectInfo.proName"
         header-align="center"
         align="center"
         label="项目名称">
       </el-table-column>
       <el-table-column
-        prop="sysUser.name"
-        header-align="center"
-        align="center"
         v-if="hasType == 'userPerId'"
-        label="项目负责人">
-        <template slot-scope="scope">
-          <el-button type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">{{scope.row.sysUser.name}}</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="sysUser.name"
+        prop="userPersonInfo.sysUser.name"
         header-align="center"
         align="center"
-        v-if="hasType == 'userTeacherId'"
         label="项目负责人">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">{{scope.row.sysUser.name}}</el-button>
+          <el-button type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">{{scope.row.userPersonInfo.sysUserEntity.name}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
+        v-if="hasType == 'userTeacherId'"
+        prop="userTeacherInfo.sysUserEntity.name"
+        header-align="center"
+        align="center"
+        label="项目负责人">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">{{scope.row.userTeacherInfo.sysUserEntity.name}}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-if="hasType == 'entInfoId'"
         prop="entEnterpriseInfo.entName"
         header-align="center"
         align="center"
-        v-if="hasType == 'entInfoId'"
         label="申请企业">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="getEntDetailsInfo(scope.row.entEnterpriseInfo.entInfoId, scope.row.entEnterpriseInfo.inApply)">{{scope.row.entEnterpriseInfo.entName}}</el-button>
@@ -150,7 +150,7 @@ export default {
       entDetails: false,
       teaDetails: false,
       stuDetails: false,
-      hasApply: '0',
+      hasApply: '1',
       hasType: 'userPerId',
       dataForm: {
         baseId: '',
