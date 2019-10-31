@@ -1,6 +1,6 @@
 <template>
-  <div class="app-wrap app-outbox" v-if="!hide">
-    <div class="app-msgbox app-w clearfix">
+  <div class="app-wrap app-outbox" style="height: 5px" v-if="!hide">
+    <div class="app-msgbox app-w clearfix" v-if="false">
       <!-- 左边 -->
       <div class="app-mleft clearfix fl-l">
         <img :src="bg" alt="" title="">
@@ -21,8 +21,6 @@
     props: {hide: Boolean},
     data () {
       return {
-        bg: '/src/assets/img/fast-reg.png',
-        resume: {src: '/src/assets/img/fast-reg-text.png'}
       }
     },
     methods: {
