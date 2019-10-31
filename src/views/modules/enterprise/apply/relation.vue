@@ -191,9 +191,9 @@ export default {
       })
     },
         // 通过
-    consentHandle (item) {
+    consentHandle (proCooperationInfoId) {
       this.consentVisible = true
-      this.tempPro = item
+      this.proCooperationInfoId = proCooperationInfoId
             // this.$nextTick(() => {
             //     this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
             // })
