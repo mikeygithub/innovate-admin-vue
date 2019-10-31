@@ -82,8 +82,8 @@
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">申请合作列表</el-button>
-          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">全部通过</el-button>
-          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">全部不通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row.proCooperationInfoId)">全部通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.proCooperationId)">全部不通过</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
@@ -150,6 +150,7 @@ export default {
       entDetails: false,
       teaDetails: false,
       stuDetails: false,
+      proCooperationId: 0,
       hasApply: '1',
       hasType: 'userPerId',
       dataForm: {
@@ -184,10 +185,9 @@ export default {
     },
         // 详情
     detailHandle (id) {
-      console.log(id)
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(id, this.hasType, this.hasApply)
+        this.$refs.details.init(id, this.hasType, '0')
       })
     },
         // 通过
@@ -199,9 +199,9 @@ export default {
             // })
     },
         // 不通过
-    retreatHandle (item) {
+    retreatHandle (proCooperationId) {
       this.retreatVisible = true
-      this.tempPro = item
+      this.proCooperationId = proCooperationId
             // this.$nextTick(() => {
             //     this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
             // })
@@ -309,11 +309,10 @@ export default {
         // 审批不通过
     applyRetreatHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/person/cooperation/delete'),
+        url: this.$http.adornUrl('/enterprise/person/cooperation/deleteCoId'),
         method: 'post',
         params: this.$http.adornParams({
-          'proCooperationIds': this.proCooperationIds,
-          'inApply': '0'
+          'proCooperationId': this.proCooperationId
         }, false)
       }).then(({data}) => {
         this.$message({

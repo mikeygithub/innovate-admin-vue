@@ -162,6 +162,7 @@ export default {
       this.inApply = inApply
       console.log(this.proInfoId)
       console.log(this.hasType)
+      console.log(this.inApply)
       this.$nextTick(() => {
         if (this.proInfoId) {
           this.$http({
