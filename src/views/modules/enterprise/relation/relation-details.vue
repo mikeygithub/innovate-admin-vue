@@ -62,7 +62,8 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">移除</el-button>
+          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">不通过</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
@@ -278,7 +279,8 @@ export default {
         url: this.$http.adornUrl('/enterprise/person/cooperation/update'),
         method: 'post',
         params: this.$http.adornParams({
-          'proCooperationId': this.item.proCooperationId
+          'proCooperationId': this.item.proCooperationId,
+          'inApply': '0'
         }, false)
       }).then(({data}) => {
         this.$message({
@@ -286,16 +288,17 @@ export default {
           message: '提交成功!'
         })
         this.consentVisible = false
+        this.init(this.proInfoId, this.hasType, this.inApply)
         this.changeType(this.hasType)
       })
     },
       // 审批不通过
     applyRetreatHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/project/info/entExamine'),
+        url: this.$http.adornUrl('/enterprise/person/cooperation/update'),
         method: 'post',
         params: this.$http.adornParams({
-          'proInfoId': this.tempPro.proInfoId,
+          'proCooperationId': this.item.proCooperationId,
           'inApply': '0'
         }, false)
       }).then(({data}) => {
@@ -304,7 +307,8 @@ export default {
           message: '提交成功!'
         })
         this.retreatVisible = false
-        this.getDataList()
+        this.init(this.proInfoId, this.hasType, this.inApply)
+        this.changeType(this.hasType)
       })
     },
     details (id) {

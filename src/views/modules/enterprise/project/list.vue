@@ -136,22 +136,22 @@ export default {
     this.getDataList()
   },
   methods: {
-        // 格式化区域显示
+      // 格式化区域显示
     formatterZone (row, column, cellValue) {
       return cellValue === '0' ? '是' : '否'
     },
-        // 详情
+      // 详情
     detailHandle (id) {
       this.shenhe = true
       this.$nextTick(() => {
         this.$refs.details.init(this.hasType, id)
       })
     },
-        // 获取详情信息
+      // 获取详情信息
     getDetailsInfo () {
 
     },
-        // 获取数据列表
+      // 获取数据列表
     getDataList () {
       this.dataListLoading = true
       this.$http({
@@ -178,24 +178,24 @@ export default {
         this.dataListLoading = false
       })
     },
-        //  每页数
+      //  每页数
     sizeChangeHandle (val) {
       this.pageSize = val
       this.pageIndex = 1
       this.getDataList()
     },
-        // 当前页
+      // 当前页
     currentChangeHandle (val) {
       this.pageIndex = val
       this.getDataList()
     },
-        // 多选
+      // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
     },
     isDelete (item) {
       if ((item.projectMatchApplyStatus === 0) &&
-                this.isAuth('innovate:match:delete')) {
+              this.isAuth('innovate:match:delete')) {
         return true
       }
     },
@@ -206,53 +206,34 @@ export default {
         this.$refs.addOrUpdate.init(id)
       })
     },
-        // 删除
+      // 删除
     deleteHandle (id) {
-      var canDelete = true
-      var matchIds = id ? [id] : this.dataListSelections.map(item => {
-        if ((item.projectInfoEntity.projectMatchApplyStatus > 0) ||
-                    !this.isAuth('innovate:match:delete')) {
-          canDelete = false
-        } else {
-          canDelete = false
-        }
-        return item.projectInfoEntity.matchId
+      var ids = id ? [id] : this.dataListSelections.map(item => {
+        return item.proInfoId
       })
-      this.$confirm(`确定要进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (canDelete) {
-          this.$http({
-            url: this.$http.adornUrl('/innovate/match/info/delete'),
-            method: 'post',
-            data: this.$http.adornData(matchIds, false)
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        } else {
-          this.$message({
-            message: '包含不可删除项目',
-            type: 'error',
-            duration: 1500,
-            onClose: () => {
-              this.getDataList()
-            }
-          })
-        }
-      }).catch(() => {
+        this.$http({
+          url: this.$http.adornUrl('/enterprise/project/info/delete'),
+          method: 'post',
+          data: this.$http.adornData(ids, false)
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       })
     }
   }

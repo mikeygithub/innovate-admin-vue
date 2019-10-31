@@ -82,8 +82,8 @@
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">申请合作列表</el-button>
-          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">截止申请</el-button>
-          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">全部通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">全部通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">全部不通过</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
@@ -163,7 +163,8 @@ export default {
       pageSize: 10,
       totalPage: 0,
       dataListLoading: false,
-      dataListSelections: []
+      dataListSelections: [],
+      proCooperationIds: []
     }
   },
   components: {
@@ -290,10 +291,10 @@ export default {
         // 审批通过
     applyConsentHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/info/entExamine'),
+        url: this.$http.adornUrl('/enterprise/person/cooperation/update'),
         method: 'post',
         params: this.$http.adornParams({
-          'proInfoId': this.tempPro.proInfoId,
+          'proCooperationInfoId': this.tempPro.proCooperationInfoId,
           'inApply': '1'
         }, false)
       }).then(({data}) => {
@@ -308,10 +309,10 @@ export default {
         // 审批不通过
     applyRetreatHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/info/entExamine'),
+        url: this.$http.adornUrl('/enterprise/person/cooperation/delete'),
         method: 'post',
         params: this.$http.adornParams({
-          'proInfoId': this.tempPro.proInfoId,
+          'proCooperationIds': this.proCooperationIds,
           'inApply': '0'
         }, false)
       }).then(({data}) => {

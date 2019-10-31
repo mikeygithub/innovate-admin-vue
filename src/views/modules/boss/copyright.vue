@@ -41,16 +41,16 @@
         compaby: {
           title: '企业服务',
           // eslint-disable-next-line standard/object-curly-even-spacing
-          list: [{ name: '职位搜索', url: '#', target: '_blank'}, { name: '新闻资讯', url: '#', target: '_blank'}, { name: 'BOSS直聘APP', url: '#'}]
+          list: [{ name: '职位搜索', url: '#', target: '_blank'}, { name: '新闻资讯', url: '#', target: '_blank'}]
         },
         help: {
           title: '使用与帮助',
           list: [{name: '用户协议与隐私政策', url: '#', target: '_blank'}, {name: '防骗指南', url: '#', target: '_blank'}, {name: '职位发布规则', url: '#', target: '_blank'}, {name: '使用帮助', url: '#', target: '_blank'}]
         },
         address: {
-          title: '联系BOSS直聘',
-          list: [{name: '北京华品博睿网络技术有限公司', url: '#', target: '_blank'}, {name: '公司地址:北京市朝阳区太阳宫中路8号冠捷大厦302', url: '#', target: '_blank'},
-            {name: '联系电话:010-84150633', url: '#', target: '_blank'}, {name: '违法和不良信息举报邮箱:jubao@kanzhun.com', url: '#', target: '_blank'}]
+          title: '联系创新创业学院',
+          list: [{name: '梧州学院创新创业学院', url: '#', target: '_blank'}, {name: '地址:梧州市万秀区梧州学院发展中心负一楼', url: '#', target: '_blank'},
+            {name: '联系电话:010-88888888', url: '#', target: '_blank'}, {name: '违法和不良信息举报邮箱:gxuwz@cxcy.com', url: '#', target: '_blank'}]
         },
         link: {
           title: '梧州学院校企合作网',
@@ -59,11 +59,11 @@
         copyright: {
           copyright: 'Copyright &copyright; 2019 梧州学院校企合作网',
           // eslint-disable-next-line standard/object-curly-even-spacing
-          beian: '桂ICP备14013441号-5桂ICP证150923号',
+          beian: '桂ICP备14013441号-5桂ICP证888888号',
           // eslint-disable-next-line standard/object-curly-even-spacing
           zhizhao: { name: '电子营业执照', url: '#', target: '_blank'},
           // eslint-disable-next-line standard/object-curly-even-spacing
-          gonganju: { name: '桂公网安备11010502032801', url: '#', target: '_blank'},
+          gonganju: { name: '桂公网安备88888888888888', url: '#', target: '_blank'},
           // eslint-disable-next-line standard/object-curly-even-spacing
           alams: { name: '首都报警', url: '#', target: '_blank'}
         }

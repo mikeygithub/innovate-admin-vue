@@ -286,53 +286,34 @@ export default {
         return true
       }
     },
-        // 删除
+      // 删除
     deleteHandle (id) {
-      var canDelete = true
-      var matchIds = id ? [id] : this.dataListSelections.map(item => {
-        if ((item.projectInfoEntity.projectMatchApplyStatus > 0) ||
-                    !this.isAuth('innovate:match:delete')) {
-          canDelete = false
-        } else {
-          canDelete = false
-        }
-        return item.projectInfoEntity.matchId
+      var ids = id ? [id] : this.dataListSelections.map(item => {
+        return item.proInfoId
       })
-      this.$confirm(`确定要进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (canDelete) {
-          this.$http({
-            url: this.$http.adornUrl('/innovate/match/info/delete'),
-            method: 'post',
-            data: this.$http.adornData(matchIds, false)
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        } else {
-          this.$message({
-            message: '包含不可删除项目',
-            type: 'error',
-            duration: 1500,
-            onClose: () => {
-              this.getDataList()
-            }
-          })
-        }
-      }).catch(() => {
+        this.$http({
+          url: this.$http.adornUrl('/enterprise/project/info/delete'),
+          method: 'post',
+          data: this.$http.adornData(ids, false)
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
       })
     }
   }
