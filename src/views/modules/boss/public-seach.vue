@@ -45,10 +45,8 @@
           select: {
             show: false,
             title: '项目类型',
-            first: [{cur: true, name: '不限', data: ''}, {cur: false, name: '高级管理', data: ''}, {cur: false, name: '技术', data: ''}, {cur: false, name: '产品', data: ''}, {cur: false, name: '设计', data: ''},
-              {cur: false, name: '运营', data: ''}, {cur: false, name: '市场', data: ''}, {cur: false, name: '销售', data: ''}, {cur: false, name: '传媒', data: ''}, {cur: false, name: '金融', data: ''}],
-            second: [{cur: true, name: '后端开发', data: ''}, {cur: false, name: '移动开发', data: ''}, {cur: false, name: '测试', data: ''}, {cur: false, name: '运维技术支持', data: ''}, {cur: false, name: '数据', data: ''},
-              {cur: false, name: '项目管理', data: ''}, {cur: false, name: '硬件开发', data: ''}, {cur: false, name: '前端开发', data: ''}, {cur: false, name: '通讯', data: ''}, {cur: false, name: '电子半导体', data: ''}]
+            first: [{cur: true, name: '不限', data: ''}, {cur: false, name: '科研项目', data: ''}, {cur: false, name: '横向项目', data: ''}, {cur: false, name: '企业项目', data: ''}, {cur: false, name: '大创项目', data: ''},
+              {cur: false, name: '企业招聘', data: ''}, {cur: false, name: '实习项目对接', data: ''}]
           },
           type: 'submit',
           keywords: '',
