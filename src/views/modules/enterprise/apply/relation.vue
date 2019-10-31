@@ -83,7 +83,7 @@
           <!-- isAuth('enterprise:info:shenhe') -->
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">申请合作列表</el-button>
           <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row.proCooperationInfoId)">全部通过</el-button>
-          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.proCooperationId)">全部不通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.proCooperationInfoId)">全部不通过</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
@@ -150,7 +150,7 @@ export default {
       entDetails: false,
       teaDetails: false,
       stuDetails: false,
-      proCooperationId: 0,
+      proCooperationInfoId: 0,
       hasApply: '1',
       hasType: 'userPerId',
       dataForm: {
@@ -199,9 +199,9 @@ export default {
             // })
     },
         // 不通过
-    retreatHandle (proCooperationId) {
+    retreatHandle (proCooperationInfoId) {
       this.retreatVisible = true
-      this.proCooperationId = proCooperationId
+      this.proCooperationInfoId = proCooperationInfoId
             // this.$nextTick(() => {
             //     this.$refs.retreat.init(item.declareId, 'project_audit_apply_status', item.projectAuditApplyStatus)
             // })
@@ -312,7 +312,7 @@ export default {
         url: this.$http.adornUrl('/enterprise/person/cooperation/deleteCoId'),
         method: 'post',
         params: this.$http.adornParams({
-          'proCooperationId': this.proCooperationId
+          'proCooperationInfoId': this.proCooperationInfoId
         }, false)
       }).then(({data}) => {
         this.$message({
