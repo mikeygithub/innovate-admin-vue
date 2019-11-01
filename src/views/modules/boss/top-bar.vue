@@ -45,7 +45,7 @@
             <li class="position-r nav-figure" v-if="isLogin">
               <a href="javascript:;" @click="showInfo(true)">
                 <span class="label-text">{{this.getUserInfo() && this.$store.state.user.name }}</span>
-                <img src="/src/assets/img/avatar_13.png" alt="头像" title="头像">
+                <img :src=headImag alt="头像" title="头像">
               </a>
               <div class="self-box position-a" v-show="showUserInfo" @mouseleave="showInfo(false)">
                 <a v-if="false" href="#" >个人中心<span>推荐职位、编辑在线简历</span></a>
@@ -67,6 +67,7 @@
 
 <script>
   import TopBarImg from '@/assets/img/logo-2x.png'
+  import HeadImg from '@/assets/img/avatar_13.png'
   // 公共区域
   export default {
     name: 'top-bar',
@@ -74,6 +75,7 @@
     data () {
       return {
         logo: TopBarImg,
+        headImag: HeadImg,
         menu: [{name: '首页', url: '#', target: '_blank', cur: true}, {name: '职位', url: '#', target: '_blank', cur: false}, {name: '公司', url: '#', target: '_blank', cur: false},
           {name: 'APP', url: '#', target: '_blank', cur: false}, {name: '资讯', url: '#', target: '_blank', cur: false}],
         isLogin: false,
