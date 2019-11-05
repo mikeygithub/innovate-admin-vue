@@ -308,7 +308,7 @@
           <tr v-for="item in attachLists"
               align="center">
             <td colspan="7" v-text="item.attachName"></td>
-            <td colspan="3"><el-button @click="attachDown(item)">下载</el-button></td>
+            <td colspan="3"><el-button @click="attachDown(item)" :loading="downloadLoading"><span v-text="downloadText"></span></el-button></td>
           </tr>
         </template>
         <tr align='center'>
@@ -372,6 +372,8 @@
       return {
         visible: false,
         dataListLoading: false,
+        downloadLoading: false,
+        downloadText: '下载',
         finishInfo: {},
         instituteList: this.$store.state.user.institute,
         gradeList: this.$store.state.user.grade,
@@ -515,15 +517,29 @@
         })
       },
       attachDown (attach) {
+        this.downloadLoading = true
+        this.downloadText = '正在下载'
+        this.$notify({
+          title: '下载提示',
+          message: '文件正在后台下载,请您稍后!',
+          duration: 0,
+          type: 'success'
+        })
         this.$httpFile({
           url: this.$httpFile.adornUrl(`/innovate/finish/attach/download`),
           method: 'post',
           params: this.$httpFile.adornParams({
             'filePath': attach.attachPath
-            // 'apply': 'project_base_apply_status'
           })
         }).then(response => {
           if (!response) {
+            this.$notify({
+              title: '下载提示',
+              message: '下载失败',
+              duration: 0,
+              type: 'error'
+            })
+            this.downloadLoading = false
             return
           }
           let url = window.URL.createObjectURL(new Blob([response.data]))
@@ -533,8 +549,17 @@
           link.setAttribute('download', attach.attachName)
           document.body.appendChild(link)
           link.click()
+          this.$notify({
+            title: '下载成功',
+            message: '后台文件下载成功',
+            duration: 0,
+            type: 'success'
+          })
+          this.downloadText = '下载'
+          this.downloadLoading = false
         }).catch(err => {
           console.log(err)
+          this.downloadLoading = false
         })
       },
 

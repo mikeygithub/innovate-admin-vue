@@ -96,6 +96,7 @@
             </td>
           <td>
             <span v-text="item.finishInfoEntity.finishScoreAvg"></span>
+
           </td>
           </tr>
         </template>

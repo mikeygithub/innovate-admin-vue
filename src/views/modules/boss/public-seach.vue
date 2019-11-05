@@ -3,7 +3,7 @@
     <div class="app-w app-sform box-s-b clearfix">
       <!-- logo -->
       <div class="app-plogo fl-l">
-        <a v-if="form.logo" :href="form.logo.url" :target="form.logo.target || '_blank'"><img :src="form.logo.src" alt="logo" title="logo"></a>
+        <a v-if="form.logo" :href="form.logo.url" :target="form.logo.target || '_blank'"><img :src="logoImg" alt="logo" title="logo"></a>
       </div>
       <div class="app-form">
         <div action="#" class="position-r" method="POST" onsubmit="return false;">
@@ -35,11 +35,13 @@
 
 <script>
   // 搜索信息区域
+  import LogoImg from '@/assets/img/logo-2x.png'
   export default {
     name: 'public-seach',
     props: {hide: Boolean},
     data () {
       return {
+        logoImg: LogoImg,
         form: {
           logo: {url: '#', target: '_blank', src: '/src/assets/img/logo-2x.png'},
           select: {

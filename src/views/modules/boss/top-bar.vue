@@ -135,7 +135,7 @@
 </script>
 
 <style scoped>
-  .top-bg {
-    background-image: url("~@/assets/img/logo-2x.png");
-  }
+  /*.top-bg {*/
+    /*background-image: url("~@/assets/img/logo-2x.png");*/
+  /*}*/
 </style>

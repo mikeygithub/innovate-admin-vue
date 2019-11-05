@@ -2,7 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-select v-model="dataForm.instituteId" placeholder="请选择二级学院">
+        <el-select v-model="dataForm.instituteId" placeholder="请选择二级学院" @change="getDataList">
           <el-option
             v-for="inst in instituteList"
             :key="inst.instituteName"
@@ -14,6 +14,7 @@
       <el-form-item>
         <!--年度 start-->
         <el-date-picker
+          @change="getDataList"
           v-model="dataForm.finishTime"
           align="right"
           :editable="false"
@@ -127,11 +128,14 @@
         prop="finishInfoEntity.finishScoreAvg"
         header-align="center"
         align="center"
-        width="80"
-        label="平均分">
+        width="180"
+        label="学院">
         <template slot-scope="scope">
-          <el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg === null || scope.row.finishInfoEntity.finishScoreAvg === ''">未评分</el-tag>
-          <el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg != null" v-text="scope.row.finishInfoEntity.finishScoreAvg"></el-tag>
+          <!--<el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg === null || scope.row.finishInfoEntity.finishScoreAvg === ''">未评分</el-tag>-->
+          <!--<el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg != null" v-text="scope.row.finishInfoEntity.finishScoreAvg"></el-tag>-->
+          <span v-if="scope.row.userPersonInfoEntities!==null&&scope.row.userPersonInfoEntities.length!==0" :key="index" v-for="inst in instituteList">
+              <span v-if="scope.row.userPersonInfoEntities[0].sysUserEntity.instituteId === inst.instituteId" v-text="inst.instituteName"></span>
+            </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -211,6 +215,7 @@
             'noPassStatus': 0,
             'noPass': 'finish_no_pass',
             'isDel': 0,
+            'isEr': true,
             'currPage': this.pageIndex,
             'pageSize': this.pageSize
             // 'isEr': true
@@ -220,6 +225,7 @@
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
             this.dataListLoading = false
+            console.log(this.dataList)
           } else {
             this.$message.error(data.msg)
           }

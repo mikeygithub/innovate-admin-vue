@@ -35,7 +35,8 @@
           <!--李四/112583030116,王五/112583030114  -->
           <th colspan="2">指导老师姓名</th>
           <th colspan="2">指导教师职称</th>
-          <td>平均分</td>
+          <!--<td>平均分</td>-->
+          <td>学院</td>
         </tr>
 
         <template>
@@ -54,8 +55,9 @@
           </tr>
         </template>
         <template>
-          <tr v-for="(item,index) in finishInfoList" align="center"
-              v-if="item.finishInfoEntity.projectFinishApplyStatus !==0 && item.finishInfoEntity.finishNoPass === 0">
+          <tr v-for="(item,index) in finishInfoList" align="center">
+              <!--v-if="item.finishInfoEntity.projectFinishApplyStatus !==0 && item.finishInfoEntity.finishNoPass === 0">-->
+            <!--TODO:整改-->
             <td v-text="index+1"></td>
             <td colspan="1" v-text="item.finishInfoEntity.finishName"></td>
             <td colspan="2">
@@ -95,8 +97,12 @@
                 </span>
             </td>
           <td>
-            <span v-text="item.finishInfoEntity.finishScoreAvg"></span>
-          </td>
+            <!--<span v-text="item.finishInfoEntity.finishScoreAvg"></span>-->
+            <!--二级学院-->
+            <!--<span :key="index" v-for="inst in instituteList" v-if="item.userPersonInfoEntities[0].sysUserEntity.instituteId === inst.instituteId" v-text="inst.instituteName"></span>          </td>-->
+            <span v-if="item.userPersonInfoEntities!==null&&item.userPersonInfoEntities.length!==0" :key="index" v-for="inst in instituteList">
+              <span v-if="item.userPersonInfoEntities[0].sysUserEntity.instituteId === inst.instituteId" v-text="inst.instituteName"></span>
+            </span></td>
           </tr>
         </template>
         <tr align='center'  style="height: 3.0rem">
@@ -198,7 +204,8 @@
             'project_finish_apply_status_more': 2,
             'isDel': 0,
             'finishTime': time.getFullYear(),
-            'instituteId': instituteId
+            'instituteId': instituteId,
+            'isEr': true
           })
         }).then(({data}) => {
           // console.info(data)

@@ -13,14 +13,14 @@
             <el-input v-model="dataForm.finishName" placeholder="请输入申报名称"></el-input>
           </el-form-item>
         </el-col>
-        <!--<el-col :span="24">-->
-          <!--<el-form-item label="申报类型" prop="finishType">-->
-            <!--<el-select v-model="dataForm.finishType"  placeholder="请选择">-->
-              <!--<el-option v-for="item in finishTypeList" :key="item.value" :label="item.label" :value="item.value">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-        <!--</el-col>-->
+        <el-col :span="24">
+          <el-form-item label="申报类型" prop="finishType">
+            <el-select v-model="dataForm.finishType"  placeholder="请选择">
+              <el-option v-for="item in finishTypeList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
         <el-col :span="24">
           <el-form-item label="项目简介(300字之内)" prop="finishDescribe">
 
@@ -51,22 +51,22 @@
             <span v-if="isTeacherInfoNullVisible" style="color: crimson">*请联系指导老师完善个人信息</span>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="项目参与者信息" prop="staffInfoLists">
-            <el-button size="mini"
-                       v-if="addVisible(staffInfoLists)" type="primary" plain @click="addStaff()">添加</el-button>
-            <template v-for="(item,index) in staffInfoLists" v-if="item.isDel !== 1">
-              <el-col :span="24">
-                <el-tag style="margin-right: 1rem"
-                        v-text="item.staffName">
-                </el-tag>
-                <el-button size="mini" type="primary" plain @click="addStaff()">添加</el-button>
-                <el-button size="mini" type="primary" plain @click="addStaff(item, index)">修改</el-button>
-                <el-button size="mini" type="danger" @click="delStaff(item, index)">删除</el-button>
-              </el-col>
-            </template>
-          </el-form-item>
-        </el-col>
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="项目参与者信息" prop="staffInfoLists">-->
+            <!--<el-button size="mini"-->
+                       <!--v-if="addVisible(staffInfoLists)" type="primary" plain @click="addStaff()">添加</el-button>-->
+            <!--<template v-for="(item,index) in staffInfoLists" v-if="item.isDel !== 1">-->
+              <!--<el-col :span="24">-->
+                <!--<el-tag style="margin-right: 1rem"-->
+                        <!--v-text="item.staffName">-->
+                <!--</el-tag>-->
+                <!--<el-button size="mini" type="primary" plain @click="addStaff()">添加</el-button>-->
+                <!--<el-button size="mini" type="primary" plain @click="addStaff(item, index)">修改</el-button>-->
+                <!--<el-button size="mini" type="danger" @click="delStaff(item, index)">删除</el-button>-->
+              <!--</el-col>-->
+            <!--</template>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
         <el-col :span="24">
           <el-form-item label="附件要求">
             <template>
@@ -182,7 +182,7 @@
           finishDescribe: '',
           finishType: '',
           finishExpect: '',
-          projectFinishApplyStatus: 0,
+          projectFinishApplyStatus: 1,
           isUpdate: 0,
           isDel: 0
         },

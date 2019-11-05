@@ -141,6 +141,21 @@
               </div>
             </el-card>
           </el-col>
+          <el-col :span="8">
+            <el-card v-if="noPassFinishs.length > 0">
+              <div slot="header">
+                <span>结题管理->不通过项目列表(项目负责人)</span>
+              </div>
+              <div>
+                <li v-for="item in noPassFinishs">
+                  项目：{{item.finishInfoEntity.finishName}}
+                  <span v-if="item.finishInfoEntity.finishNoPass === 1">、</span>
+                  不通过，请修改
+                  <router-link to="/innovate-apply/finsh/nopass">跳转</router-link>
+                </li>
+              </div>
+            </el-card>
+          </el-col>
         </template>
         <!--指导老师-->
         <template v-if="role === 3">
@@ -190,6 +205,17 @@
             <!--</el-card>-->
           <!--</el-col>-->
           <!--中期检查e-->
+          <el-col :span="8">
+            <el-card v-if="totalPageFinishTeacher > 0">
+              <div slot="header">
+                <span>结题申请管理->指导老师审批列表(指导老师)</span>
+              </div>
+              <div>
+                <span>{{totalPageFinishTeacher}}条、待审批</span>
+                <router-link to="/innovate-apply/finish/teacher">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
         </template>
         <!--二级学院-->
         <template v-if="role === 4">
@@ -228,6 +254,17 @@
             </el-card>
           </el-col>
           <!--中期检查e-->
+          <el-col :span="8">
+            <el-card v-if="totalPageFinishEr > 0">
+              <div slot="header">
+                <span>结题管理->二级学院审批列表(二级学院)</span>
+              </div>
+              <div>
+                <span>{{totalPageFinishEr}}条、待审批</span>
+                <router-link to="/innovate-apply/finish/er">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
         </template>
         <!--分配评委-->
         <template v-if="role === 5">
@@ -277,6 +314,17 @@
             </el-card>
           </el-col>
           <!--中期检查e-->
+          <el-col :span="8">
+            <el-card v-if="totalPageFinishAdmin > 0">
+              <div slot="header">
+                <span>结题管理->分配评委组列表(分配评委)</span>
+              </div>
+              <div>
+                <span>{{totalPageFinishAdmin}}条、待审批</span>
+                <router-link to="/innovate-apply/finish/admin">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
         </template>
         <!--评委-->
         <template v-if="role === 6">
@@ -326,6 +374,17 @@
             </el-card>
           </el-col>
           <!--中期检查e-->
+          <el-col :span="8">
+            <el-card v-if="totalPageFinishJury > 0">
+              <div slot="header">
+                <span>结题管理->评委打分列表(评委)</span>
+              </div>
+              <div>
+                <span>{{totalPageFinishJury}}条、待审批</span>
+                <router-link to="/innovate-apply/finish/jury">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
         </template>
         <!--管理员-->
         <template v-if="role === 5">
@@ -386,6 +445,19 @@
             </el-card>
           </el-col>
           <!--中期检查e-->
+          <!--结题s-->
+          <el-col :span="8">
+            <el-card v-if="totalPageFinishAdmin2 > 0">
+              <div slot="header">
+                <span>结题申请管理->管理员审批列表(管理员)</span>
+              </div>
+              <div>
+                <span>{{totalPageFinishAdmin2}}条、待审批</span>
+                <router-link to="/innovate-apply/finish/admin2">跳转</router-link>
+              </div>
+            </el-card>
+          </el-col>
+          <!--结题e-->
         </template>
       </template>
     </el-row>
@@ -405,22 +477,27 @@
         totalPageMatchTeacher: '',
         totalPageAuditTeacher: '',
         totalPageCheckTeacher: '',
+        totalPageFinishTeacher: '',
         totalPageBaseEr: '',
         totalPageMatchEr: '',
         totalPageAuditEr: '',
         totalPageCheckEr: '',
+        totalPageFinishEr: '',
         totalPageBaseAdmin: '',
         totalPageMatchAdmin: '',
         totalPageAuditAdmin: '',
         totalPageCheckAdmin: '',
+        totalPageFinishAdmin: '',
         totalPageBaseJury: '',
         totalPageMatchJury: '',
         totalPageAuditJury: '',
         totalPageCheckJury: '',
+        totalPageFinishJury: '',
         totalPageBaseAdmin2: '',
         totalPageMatchAdmin2: '',
         totalPageAuditAdmin2: '',
         totalPageCheckAdmin2: '',
+        totalPageFinishAdmin2: '',
         totalPageBaseSuperAdmin: '',
         totalPageMatchSuperAdmin: '',
         totalPageAuditSuperAdmin: '',
@@ -429,6 +506,7 @@
         noPassProjects: '',
         noPassMatchs: '',
         noPassChecks: '',
+        noPassFinishs: '',
         noPassAudits: ''
       }
     },
@@ -652,6 +730,28 @@
             this.totalPage = 0
           }
         })
+        // 结题不通过
+        this.$http({
+          url: this.$http.adornUrl(`/innovate/finish/info/list`),
+          method: 'get',
+          params: this.$http.adornParams({
+            // 'projectName': this.dataForm.projectName,
+            // 'finishTime': this.dataForm.finishTime == null ? '' : this.dataForm.finishTime.getFullYear(),
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'userId': this.$store.state.user.id,
+            'isStudent': true,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.noPassFinishs = data.page.list
+            this.totalPage = data.page.totalCount
+          } else {
+            this.dataList = []
+            this.totalPage = 0
+          }
+        })
       },
       getTeacher () {
         this.$http({
@@ -720,6 +820,31 @@
             this.totalPage = 0
           }
         })
+        // 结题
+        this.$http({
+          url: this.$http.adornUrl('/innovate/finish/info/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            // 'projectName': this.dataForm.projectName,
+            // 'finishTime': this.dataForm.finishTime == null ? '' : this.dataForm.finishTime.getFullYear(),
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'userId': this.$store.state.user.id,
+            'hasApply': this.hasApply,
+            'noPass': 'finish_no_pass',
+            'noPassStatus': 0,
+            'isTeacher': true,
+            'apply': 'project_finish_apply_status',
+            'applyStatus': 1,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.totalPageFinishTeacher = data.page.totalCount
+          } else {
+            this.totalPage = 0
+          }
+        })
       },
       getEr () {
         this.$http({
@@ -783,6 +908,32 @@
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.totalPageCheckEr = data.page.totalCount
+          } else {
+            this.dataList = []
+          }
+        })
+        // 结题
+        this.$http({
+          url: this.$http.adornUrl('/innovate/finish/info/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            // 'projectName': this.dataForm.projectName,
+            // 'finishTime': this.dataForm.finishTime == null ? '' : this.dataForm.finishTime.getFullYear(),
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'userId': this.$store.state.user.id,
+            'hasApply': this.hasApply,
+            'noPass': 'finish_no_pass',
+            'noPassStatus': 0,
+            'erInstituteId': this.$store.state.user.instituteId,
+            'isEr': true,
+            'apply': 'project_finish_apply_status',
+            'applyStatus': 2,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.totalPageFinishEr = data.page.totalCount
           } else {
             this.dataList = []
           }
@@ -965,6 +1116,54 @@
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.totalPageCheckAdmin2 = data.page.totalCount
+          } else {
+            this.dataList = []
+          }
+        })
+        // 结题分配评委组
+        this.$http({
+          url: this.$http.adornUrl('/innovate/finish/info/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            // 'projectName': this.dataForm.projectName,
+            // 'finishTime': this.dataForm.finishTime == null ? '' : this.dataForm.finishTime.getFullYear(),
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'userId': this.$store.state.user.id,
+            'hasApply': '1',
+            'noPass': 'finish_no_pass',
+            'noPassStatus': 0,
+            'apply': 'project_finish_apply_status',
+            'applyStatus': 3,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.totalPageFinishAdmin = data.page.totalCount
+          } else {
+            this.dataList = []
+          }
+        })
+        // 结题管理员审批
+        this.$http({
+          url: this.$http.adornUrl('/innovate/finish/info/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            // 'projectName': this.dataForm.projectName,
+            // 'finishTime': this.dataForm.finishTime == null ? '' : this.dataForm.finishTime.getFullYear(),
+            'currPage': this.pageIndex,
+            'pageSize': this.pageSize,
+            'userId': this.$store.state.user.id,
+            'hasApply': '1',
+            'noPass': 'finish_no_pass',
+            'noPassStatus': 0,
+            'apply': 'project_finish_apply_status',
+            'applyStatus': 5,
+            'isDel': 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.totalPageFinishAdmin2 = data.page.totalCount
           } else {
             this.dataList = []
           }

@@ -80,7 +80,7 @@ http.adornData = (data = {}, openDefultdata = true, contentType = 'json') => {
  */
 
 const httpFile = axios.create({
-  timeout: 1000 * 30,
+  timeout: 1000 * 3000,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json; charset=utf-8'

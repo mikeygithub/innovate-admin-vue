@@ -4,6 +4,7 @@
       <el-form-item>
         <el-select v-model="dataForm.instituteId" placeholder="请选择二级学院" disabled="">
           <el-option
+            @change="getDataList"
             :editable="false"
             v-for="inst in instituteList"
             :key="inst.instituteName"
@@ -14,9 +15,12 @@
         <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <!--年度 start-->
         <el-date-picker
+          @change="getDataList"
           v-model="dataForm.finishTime"
+          editable="false"
           align="right"
           type="year"
+          clearable="false"
           placeholder="请选择年度">
         </el-date-picker>
         <!--年度 end-->

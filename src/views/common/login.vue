@@ -100,11 +100,20 @@
             }).then(({data}) => {
               this.loginLoading = false
               if (data && data.code === 0) {
+                this.$notify({
+                  title: '系统提示',
+                  message: '登入成功,欢迎使用校企合作及双创管理平台',
+                  // duration: 1000,
+                  type: 'success'
+                })
                 this.$cookie.set('token', data.token)
-                this.$message.success('登入成功')
-                this.$router.replace({ name: 'index' })
-                this.visible = false
-                this.$router.go(0)
+                // 登入成功
+                // this.$message.success('登入成功')
+                this.$nextTick(function () {
+                  this.$router.replace({ name: 'index' })
+                  this.visible = false
+                  this.$router.go(0)
+                })
               } else {
                 this.getCaptcha()
                 this.$message.error(data.msg)

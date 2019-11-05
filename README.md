@@ -13,10 +13,10 @@ vue + element UI
 控制台输入：npm install
 2. 运行：npm run dev
 3. 构建 npm run build
-3. docker打包： docker build -t mikeyboom/innovate-admin-vue:v1.2.3 .
+3. docker打包： docker build -t mikeyboom/innovate-admin-vue:v1.3.2 .
 4. docker login 登入后推到仓库： docker push mikeyboom/innovate-admin-vue
-5. 服务器拉取镜像： docker pull mikeyboom/innovate-admin-vue:v1.2.5
-6. 部署：docker run --name innovate-admin-vue -d -p 8001:8001 innovate-admin-vue:v1.2.3
+5. 服务器拉取镜像： docker pull mikeyboom/innovate-admin-vue:v1.3.2
+6. 部署：docker run --name innovate-admin-vue -d -p 8001:8001 innovate-admin-vue:v1.3.2
 
 ``
 linux 前端项目vue无法热更新 在启动时请使用 sudo npm run dev

@@ -122,7 +122,7 @@
           <el-button v-if="addOrUpadate(scope.row.finishInfoEntity)" type="text" size="small" @click="addOrUpdateHandle(scope.row.finishInfoEntity.finishId)">修改</el-button>
           <el-button v-if="isDelete(scope.row.finishInfoEntity)" type="text" size="small" @click="deleteHandle(scope.row.finishInfoEntity.finishId)">删除</el-button>
           <br v-if="applyFinishIsVisible(scope.row.finishInfoEntity)">
-          <el-button v-if="applyFinishIsVisible(scope.row.finishInfoEntity)" type="text" size="small" @click="detailedAddOrUpdateHandle(scope.row.finishInfoEntity.finishId)">填写评审明细汇总表</el-button>
+          <!--<el-button v-if="applyFinishIsVisible(scope.row.finishInfoEntity)" type="text" size="small" @click="detailedAddOrUpdateHandle(scope.row.finishInfoEntity.finishId)">填写评审明细汇总表</el-button>-->
           <br v-if="applyFinishIsVisible(scope.row.finishInfoEntity)">
           <el-button v-if="applyFinishIsVisible(scope.row.finishInfoEntity)" type="text" size="small" @click="applyFinishHandle(scope.row.finishInfoEntity.finishId)">通过</el-button>
           <el-button v-if="retreatIsVisible(scope.row.finishInfoEntity)" type="text" size="small" @click="retreatHandle(scope.row.finishInfoEntity)">不通过</el-button>
