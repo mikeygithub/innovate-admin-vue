@@ -211,6 +211,8 @@
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,
+            'noPass': 'finish_no_pass',
+            'noPassStatus': 0,
             // 'isTeacher': true
             'isStudent': true,
             // 'apply': 'project_audit_apply_status',

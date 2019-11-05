@@ -151,7 +151,7 @@
                   项目：{{item.finishInfoEntity.finishName}}
                   <span v-if="item.finishInfoEntity.finishNoPass === 1">、</span>
                   不通过，请修改
-                  <router-link to="/innovate-apply/finsh/nopass">跳转</router-link>
+                  <router-link to="/innovate-apply/finish/nopass">跳转</router-link>
                 </li>
               </div>
             </el-card>
@@ -732,20 +732,21 @@
         })
         // 结题不通过
         this.$http({
-          url: this.$http.adornUrl(`/innovate/finish/info/list`),
+          url: this.$http.adornUrl('/innovate/finish/info/list'),
           method: 'get',
           params: this.$http.adornParams({
-            // 'projectName': this.dataForm.projectName,
-            // 'finishTime': this.dataForm.finishTime == null ? '' : this.dataForm.finishTime.getFullYear(),
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'userId': this.$store.state.user.id,
+            'noPass': 'finish_no_pass',
+            'noPassStatus': 1,
             'isStudent': true,
             'isDel': 0
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.noPassFinishs = data.page.list
+            console.log(this.noPassFinishs)
             this.totalPage = data.page.totalCount
           } else {
             this.dataList = []

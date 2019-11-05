@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import CityImg from '@/assets/img/city_101010100.png'
   // 城市热招
   export default {
     props: {hide: Boolean},
@@ -30,8 +31,30 @@
       return {
         datas: {
           title: '创新创业教育相关连接',
-          list: ['/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png',
-            '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png', '/src/assets/img/city_101010100.png']
+          list: [
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg,
+            CityImg]
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png',
+            // '/src/assets/img/city_101010100.png']
         }
       }
     }
