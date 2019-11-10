@@ -3,7 +3,7 @@
     :title="'批量添加学院用户'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="6rem">
+    <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="6rem">
       <el-alert
         title="文件要求"
         type="info"
@@ -32,8 +32,19 @@
         show-icon
         :closable="false">
       </el-alert>
+      <input type="hidden" style="padding: 5px"/>
+      <el-button type="danger" @click="outErrorData()">导出错误数据</el-button>
     </template>
-    <table border="1" cellspacing="0" width="100%" class="table" id="out-table">
+    <el-row>
+      <table border="1" cellspacing="0" width="100%" class="table" id="out-table1">
+        <tr align='center' hidden>
+          <td colspan="10" style="height: 1.2rem">账号填工号/学号，密码默认：123456，多用户类型用“,”分隔开。</td>
+        </tr>
+        <tr class="contents" align="center" hidden>
+          <th colspan="10">
+            备注：项目负责人的用户类型为2，指导老师为3，指导老师为11，指导老师为12。请自行修改！
+          </th>
+        </tr>
       <tr align='center'>
         <th>序号</th>
         <th>账号</th>
@@ -43,7 +54,7 @@
         <th>用户类型</th>
       </tr>
       <template>
-        <tr align='center' v-if="batchSaveList.length === 0">
+        <tr align='center' v-if="batchSaveList != null && batchSaveList.length === 0">
           <td>暂无数据</td>
           <td>暂无数据</td>
           <td>暂无数据</td>
@@ -60,11 +71,14 @@
           <td><span v-text="item.__EMPTY_2"></span></td>
           <td><span v-text="item.__EMPTY_3"></span></td>
           <td>
-            <span v-for="role in roleList" v-if="item.__EMPTY_4 === role.roleId" v-text="role.roleName"></span>
+            <template v-for="role in roleList">
+              <span v-for="i in item.__EMPTY_4.toString().split(',')" v-if="i == role.roleId" v-text="role.roleName + ','"></span>
+            </template>
           </td>
         </tr>
       </template>
     </table>
+    </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false, errorDataCode = false, batchSaveList = []">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()" :loading="registerLoading">确定</el-button>
@@ -73,6 +87,7 @@
 </template>
 
 <script>
+  import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
   export default {
     data () {
@@ -81,10 +96,12 @@
         instituteList: this.$store.state.user.institute,
         roleList: [
           {roleId: 2, roleName: '项目负责人'},
-          {roleId: 3, roleName: '指导老师'}
+          {roleId: 3, roleName: '指导老师'},
+          {roleId: 11, roleName: '学生'},
+          {roleId: 12, roleName: '老师'}
         ],
         batchSaveList: [],
-        batchSaveLoading: false,
+        registerLoading: false,
         errorDataCode: false,
         dataForm: {
           id: 0,
@@ -134,7 +151,6 @@
                   }
                 })
               } else {
-                // this.$message.error(data.msg)
                 this.batchSaveList = data.errorDate
                 this.errorDataCode = true
                 this.registerLoading = false
@@ -186,6 +202,26 @@
           }
         }
         fileReader.readAsBinaryString(files[0])
+      },
+      // 导出错误数据
+      outErrorData () {
+        var msg = '操作成功'
+        var type = 'success'
+        var wb = XLSX.utils.table_to_book(document.querySelector('#out-table1'))
+        var wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'})
+        try {
+          FileSaver.saveAs(new Blob([wbout], {type: 'application/octet-stream'}), '错误的用户数据' + '.xlsx')
+        } catch (e) {
+          if (typeof console !== 'undefined') console.log(e, wbout)
+          msg = '操作失败'
+          type = 'error'
+        }
+        this.$message({
+          message: msg,
+          type: type,
+          duration: 1500
+        })
+        return wbout
       }
     }
   }
