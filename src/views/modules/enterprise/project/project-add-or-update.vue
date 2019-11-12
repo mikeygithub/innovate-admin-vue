@@ -42,12 +42,10 @@
         <el-col :span="24">
           <el-form-item label="项目附件">
             <el-upload
-              ref="upLoadFiles"
               class="upload-demo"
               :action="url"
-              :limit="1"
-              :data="{proInfoId: dataForm.proInfoId}"
-              :on-success="successHandle">
+              :file-list="dataForm.attachments"
+              :on-success="handleChange">
               <el-button size="small" icon="el-icon-upload" type="primary">点击上传</el-button>
             </el-upload>
           </el-form-item>
@@ -75,7 +73,8 @@ export default {
         proOutlay: '',
         proType: '',
         proIntroduce: '',
-        inApply: '0'
+        inApply: '0',
+        attachments: [] // 项目附件
       },
       proTypeList: [
         {value: 1, label: '科研项目'},
@@ -106,6 +105,19 @@ export default {
         ]
       }
     }
+  },
+  activated () {
+    this.getDataList()
+    this.dataForm.ent.newHighZones = '0'
+    this.dataForm.type = '1'
+    this.dataForm.ent.entStatus = 1
+    this.url = this.$http.adornUrl('/common/file/upload')
+  },
+  mounted () {
+    this.dataForm.ent.newHighZones = '0'
+    this.dataForm.type = '1'
+    this.dataForm.ent.entStatus = 1
+    this.url = this.$http.adornUrl('/common/file/upload')
   },
   methods: {
     init (id) {
@@ -169,6 +181,11 @@ export default {
           })
         }
       })
+    },
+    handleChange (file, fileList) {
+      this.dataForm.attachments = fileList.slice(-3)
+          // console.log('结果', this.dataForm.attachments)
+          // console.log('结果', this.dataForm.attachments)
     },
     // 上传成功
     successHandle (response, file, fileList) {
