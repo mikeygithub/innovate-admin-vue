@@ -7,11 +7,11 @@
       <el-form-item v-show="1 == 2">
         <table border="1" cellspacing="0" width="100%" class="table" id="out-table">
           <tr align='center'>
-            <td colspan="10" style="height: 1.2rem"></td>
+            <td colspan="10" style="height: 1.2rem">账号填工号/学号，密码默认：123456，多用户类型用“,”分隔开。</td>
           </tr>
           <tr class="contents" align="center">
             <th colspan="10">
-              备注：账号填工号/学号；项目负责人的用户类型为2，指导老师的用户类型为3。（密码：123456）
+              备注：项目负责人的用户类型为2，指导老师为3，指导老师为11，指导老师为12。
             </th>
           </tr>
           <tr align='center'>
@@ -138,7 +138,9 @@
         roleId: 2,
         roleList: [
           {roleId: 2, roleName: '项目负责人'},
-          {roleId: 3, roleName: '指导老师'}
+          {roleId: 3, roleName: '指导老师'},
+          {roleId: 11, roleName: '学生'},
+          {roleId: 12, roleName: '老师'}
         ],
         dataList: [],
         pageIndex: 1,
