@@ -1,28 +1,59 @@
 <template>
   <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
+    width="60%"
+    :title="!dataForm.id ? '新增项目' : '修改项目'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="项目名称" prop="proName">
-        <el-input v-model="dataForm.proName" placeholder="项目名称"></el-input>
-      </el-form-item>
-      <el-form-item label="项目登记" prop="proRegister">
-        <el-input type="textarea" v-model="dataForm.proRegister" placeholder="项目登记"></el-input>
-      </el-form-item>
-      <el-form-item label="项目来源" prop="proOrigin">
-        <el-input type="textarea" v-model="dataForm.proOrigin" placeholder="项目来源"></el-input>
-      </el-form-item>
-      <el-form-item label="项目经费" prop="proOutlay">
-        <el-input v-model="dataForm.proOutlay" placeholder="项目经费"></el-input>
-      </el-form-item>
-      <el-form-item label="项目类型" prop="proType">
-        <el-input type="textarea" v-model="dataForm.proType" placeholder="项目类型"></el-input>
-      </el-form-item>
-      <el-form-item label="项目介绍" prop="proIntroduce">
-        <el-input type="textarea" v-model="dataForm.proIntroduce" placeholder="项目介绍"></el-input>
-      </el-form-item>
-    </el-form>
+    <el-row>
+      <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="10rem" style="width: 94%; margin: 0 auto">
+        <el-col>
+          <el-form-item label="项目名称" prop="proName">
+            <el-input v-model="dataForm.proName" placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="项目类型" prop="proType">
+            <el-select v-model="dataForm.proType"  placeholder="请选择">
+              <el-option v-for="item in proTypeList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="项目介绍" prop="proIntroduce">
+          <el-input type="textarea" maxlength="400" :rows="5" v-model="dataForm.proIntroduce" placeholder="请输入"></el-input>
+        </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="项目经费" prop="proOutlay">
+            <el-input v-model="dataForm.proOutlay" style="width: 24%" placeholder="请输入"></el-input> 万元
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="项目登记" prop="proRegister">
+            <el-input type="textarea" v-model="dataForm.proRegister" placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col>
+          <el-form-item label="项目来源" prop="proOrigin">
+            <el-input type="textarea" v-model="dataForm.proOrigin" placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="项目附件">
+            <el-upload
+              ref="upLoadFiles"
+              class="upload-demo"
+              :action="url"
+              :limit="1"
+              :data="{proInfoId: dataForm.proInfoId}"
+              :on-success="successHandle">
+              <el-button size="small" icon="el-icon-upload" type="primary">点击上传</el-button>
+            </el-upload>
+          </el-form-item>
+        </el-col>
+      </el-form>
+    </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
@@ -35,6 +66,7 @@ export default {
   data () {
     return {
       visible: false,
+      url: '',
       dataForm: {
         proInfoId: 0,
         proName: '',
@@ -45,6 +77,14 @@ export default {
         proIntroduce: '',
         inApply: '0'
       },
+      proTypeList: [
+        {value: 1, label: '科研项目'},
+        {value: 2, label: '横向项目'},
+        {value: 3, label: '企业项目'},
+        {value: 1, label: '大创项目'},
+        {value: 2, label: '企业招聘'},
+        {value: 3, label: '实习项目对接'}
+      ],
       dataRule: {
         proName: [
                     { required: true, message: '项目名称不能为空', trigger: 'blur' }
@@ -129,6 +169,14 @@ export default {
           })
         }
       })
+    },
+    // 上传成功
+    successHandle (response, file, fileList) {
+      if (response && response.code === 0) {
+        // this.dataForm.entTeacherAttachmentEntity = response.entTeacherAttachmentEntity
+      } else {
+        this.$message.error(response.msg)
+      }
     }
   }
 }

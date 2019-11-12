@@ -4,9 +4,9 @@
       width="60%"
       :modal-append-to-body='false'
       :visible.sync="visible">
-      <div id="project-app">
+      <div id="project">
         <div class="menuList">
-          <ul>
+          <ul class="project-ul">
             <li v-for="(item,index) in list" :key="item.id" :class="{active:num==index}" @click="getNum(index)">
               {{item}}
             </li>
@@ -21,7 +21,7 @@
 
       <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="visible = false">返回</el-button>
-    </span>
+      </span>
       <!-- 弹窗, 学生 / 教师 / 企业详情 -->
       <ent-details v-if="entDetails" ref="entDetails" @refreshDataList="getEntDetailsInfo()"/>
       <tea-details v-if="teaDetails" ref="teaDetails"/>
@@ -45,7 +45,7 @@ export default {
       activeNames: ['1'],
       hasType: 'userPerId',
       num: 0,
-      list: ['项目信息', '合作信息', '项目成员', '专利'],
+      list: ['项目信息', '负责人', '合作信息', '成员', '专利'],
       tabContents: [
         '张三丰，名君宝，字符元，道号三丰。武林至尊，民族英雄 、内拳始祖、太极始祖、武学泰斗、龙行书法始祖张三丰集各派绝学于一身，威震武林，造诣已达炼虚合道至高极境 [1]  ，元末明初真人，武当山道人，武当派始祖，正史记载宋理宗淳佑七年(1247年) 出生辽东，14岁考取文武状元，18岁担任博陵县令，（1280年）辞官出家修道，拜火龙真人为师，武林盟主张三丰时隐时现，至今行踪不定，清朝道光年间曾出现在峨眉山。',
         '独孤求败，自号“剑魔”，纵横江湖三十馀载，杀尽仇寇，败尽英雄，天下更无抗手，无可奈何，惟隐居深谷，以雕为友。呜呼，生平求一敌手而不可得，诚寂寥难堪也。在小说中从未出场过，只曾在人物的口中提及。',
@@ -137,7 +137,7 @@ export default {
     background: #e74c3c;
   }
 
-  #project-app {
+  #project {
     width: 100%;
     height: 90%;
     margin-bottom: 100px;
@@ -152,7 +152,7 @@ export default {
     background-color: #33344a;
   }
 
-  ul {
+  .project-ul {
     width: 100%;
     display: flex;
     list-style: none;
@@ -164,7 +164,7 @@ export default {
 
   }
 
-  ul li {
+  .project-ul li {
     flex: 1;
     text-align: center;
     cursor: pointer;
