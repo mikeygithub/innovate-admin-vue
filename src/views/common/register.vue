@@ -354,7 +354,7 @@
     methods: {
       handleChange (file, fileList) {
         this.dataForm.attachments = fileList.slice(-3)
-        // console.log('结果', this.dataForm.attachments)
+        console.log('结果', this.dataForm.attachments)
       },
       handleAvatarSuccess (res, file) {
         // console.log(res, file)

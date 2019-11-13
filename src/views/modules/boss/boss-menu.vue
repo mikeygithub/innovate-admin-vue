@@ -76,7 +76,7 @@
       play () {
         let that = this
         setInterval(function () {
-          console.log(that.top >= that.max)
+          // console.log(that.top >= that.max)
           if (that.top >= that.max + 60) {
             that.top = 0
           }
