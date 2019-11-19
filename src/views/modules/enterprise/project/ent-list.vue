@@ -127,7 +127,7 @@ export default {
       shenhe: false,
       addOrUpdateVisible: false,
       hasApply: '1',
-      hasType: 'userTeacherId',
+      hasType: 'entInfoId',
       dataForm: {
         baseId: '',
         projectName: '',

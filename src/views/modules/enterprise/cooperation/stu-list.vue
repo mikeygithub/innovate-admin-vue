@@ -28,31 +28,46 @@
         align="center"
         width="50">
       </el-table-column>
-        <el-table-column
-          sortable
-          prop="projectInfo.proName"
-          header-align="center"
-          align="center"
-          label="项目名称">
-        </el-table-column>
-        <el-table-column
-          prop="cooperationContent"
-          header-align="center"
-          align="center"
-          label="合作内容">
-        </el-table-column>
-        <el-table-column
-          prop="cooperationType"
-          header-align="center"
-          align="center"
-          label="合作方式">
-        </el-table-column>
-        <el-table-column
-          prop="cooperationRequire"
-          header-align="center"
-          align="center"
-          label="合作要求">
-        </el-table-column>
+      <el-table-column
+        sortable
+        prop="projectInfo.proName"
+        header-align="center"
+        align="center"
+        label="项目名称">
+      </el-table-column>
+      <el-table-column
+        prop="cooperationContent"
+        header-align="center"
+        align="center"
+        label="合作内容">
+      </el-table-column>
+      <el-table-column
+        prop="cooperationType"
+        header-align="center"
+        align="center"
+        label="合作方式">
+      </el-table-column>
+      <el-table-column
+        prop="cooperationRequire"
+        header-align="center"
+        align="center"
+        label="合作要求">
+      </el-table-column>
+      <el-table-column
+        sortable
+        prop="inApply"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>
+          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>
+          <el-tag v-if="scope.row.inApply === '2'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '4'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '5'" size="small">已提交</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
@@ -61,7 +76,6 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="cooHandle(scope.row.proInfoId)">合作列表</el-button>
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
           <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
@@ -133,7 +147,7 @@ export default {
       }).then(({data}) => {
         console.log(data)
         if (data && data.code === 0) {
-          this.dataList = data.page.records
+          this.dataList = data.page.list
           this.totalPage = data.page.totalCount
         } else {
           this.dataList = []
@@ -141,29 +155,6 @@ export default {
         }
         this.dataListLoading = false
       })
-      if (this.cooType === '1') {
-        this.$http({
-          url: this.$http.adornUrl('/enterprise/person/cooperation/queryMyProject'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'key': this.dataForm.key,
-            'inApply': this.hasApply,
-            'inType': this.hasType
-          })
-        }).then(({data}) => {
-          console.log(data)
-          if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
-          } else {
-            this.dataList = []
-            this.totalPage = 0
-          }
-          this.dataListLoading = false
-        })
-      }
     },
         // 每页数
     sizeChangeHandle (val) {

@@ -336,7 +336,7 @@ export default {
     StuDetails
   },
   methods: {
-    init (hasType, id) {
+    init (hasType, id, inApply) {
       this.visible = true
       this.dataForm.proInfoId = id
       this.hasType = hasType
