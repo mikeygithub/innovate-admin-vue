@@ -13,12 +13,71 @@
           </ul>
         </div>
         <div class="tabCon">
-          <div v-for='(itemCon,index) in tabContents' v-show="index == num">
-            {{itemCon}}
+          <div v-if="viewType === 0">
+            <el-form :model="dataForm" ref="dataForm" label-width="150px">
+              <el-form-item label="项目名称" prop="proName">
+                <el-input v-model="dataForm.proName" :readonly="true"></el-input>
+              </el-form-item>
+              <el-form-item label="项目登记" prop="proRegister">
+                <el-input v-model="dataForm.proRegister" :readonly="true"></el-input>
+              </el-form-item>
+              <el-form-item label="项目来源" prop="proOrigin">
+                <el-input type="textarea" v-model="dataForm.proOrigin" :readonly="true"></el-input>
+              </el-form-item>
+              <el-form-item label="项目经费" prop="proOutlay">
+                <el-input v-model="dataForm.proOutlay" :readonly="true"></el-input>
+              </el-form-item>
+              <el-form-item label="项目类型" prop="proType">
+                <el-input v-model="dataForm.proType" :readonly="true"></el-input>
+              </el-form-item>
+              <el-form-item label="项目介绍" prop="proIntroduce">
+                <el-input type="textarea" v-model="dataForm.proIntroduce" :readonly="true"></el-input>
+              </el-form-item>
+            </el-form>
           </div>
+          <div v-if="viewType === 1">
+            <div v-if="hasType === 'userPerId'">
+              {{sysUser.name}}
+            </div>
+            <div v-if="hasType === 'userTeacherId'">
+              {{sysUser.name}}
+            </div>
+            <div v-if="hasType === 'entInfoId'">
+              {{sysUser.name}}
+            </div>
+          </div>
+          <div v-if="viewType === 2">
+            {{projectCooperationInfo.cooperationContent}}
+          </div>
+          <div v-if="viewType === 3">
+              <el-table
+                :data="personCooperationPer"
+                :default-sort="{prop: 'userId', order: 'ascending'}"
+                style="width: 100%">
+                <el-table-column
+                  prop="userPersonInfo.sysUserEntity.name"
+                  width="180">
+                </el-table-column>
+              </el-table>
+            <div v-if="hasType === 'userTeacherId'"></div>
+            <div v-if="hasType === 'entInfoId'"></div>
+          </div>
+          <div v-if="viewType === 4">
+            <el-table
+              :data="entProjectAttachEntities"
+              :default-sort="{prop: 'projectAttachId', order: 'ascending'}"
+              style="width: 100%">
+              <el-table-column
+                prop="url"
+                width="180">
+              </el-table-column>
+            </el-table>
+          </div>
+<!--          <div v-for='(itemCon,index) in tabContents' v-show="index == num">-->
+<!--            {{itemCon}}-->
+<!--          </div>-->
         </div>
       </div>
-
       <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="visible = false">返回</el-button>
       </span>
@@ -42,14 +101,14 @@ export default {
       teaDetails: false,
       stuDetails: false,
       dataList: [],
+      viewType: 0,
       activeNames: ['1'],
       hasType: 'userPerId',
       num: 0,
-      list: ['项目信息', '负责人', '合作信息', '成员', '专利'],
+      list: ['项目信息', '负责人', '合作信息', '成员', '附件、专利'],
       tabContents: [
-        '张三丰，名君宝，字符元，道号三丰。武林至尊，民族英雄 、内拳始祖、太极始祖、武学泰斗、龙行书法始祖张三丰集各派绝学于一身，威震武林，造诣已达炼虚合道至高极境 [1]  ，元末明初真人，武当山道人，武当派始祖，正史记载宋理宗淳佑七年(1247年) 出生辽东，14岁考取文武状元，18岁担任博陵县令，（1280年）辞官出家修道，拜火龙真人为师，武林盟主张三丰时隐时现，至今行踪不定，清朝道光年间曾出现在峨眉山。',
-        '独孤求败，自号“剑魔”，纵横江湖三十馀载，杀尽仇寇，败尽英雄，天下更无抗手，无可奈何，惟隐居深谷，以雕为友。呜呼，生平求一敌手而不可得，诚寂寥难堪也。在小说中从未出场过，只曾在人物的口中提及。',
-        '周伯通不是金大师小说中的主角，也不是塑造的最丰满、最完善的形象，更不是侠客或英雄的代表，而且就武侠小说最基本的要素-武功、武学所达到的境界来说，周伯通也不是绝顶高手，但毫无疑问，周伯通是金大师所塑造的所有人物中最有意思的一位，至少是最有意思的人物之一。'],
+        // this.dataForm, this.dataForm.sysUser, this.dataForm.projectCooperationInfo, this.dataForm.projectCooperationInfo, this.dataForm.entProjectAttachEntities
+      ],
       dataForm: {
         proInfoId: 0,
         proName: '',
@@ -59,7 +118,13 @@ export default {
         proType: '',
         proIntroduce: '',
         inApply: ''
-      }
+      },
+      sysUser: '',
+      entProjectAttachEntities: [],
+      projectCooperationInfo: '',
+      personCooperationPer: [],
+      personCooperationTeacher: [],
+      personCooperationEnt: []
     }
   },
   components: {
@@ -72,22 +137,32 @@ export default {
       this.visible = true
       this.dataForm.proInfoId = id
       this.hasType = hasType
+      if (hasType === 'entInfoId') {
+        this.list.splice(1, 5, '企业详情', '合作信息', '成员', '附件、专利')
+      }
       console.log(`${this.hasType}/${this.dataForm.proInfoId}`)
       if (this.dataForm.proInfoId) {
         this.$http({
-          url: this.$http.adornUrl(`/enterprise/project/info/info/${this.hasType}/${this.dataForm.proInfoId}`),
+          url: this.$http.adornUrl(`/enterprise/project/info/projectInfo/${this.hasType}/${this.dataForm.proInfoId}`),
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          console.log(data)
           if (data && data.code === 0) {
+            console.log(data)
             this.dataForm = data.data
+            this.sysUser = data.data.sysUser
+            this.entProjectAttachEntities = data.data.entProjectAttachEntities
+            this.projectCooperationInfo = data.data.projectCooperationInfo
+            this.personCooperationPer = data.data.projectCooperationInfo.personCooperationPer
+            this.personCooperationTeacher = data.data.projectCooperationInfo.personCooperationTeacher
+            this.personCooperationEnt = data.data.projectCooperationInfo.personCooperationEnt
           }
         })
       }
     },
     getNum (index) {
       this.num = index
+      this.viewType = index
     },
         // 企业详情弹窗
     getEntDetailsInfo (id, hasApply) {

@@ -9,11 +9,10 @@
         <el-button type="primary" v-if="isAuth('enterprise:project:info:save')" @click="addOrUpdateHandle()">新增项目</el-button>
       </el-form-item>
     </el-form>
-    <el-card v-if="!isAuth('enterprise:project:info:save')">
-      <el-radio-group v-model="hasType" @change="getDataList">
-        <el-radio label="userPerId">学生</el-radio>
-        <el-radio label="userTeacherId">教师</el-radio>
-        <el-radio label="entInfoId">企业</el-radio>
+    <el-card>
+      <el-radio-group v-model="hasApply" @change="getDataList">
+        <el-radio label="1">已通过</el-radio>
+        <el-radio label="0">未通过</el-radio>
       </el-radio-group>
     </el-card>
     <el-table
@@ -73,6 +72,21 @@
         header-align="center"
         align="center"
         label="项目介绍">
+      </el-table-column>
+      <el-table-column
+        sortable
+        prop="inApply"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>
+          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>
+          <el-tag v-if="scope.row.inApply === '2'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '4'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '5'" size="small">已提交</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"

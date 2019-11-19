@@ -11,9 +11,9 @@
       </el-form-item>
     </el-form>
     <el-card>
-      <el-radio-group v-model="cooType" @change="getDataList">
-        <el-radio label="0">我发布的</el-radio>
-        <el-radio label="1">我参与的</el-radio>
+      <el-radio-group v-model="hasApply" @change="getDataList">
+        <el-radio label="1">已通过</el-radio>
+        <el-radio label="0">未通过</el-radio>
       </el-radio-group>
     </el-card>
     <el-table
@@ -28,64 +28,31 @@
         align="center"
         width="50">
       </el-table-column>
-      <el-table-column
-        v-if="cooType== '0'"
-        sortable
-        prop="projectInfo.proName"
-        header-align="center"
-        align="center"
-        label="项目名称">
-      </el-table-column>
-      <el-table-column
-        v-if="cooType== '1'"
-        sortable
-        prop="entProjectInfo.proName"
-        header-align="center"
-        align="center"
-        label="项目名称">
-      </el-table-column>
-      <el-table-column
-        v-if="cooType== '0'"
-        prop="cooperationContent"
-        header-align="center"
-        align="center"
-        label="合作内容">
-      </el-table-column>
-      <el-table-column
-        v-if="cooType== '1'"
-        prop="entProjectCooperationInfo.cooperationContent"
-        header-align="center"
-        align="center"
-        label="合作内容">
-      </el-table-column>
-      <el-table-column
-        v-if="cooType== '0'"
-        prop="cooperationType"
-        header-align="center"
-        align="center"
-        label="合作方式">
-      </el-table-column>
-      <el-table-column
-        v-if="cooType== '1'"
-        prop="entProjectCooperationInfo.cooperationType"
-        header-align="center"
-        align="center"
-        label="合作方式">
-      </el-table-column>
-      <el-table-column
-        v-if="cooType== '0'"
-        prop="cooperationRequire"
-        header-align="center"
-        align="center"
-        label="合作要求">
-      </el-table-column>
-      <el-table-column
-        v-if="cooType== '1'"
-        prop="entProjectCooperationInfo.cooperationRequire"
-        header-align="center"
-        align="center"
-        label="合作要求">
-      </el-table-column>
+        <el-table-column
+          sortable
+          prop="projectInfo.proName"
+          header-align="center"
+          align="center"
+          label="项目名称">
+        </el-table-column>
+        <el-table-column
+          prop="cooperationContent"
+          header-align="center"
+          align="center"
+          label="合作内容">
+        </el-table-column>
+        <el-table-column
+          prop="cooperationType"
+          header-align="center"
+          align="center"
+          label="合作方式">
+        </el-table-column>
+        <el-table-column
+          prop="cooperationRequire"
+          header-align="center"
+          align="center"
+          label="合作要求">
+        </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
@@ -128,7 +95,6 @@ export default {
         key: ''
       },
       dataList: [],
-      cooType: '0',
       proInfoId: '',
       pageIndex: 1,
       pageSize: 10,
@@ -154,29 +120,27 @@ export default {
       // 获取数据列表
     getDataList () {
       this.dataListLoading = true
-      if (this.cooType === '0') {
-        this.$http({
-          url: this.$http.adornUrl('/enterprise/person/cooperation/queryProject'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'key': this.dataForm.key,
-            'inApply': this.hasApply,
-            'inType': this.hasType
-          })
-        }).then(({data}) => {
-          console.log(data)
-          if (data && data.code === 0) {
-            this.dataList = data.page.records
-            this.totalPage = data.page.totalCount
-          } else {
-            this.dataList = []
-            this.totalPage = 0
-          }
-          this.dataListLoading = false
+      this.$http({
+        url: this.$http.adornUrl('/enterprise/project/cooperation/queryProject'),
+        method: 'get',
+        params: this.$http.adornParams({
+          'page': this.pageIndex,
+          'limit': this.pageSize,
+          'key': this.dataForm.key,
+          'inApply': this.hasApply,
+          'inType': this.hasType
         })
-      }
+      }).then(({data}) => {
+        console.log(data)
+        if (data && data.code === 0) {
+          this.dataList = data.page.records
+          this.totalPage = data.page.totalCount
+        } else {
+          this.dataList = []
+          this.totalPage = 0
+        }
+        this.dataListLoading = false
+      })
       if (this.cooType === '1') {
         this.$http({
           url: this.$http.adornUrl('/enterprise/person/cooperation/queryMyProject'),

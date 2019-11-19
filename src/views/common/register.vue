@@ -353,6 +353,7 @@
     },
     methods: {
       handleChange (file, fileList) {
+        console.log(fileList)
         this.dataForm.attachments = fileList.slice(-3)
         console.log('结果', this.dataForm.attachments)
       },

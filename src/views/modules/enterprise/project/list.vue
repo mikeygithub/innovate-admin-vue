@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import ProjectDetails from '../base/project-details'
+import ProjectDetails from '../project/project-details'
 import AddOrUpdate from './project-add-or-update'
 export default {
   data () {
