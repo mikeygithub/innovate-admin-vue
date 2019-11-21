@@ -29,31 +29,31 @@
         align="center"
         width="50">
       </el-table-column>
-        <el-table-column
-          sortable
-          prop="projectInfo.proName"
-          header-align="center"
-          align="center"
-          label="项目名称">
-        </el-table-column>
-        <el-table-column
-          prop="cooperationContent"
-          header-align="center"
-          align="center"
-          label="合作内容">
-        </el-table-column>
-        <el-table-column
-          prop="cooperationType"
-          header-align="center"
-          align="center"
-          label="合作方式">
-        </el-table-column>
-        <el-table-column
-          prop="cooperationRequire"
-          header-align="center"
-          align="center"
-          label="合作要求">
-        </el-table-column>
+      <el-table-column
+        sortable
+        prop="projectInfo.proName"
+        header-align="center"
+        align="center"
+        label="项目名称">
+      </el-table-column>
+      <el-table-column
+        prop="cooperationContent"
+        header-align="center"
+        align="center"
+        label="合作内容">
+      </el-table-column>
+      <el-table-column
+        prop="cooperationType"
+        header-align="center"
+        align="center"
+        label="合作方式">
+      </el-table-column>
+      <el-table-column
+        prop="cooperationRequire"
+        header-align="center"
+        align="center"
+        label="合作要求">
+      </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
@@ -82,31 +82,31 @@
         align="center"
         width="50">
       </el-table-column>
-        <el-table-column
-          sortable
-          prop="entProjectInfo.proName"
-          header-align="center"
-          align="center"
-          label="项目名称">
-        </el-table-column>
-        <el-table-column
-          prop="entProjectCooperationInfo.cooperationContent"
-          header-align="center"
-          align="center"
-          label="合作内容">
-        </el-table-column>
-        <el-table-column
-          prop="entProjectCooperationInfo.cooperationType"
-          header-align="center"
-          align="center"
-          label="合作方式">
-        </el-table-column>
-        <el-table-column
-          prop="entProjectCooperationInfo.cooperationRequire"
-          header-align="center"
-          align="center"
-          label="合作要求">
-        </el-table-column>
+      <el-table-column
+        sortable
+        prop="entProjectInfo.proName"
+        header-align="center"
+        align="center"
+        label="项目名称">
+      </el-table-column>
+      <el-table-column
+        prop="entProjectCooperationInfo.cooperationContent"
+        header-align="center"
+        align="center"
+        label="合作内容">
+      </el-table-column>
+      <el-table-column
+        prop="entProjectCooperationInfo.cooperationType"
+        header-align="center"
+        align="center"
+        label="合作方式">
+      </el-table-column>
+      <el-table-column
+        prop="entProjectCooperationInfo.cooperationRequire"
+        header-align="center"
+        align="center"
+        label="合作要求">
+      </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
@@ -133,15 +133,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <cooperation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
-    <relation-details v-if="relationDetails" ref="relationDetails" @refreshDataList="getDetailsInfo()"/>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
 import CooperationDetails from '../cooperation/cooperation-details'
-import AddOrUpdate from './cooperation-add-or-update'
-import RelationDetails from '../relation/relation-details'
+import AddOrUpdate from '../cooperation/cooperation-add-or-update'
 export default {
   data () {
     return {
@@ -158,69 +156,42 @@ export default {
       dataListSelections: [],
       addOrUpdateVisible: false,
       shenhe: false,
-      relationDetails: false,
-      hasType: 'userPerId',
+      hasType: 'userTeacherId',
       hasApply: '1'
     }
   },
   components: {
     CooperationDetails,
-    AddOrUpdate,
-    RelationDetails
+    AddOrUpdate
   },
   activated () {
     this.getDataList()
   },
   methods: {
-      // 获取数据列表
+        // 获取数据列表
     getDataList () {
       this.dataListLoading = true
-      if (this.cooType === '0') {
-        this.$http({
-          url: this.$http.adornUrl('/enterprise/person/cooperation/queryProject'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'key': this.dataForm.key,
-            'inApply': this.hasApply,
-            'inType': this.hasType
-          })
-        }).then(({data}) => {
-          console.log(data)
-          if (data && data.code === 0) {
-            this.dataList = data.page.records
-            this.totalPage = data.page.totalCount
-          } else {
-            this.dataList = []
-            this.totalPage = 0
-          }
-          this.dataListLoading = false
+      this.$http({
+        url: this.$http.adornUrl('/enterprise/project/cooperation/list'),
+        method: 'get',
+        params: this.$http.adornParams({
+          'page': this.pageIndex,
+          'limit': this.pageSize,
+          'key': this.dataForm.key,
+          'inApply': this.hasApply,
+          'inType': this.hasType
         })
-      }
-      if (this.cooType === '1') {
-        this.$http({
-          url: this.$http.adornUrl('/enterprise/person/cooperation/queryMyProject'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'key': this.dataForm.key,
-            'inApply': this.hasApply,
-            'inType': this.hasType
-          })
-        }).then(({data}) => {
-          console.log(data)
-          if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
-          } else {
-            this.dataList = []
-            this.totalPage = 0
-          }
-          this.dataListLoading = false
-        })
-      }
+      }).then(({data}) => {
+        console.log(data)
+        if (data && data.code === 0) {
+          this.dataList = data.page.list
+          this.totalPage = data.page.totalCount
+        } else {
+          this.dataList = []
+          this.totalPage = 0
+        }
+        this.dataListLoading = false
+      })
     },
         // 每页数
     sizeChangeHandle (val) {
@@ -243,13 +214,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
         this.$refs.addOrUpdate.selectProject()
-      })
-    },
-      // 合作列表详情
-    cooHandle (id) {
-      this.relationDetails = true
-      this.$nextTick(() => {
-        this.$refs.relationDetails.init(id, this.hasType, '1')
       })
     },
         // 详情

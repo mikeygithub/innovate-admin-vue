@@ -6,7 +6,7 @@
     width="75%"
     :visible.sync="visible">
     <el-card>
-      <el-radio-group v-model="hasType" @change="changeType(hasType)">
+      <el-radio-group v-model="hasType" @change="getDataList(hasType)">
         <el-radio label="userPerId">学生</el-radio>
         <el-radio label="userTeacherId">教师</el-radio>
         <el-radio label="entInfoId">企业</el-radio>
@@ -25,23 +25,23 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="userPersonInfo.sysUserEntity.name"
+        prop="sysUserEntity.name"
         header-align="center"
         align="center"
         v-if="hasType == 'userPerId'"
         label="合作申请人">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="getStuDetailsInfo(scope.row.userPersonInfo.userPerId)">{{scope.row.userPersonInfo.sysUserEntity.name}}</el-button>
+          <el-button type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">{{scope.row.sysUserEntity.name}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
-        prop="userTeacherInfo.sysUserEntity.name"
+        prop="sysUserEntity.name"
         header-align="center"
         align="center"
         v-if="hasType == 'userTeacherId'"
         label="合作申请人">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherInfo.userTeacherId)">{{scope.row.userTeacherInfo.sysUserEntity.name}}</el-button>
+          <el-button type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">{{scope.row.sysUserEntity.name}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -51,7 +51,7 @@
         v-if="hasType == 'entInfoId'"
         label="合作申请企业">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="getEntDetailsInfo(scope.row.entEnterpriseInfo.entInfoId, scope.row.entEnterpriseInfo.inApply)">{{scope.row.entEnterpriseInfo.entName}}</el-button>
+          <el-button type="text" size="small" @click="getEntDetailsInfo(scope.row.entInfoId, scope.row.inApply)">{{scope.row.entName}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -62,9 +62,11 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">通过</el-button>
-          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">不通过</el-button>
-          <el-button v-else type="text" size="small">无操作</el-button>
+          <el-button v-if="hasType == 'userPerId'" type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">详情</el-button>
+          <el-button v-if="hasType == 'userTeacherId'" type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">详情</el-button>
+          <el-button v-if="hasType == 'entInfoId'" type="text" size="small" @click="getEntDetailsInfo(scope.row.entInfoId, scope.row.inApply)">详情</el-button>
+<!--          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">通过</el-button>-->
+<!--          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">不通过</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -123,6 +125,7 @@ export default {
       consentVisible: false,
       retreatVisible: false,
       proInfoId: '',
+      proCooperationInfoId: '',
       inApply: '1',
       applyName: '',
       dataList: [],
@@ -156,47 +159,45 @@ export default {
   },
   methods: {
     init (id, hasType, inApply) {
-      this.proInfoId = id || 0
+      this.proCooperationInfoId = id || 0
       this.visible = true
       this.hasType = hasType
       this.inApply = inApply
-      console.log(this.proInfoId)
+      console.log(this.proCooperationInfoId)
       console.log(this.hasType)
       console.log(this.inApply)
       this.$nextTick(() => {
-        if (this.proInfoId) {
-          this.$http({
-            url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proInfoId}/${this.hasType}/${this.inApply}`),
-            params: this.$http.adornParams({
-              'page': this.pageIndex,
-              'limit': this.pageSize,
-              'key': this.dataForm.key,
-              'inType': this.hasType
-            })
-          }).then(({data}) => {
-            console.log(data)
-            if (data && data.code === 0) {
-              this.dataList = data.data.projectCooperationInfo.personCooperationPer
-              this.dataStuList = data.data.projectCooperationInfo.personCooperationPer
-              this.dataTeaList = data.data.projectCooperationInfo.personCooperationTeacher
-              this.dataEntList = data.data.projectCooperationInfo.personCooperationEnt
-              this.totalPage = data.page.totalCount
-            } else {
-              this.dataList = []
-              this.totalPage = 0
-            }
-            this.dataListLoading = false
-            console.log(this.dataList)
+        this.$http({
+          url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proCooperationInfoId}/${this.hasType}/${this.inApply}`),
+          params: this.$http.adornParams({
+            'page': this.pageIndex,
+            'limit': this.pageSize,
+            'key': this.dataForm.key,
+            'inType': this.hasType
           })
-        }
+        }).then(({data}) => {
+          console.log(data)
+          if (data && data.code === 0) {
+            this.dataStuList = data.entProjectCooperationInfoEntity.userPersonInfoEntities
+            this.dataTeaList = data.entProjectCooperationInfoEntity.userTeacherInfoEntities
+            this.dataEntList = data.entProjectCooperationInfoEntity.entEnterpriseInfoEntities
+            this.dataList = this.dataStuList
+            this.totalPage = data.totalCount
+          } else {
+            this.dataList = []
+            this.totalPage = 0
+          }
+          this.dataListLoading = false
+          console.log(this.dataList)
+        })
       })
     },
       // 获取数据列表
-    getDataList () {
+    getDataList (hasType) {
+      this.hasType = hasType
       this.dataListLoading = true
-      console.log(this.proInfoId + this.hasType)
       this.$http({
-        url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proInfoId}/${this.hasType}/${this.inApply}`),
+        url: this.$http.adornUrl(`/enterprise/person/cooperation/info/${this.proCooperationInfoId}/${this.hasType}/${this.inApply}`),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
@@ -206,16 +207,17 @@ export default {
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
+          console.log(data)
           if (this.hasType === 'userPerId') {
-            this.dataList = data.data.projectCooperationInfo.personCooperationPer
+            this.dataList = data.entProjectCooperationInfoEntity.userPersonInfoEntities
           }
           if (this.hasType === 'userTeacherId') {
-            this.dataList = data.data.projectCooperationInfo.personCooperationTeacher
+            this.dataList = data.entProjectCooperationInfoEntity.userTeacherInfoEntities
           }
           if (this.hasType === 'entInfoId') {
-            this.dataList = data.data.projectCooperationInfo.personCooperationEnt
+            this.dataList = data.entProjectCooperationInfoEntity.entEnterpriseInfoEntities
           }
-          this.totalPage = data.page.totalCount
+          this.totalPage = data.totalCount
         } else {
           this.dataList = []
           this.totalPage = 0
@@ -312,11 +314,14 @@ export default {
         this.changeType(this.hasType)
       })
     },
+    // 多选
+    selectionChangeHandle (val) {
+      this.dataListSelections = val
+    },
     details (id) {
       console.log(id)
     }
   },
-
       // 删除
   deleteHandle (id) {
     var ids = id ? [id] : this.dataListSelections.map(item => {

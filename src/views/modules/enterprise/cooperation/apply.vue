@@ -11,15 +11,10 @@
       </el-form-item>
     </el-form>
     <el-card>
-      <el-radio-group v-model="cooType" @change="getDataList">
-        <el-radio label="0">我发布的</el-radio>
-        <el-radio label="1">我参与的</el-radio>
-      </el-radio-group>
     </el-card>
     <el-table
       :data="dataList"
       border
-      v-if="cooType== '0'"
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
@@ -55,58 +50,20 @@
         label="合作要求">
       </el-table-column>
       <el-table-column
-        fixed="right"
+        sortable
+        prop="inApply"
         header-align="center"
         align="center"
-        width="150"
-        label="操作">
+        label="状态">
         <template slot-scope="scope">
-          <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="cooHandle(scope.row.proInfoId)">合作列表</el-button>
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
-          <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
-          <el-button v-else type="text" size="small">无操作</el-button>
+          <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>
+          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>
+          <el-tag v-if="scope.row.inApply === '2'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '4'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '5'" size="small">已提交</el-tag>
         </template>
       </el-table-column>
-    </el-table>
-    <el-table
-      :data="dataList"
-      border
-      v-if="cooType== '1'"
-      v-loading="dataListLoading"
-      @selection-change="selectionChangeHandle"
-      style="width: 100%;">
-      <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50">
-      </el-table-column>
-      <el-table-column
-        sortable
-        prop="entProjectInfo.proName"
-        header-align="center"
-        align="center"
-        label="项目名称">
-      </el-table-column>
-      <el-table-column
-        prop="entProjectCooperationInfo.cooperationContent"
-        header-align="center"
-        align="center"
-        label="合作内容">
-      </el-table-column>
-      <el-table-column
-        prop="entProjectCooperationInfo.cooperationType"
-        header-align="center"
-        align="center"
-        label="合作方式">
-      </el-table-column>
-      <el-table-column
-        prop="entProjectCooperationInfo.cooperationRequire"
-        header-align="center"
-        align="center"
-        label="合作要求">
-      </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
@@ -115,7 +72,6 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="cooHandle(scope.row.proInfoId)">合作列表</el-button>
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
           <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
@@ -133,6 +89,7 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <cooperation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
+    <relation-details v-if="relationDetails" ref="relationDetails" @refreshDataList="getDetailsInfo()"/>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
@@ -140,6 +97,7 @@
 <script>
 import CooperationDetails from '../cooperation/cooperation-details'
 import AddOrUpdate from './cooperation-add-or-update'
+import RelationDetails from '../relation/relation-details'
 export default {
   data () {
     return {
@@ -147,7 +105,6 @@ export default {
         key: ''
       },
       dataList: [],
-      cooType: '0',
       proInfoId: '',
       pageIndex: 1,
       pageSize: 10,
@@ -156,23 +113,25 @@ export default {
       dataListSelections: [],
       addOrUpdateVisible: false,
       shenhe: false,
-      hasType: 'userTeacherId',
-      hasApply: '1'
+      relationDetails: false,
+      hasType: 'userPerId',
+      hasApply: '2'
     }
   },
   components: {
     CooperationDetails,
-    AddOrUpdate
+    AddOrUpdate,
+    RelationDetails
   },
   activated () {
     this.getDataList()
   },
   methods: {
-        // 获取数据列表
+      // 获取数据列表
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/project/cooperation/list'),
+        url: this.$http.adornUrl('/enterprise/project/cooperation/queryProject'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
@@ -214,6 +173,13 @@ export default {
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
         this.$refs.addOrUpdate.selectProject()
+      })
+    },
+      // 合作列表详情
+    cooHandle (id) {
+      this.relationDetails = true
+      this.$nextTick(() => {
+        this.$refs.relationDetails.init(id, this.hasType, '1')
       })
     },
         // 详情

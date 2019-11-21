@@ -81,9 +81,9 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proInfoId)">申请合作列表</el-button>
-          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row.proCooperationInfoId)">全部通过</el-button>
-          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.proCooperationInfoId)">全部不通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">申请合作列表</el-button>
+          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row.proCooperationInfoId)">通过</el-button>
+          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row.proCooperationInfoId)">不通过</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
@@ -142,7 +142,7 @@ export default {
   data () {
     return {
       tempPro: null, // 项目临时信息
-      consenttip: '您确认要通过该审核吗？该操作不可撤回！',
+      consenttip: '您确认要通过该审核吗？合作双方将信息可见，该操作不可撤回！',
       retreattip: '您确认不通过该审核吗？该操作不可撤回！',
       shenhe: false,
       consentVisible: false,
@@ -291,11 +291,11 @@ export default {
         // 审批通过
     applyConsentHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/person/cooperation/update'),
+        url: this.$http.adornUrl('/enterprise/project/cooperation/entExamine'),
         method: 'post',
         params: this.$http.adornParams({
           'proCooperationInfoId': this.proCooperationInfoId,
-          'inApply': '1'
+          'inApply': '2'
         }, false)
       }).then(({data}) => {
         this.$message({
@@ -309,7 +309,7 @@ export default {
         // 审批不通过
     applyRetreatHandle () {
       this.$http({
-        url: this.$http.adornUrl('/enterprise/person/cooperation/deleteCoId'),
+        url: this.$http.adornUrl('/enterprise/project/cooperation/entExamine'),
         method: 'post',
         params: this.$http.adornParams({
           'proCooperationInfoId': this.proCooperationInfoId
