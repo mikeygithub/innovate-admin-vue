@@ -7,7 +7,7 @@
     <el-row>
       <table border="1" align="center" cellpadding="10" width="100%">
         <tr>
-          <th colspan="7">负责人详情</th>
+          <th colspan="7">教师详情</th>
         </tr>
 
         <tr>

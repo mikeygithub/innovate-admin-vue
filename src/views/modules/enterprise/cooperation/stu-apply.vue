@@ -11,6 +11,10 @@
       </el-form-item>
     </el-form>
     <el-card>
+      <el-radio-group v-model="hasApply" @change="getDataList">
+        <el-radio label="1">已通过</el-radio>
+        <el-radio label="0">未通过</el-radio>
+      </el-radio-group>
     </el-card>
     <el-table
       :data="dataList"
@@ -26,42 +30,38 @@
       </el-table-column>
       <el-table-column
         sortable
-        prop="projectInfo.proName"
+        prop="entProjectInfo.proName"
         header-align="center"
         align="center"
         label="项目名称">
       </el-table-column>
       <el-table-column
-        prop="cooperationContent"
+        prop="entProjectCooperationInfo.cooperationContent"
         header-align="center"
         align="center"
         label="合作内容">
       </el-table-column>
       <el-table-column
-        prop="cooperationType"
+        prop="entProjectCooperationInfo.cooperationType"
         header-align="center"
         align="center"
         label="合作方式">
       </el-table-column>
       <el-table-column
-        prop="cooperationRequire"
+        prop="entProjectCooperationInfo.cooperationRequire"
         header-align="center"
         align="center"
         label="合作要求">
       </el-table-column>
       <el-table-column
         sortable
-        prop="inApply"
+        prop="entProjectCooperationInfo.inApply"
         header-align="center"
         align="center"
         label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>
-          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>
-          <el-tag v-if="scope.row.inApply === '2'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '4'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '5'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.entProjectCooperationInfo.inApply === '0'" size="small">审核中</el-tag>
+          <el-tag v-if="scope.row.entProjectCooperationInfo.inApply === '1'" size="small">已审核</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -115,7 +115,7 @@ export default {
       shenhe: false,
       relationDetails: false,
       hasType: 'userPerId',
-      hasApply: '2'
+      hasApply: '1'
     }
   },
   components: {
@@ -131,7 +131,7 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/project/cooperation/queryProject'),
+        url: this.$http.adornUrl('/enterprise/person/cooperation/queryMyApply'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,

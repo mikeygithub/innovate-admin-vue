@@ -29,7 +29,7 @@
         header-align="center"
         align="center"
         v-if="hasType == 'userPerId'"
-        label="合作申请人">
+        label="申请人">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">{{scope.row.sysUserEntity.name}}</el-button>
         </template>
@@ -39,7 +39,7 @@
         header-align="center"
         align="center"
         v-if="hasType == 'userTeacherId'"
-        label="合作申请人">
+        label="申请人">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">{{scope.row.sysUserEntity.name}}</el-button>
         </template>
@@ -49,7 +49,7 @@
         header-align="center"
         align="center"
         v-if="hasType == 'entInfoId'"
-        label="合作申请企业">
+        label="申请企业">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="getEntDetailsInfo(scope.row.entInfoId, scope.row.inApply)">{{scope.row.entName}}</el-button>
         </template>
@@ -58,15 +58,15 @@
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="400"
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
+          <el-button v-if="inApply == '2'" type="text" size="small" @click="consentHandle(scope.row)">同意申请</el-button>
+          <!--          <el-button v-if="inApply == '2'" type="text" size="small" @click="retreatHandle(scope.row)">拒绝</el-button>-->
           <el-button v-if="hasType == 'userPerId'" type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">详情</el-button>
           <el-button v-if="hasType == 'userTeacherId'" type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">详情</el-button>
           <el-button v-if="hasType == 'entInfoId'" type="text" size="small" @click="getEntDetailsInfo(scope.row.entInfoId, scope.row.inApply)">详情</el-button>
-<!--          <el-button v-if="true" type="text" size="small" @click="consentHandle(scope.row)">通过</el-button>-->
-<!--          <el-button v-if="true" type="text" size="small" @click="retreatHandle(scope.row)">不通过</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -119,8 +119,8 @@ export default {
       entDetails: false,
       teaDetails: false,
       stuDetails: false,
-      consenttip: '您确认要通过该审核吗？该操作不可撤回！',
-      retreattip: '您确认不通过该审核吗？该操作不可撤回！',
+      consenttip: '您确认要同意该合作申请吗？',
+      retreattip: '您确认要拒绝该合作申请吗？',
       shenhe: false,
       consentVisible: false,
       retreatVisible: false,
@@ -282,8 +282,8 @@ export default {
         url: this.$http.adornUrl('/enterprise/person/cooperation/update'),
         method: 'post',
         params: this.$http.adornParams({
-          'proCooperationId': this.item.proCooperationId,
-          'inApply': '0'
+          'proCooperationId': this.item.entPersonCooperationInfoEntity.proCooperationId,
+          'inApply': '1'
         }, false)
       }).then(({data}) => {
         this.$message({
@@ -291,8 +291,7 @@ export default {
           message: '提交成功!'
         })
         this.consentVisible = false
-        this.init(this.proInfoId, this.hasType, this.inApply)
-        this.changeType(this.hasType)
+        this.getDataList(this.hasType)
       })
     },
       // 审批不通过
@@ -301,8 +300,8 @@ export default {
         url: this.$http.adornUrl('/enterprise/person/cooperation/update'),
         method: 'post',
         params: this.$http.adornParams({
-          'proCooperationId': this.item.proCooperationId,
-          'inApply': '0'
+          'proCooperationId': this.item.entPersonCooperationInfoEntity.proCooperationId,
+          'inApply': '2'
         }, false)
       }).then(({data}) => {
         this.$message({
@@ -310,8 +309,7 @@ export default {
           message: '提交成功!'
         })
         this.retreatVisible = false
-        this.init(this.proInfoId, this.hasType, this.inApply)
-        this.changeType(this.hasType)
+        this.getDataList(this.hasType)
       })
     },
     // 多选
