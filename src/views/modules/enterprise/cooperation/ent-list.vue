@@ -135,7 +135,7 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/project/cooperation/queryProject'),
+        url: this.$http.adornUrl('/enterprise/project/cooperation/queryCooperationPage'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,

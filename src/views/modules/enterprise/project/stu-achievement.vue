@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" v-if="isAuth('enterprise:project:cooperation:save')" @click="addOrUpdateHandle(null, proInfoId)">发布合作</el-button>
+        <el-button type="primary" v-if="isAuth('enterprise:project:cooperation:save')" @click="addOrUpdateHandle(null, proInfoId)">发布成果</el-button>
         <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -100,7 +100,7 @@
 
 <script>
   import CooperationDetails from '../cooperation/cooperation-details'
-  import AddOrUpdate from './cooperation-add-or-update'
+  import AddOrUpdate from '../cooperation/cooperation-add-or-update'
   import RelationDetails from '../relation/relation-details'
   export default {
     data () {
@@ -118,7 +118,7 @@
         addOrUpdateVisible: false,
         shenhe: false,
         relationDetails: false,
-        hasType: 'userTeacherId',
+        hasType: 'userPerId',
         hasApply: '1'
       }
     },
@@ -135,7 +135,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/enterprise/project/cooperation/queryCooperationPage'),
+          url: this.$http.adornUrl('/enterprise/project/achievement/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,

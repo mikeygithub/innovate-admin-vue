@@ -6,14 +6,15 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" v-if="isAuth('enterprise:project:cooperation:save')" @click="addOrUpdateHandle(null, proInfoId)">发布合作</el-button>
+        <el-button type="primary" v-if="isAuth('enterprise:project:cooperation:save')" @click="addOrUpdateHandle(null, proInfoId)">新增</el-button>
         <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
-    <el-card>
-      <el-radio-group v-model="hasApply" @change="getDataList">
-        <el-radio label="1">已通过</el-radio>
-        <el-radio label="0">未通过</el-radio>
+    <el-card v-if="!isAuth('enterprise:project:info:save')">
+      <el-radio-group v-model="hasType" @change="getDataList">
+        <el-radio label="userPerId">学生</el-radio>
+        <el-radio label="userTeacherId">教师</el-radio>
+        <el-radio label="entInfoId">企业</el-radio>
       </el-radio-group>
     </el-card>
     <el-table
@@ -30,39 +31,28 @@
       </el-table-column>
       <el-table-column
         sortable
-        prop="entProjectInfo.proName"
+        prop="projectInfo.proName"
         header-align="center"
         align="center"
         label="项目名称">
       </el-table-column>
       <el-table-column
-        prop="entProjectCooperationInfo.cooperationContent"
+        prop="cooperationContent"
         header-align="center"
         align="center"
         label="合作内容">
       </el-table-column>
       <el-table-column
-        prop="entProjectCooperationInfo.cooperationType"
+        prop="cooperationType"
         header-align="center"
         align="center"
         label="合作方式">
       </el-table-column>
       <el-table-column
-        prop="entProjectCooperationInfo.cooperationRequire"
+        prop="cooperationRequire"
         header-align="center"
         align="center"
         label="合作要求">
-      </el-table-column>
-      <el-table-column
-        sortable
-        prop="entProjectCooperationInfo.inApply"
-        header-align="center"
-        align="center"
-        label="状态">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.entProjectCooperationInfo.inApply === '0'" size="small">审核中</el-tag>
-          <el-tag v-if="scope.row.entProjectCooperationInfo.inApply === '1'" size="small">已审核</el-tag>
-        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -73,7 +63,7 @@
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
-          <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
+          <el-button v-if="true" type="text" size="small" @click="successHandle(scope.row.proCooperationInfoId)">合作达成列表</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
       </el-table-column>
@@ -89,15 +79,15 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <cooperation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
-    <relation-details v-if="relationDetails" ref="relationDetails" @refreshDataList="getDetailsInfo()"/>
+    <relation-details v-if="shenhe" ref="relationDetails" @refreshDataList="getDetailsInfo()"/>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
 import CooperationDetails from '../cooperation/cooperation-details'
-import AddOrUpdate from './cooperation-add-or-update'
 import RelationDetails from '../relation/relation-details'
+import AddOrUpdate from './cooperation-add-or-update'
 export default {
   data () {
     return {
@@ -113,9 +103,8 @@ export default {
       dataListSelections: [],
       addOrUpdateVisible: false,
       shenhe: false,
-      relationDetails: false,
       hasType: 'userPerId',
-      hasApply: '1'
+      hasApply: '3'
     }
   },
   components: {
@@ -127,11 +116,11 @@ export default {
     this.getDataList()
   },
   methods: {
-      // 获取数据列表
+        // 获取数据列表
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/person/cooperation/queryMyApply'),
+        url: this.$http.adornUrl('/enterprise/project/cooperation/list'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
@@ -175,18 +164,18 @@ export default {
         this.$refs.addOrUpdate.selectProject()
       })
     },
-      // 合作列表详情
-    cooHandle (id) {
-      this.relationDetails = true
-      this.$nextTick(() => {
-        this.$refs.relationDetails.init(id, this.hasType, '1')
-      })
-    },
         // 详情
     detailHandle: function (id) {
       this.shenhe = true
       this.$nextTick(() => {
-        this.$refs.details.init(id, null)
+        this.$refs.details.init(id, this.hasType)
+      })
+    },
+    // 合作达成列表
+    successHandle (id) {
+      this.shenhe = true
+      this.$nextTick(() => {
+        this.$refs.relationDetails.init(id, this.hasType, '1')
       })
     },
         // 删除
@@ -200,7 +189,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/enterprise/entprojectcooperationinfo/delete'),
+          url: this.$http.adornUrl('/enterprise/project/cooperation/delete'),
           method: 'post',
           data: this.$http.adornData(ids, false)
         }).then(({data}) => {

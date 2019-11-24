@@ -383,6 +383,33 @@ export default {
             }
           })
         }
+        // 没有类型查合作信息
+        if (this.hasType == null) {
+          this.$http({
+            url: this.$http.adornUrl(`/enterprise/project/cooperation/infoNoType/${this.dataForm.proCooperationInfoId}`),
+            params: this.$http.adornParams()
+          }).then(({data}) => {
+            console.log(data)
+            if (data && data.code === 0) {
+              this.dataForm = data.data
+              this.perInfo = data.data.userPersonInfo
+              this.sysUser = data.data.sysUserEntity
+              this.entProjectAttachEntities = data.data.entProjectAttachEntities
+              this.project = data.data.projectInfo
+              this.TeacherInfo = data.data.userTeacherInfo
+              this.ent = data.data.entEnterpriseInfo
+              if (data.data.userPersonInfo != null) {
+                this.hasType = 'userPerId'
+              }
+              if (data.data.userTeacherInfo != null) {
+                this.hasType = 'userTeacherId'
+              }
+              if (data.data.entEnterpriseInfo != null) {
+                this.hasType = 'entInfoId'
+              }
+            }
+          })
+        }
       })
     },
     closeDialog () {

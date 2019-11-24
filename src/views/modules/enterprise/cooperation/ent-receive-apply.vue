@@ -6,15 +6,10 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" v-if="isAuth('enterprise:project:cooperation:save')" @click="addOrUpdateHandle(null, proInfoId)">发布合作</el-button>
         <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-card>
-      <el-radio-group v-model="hasApply" @change="getDataList">
-        <el-radio label="1">已通过</el-radio>
-        <el-radio label="0">未通过</el-radio>
-      </el-radio-group>
     </el-card>
     <el-table
       :data="dataList"
@@ -53,32 +48,29 @@
         align="center"
         label="合作要求">
       </el-table-column>
-      <el-table-column
-        sortable
-        prop="inApply"
-        header-align="center"
-        align="center"
-        label="状态">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>
-          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>
-          <el-tag v-if="scope.row.inApply === '2'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '4'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '5'" size="small">已提交</el-tag>
-        </template>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        sortable-->
+<!--        prop="inApply"-->
+<!--        header-align="center"-->
+<!--        align="center"-->
+<!--        label="状态">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>-->
+<!--          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>-->
+<!--          <el-tag v-if="scope.row.inApply === '2'" size="small">关系公开</el-tag>-->
+<!--          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="250"
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
-          <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
-          <el-button v-else type="text" size="small">无操作</el-button>
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">申请列表</el-button>
+          <el-button v-if="true" type="text" size="small" @click="entApplyHandle(scope.row.proCooperationInfoId)">结束申请</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -92,9 +84,22 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <cooperation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
-    <relation-details v-if="relationDetails" ref="relationDetails" @refreshDataList="getDetailsInfo()"/>
+    <relation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
+    <relation-details v-if="relationDetails" ref="relationDetails"/>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+
+    <!-- 结束申请按钮 -->
+    <el-dialog
+      title="审核提示"
+      :visible.sync="retreatVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>{{retreattip}}</span>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="retreatVisible = false">取 消</el-button>
+          <el-button type="primary" @click="entApply()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -109,6 +114,10 @@
           key: ''
         },
         dataList: [],
+        consenttip: '您确认要通过该审核吗？该操作不可撤回！',
+        retreattip: '您确认结束该合作的申请吗？该操作不可撤回！',
+        consentVisible: false,
+        retreatVisible: false,
         proInfoId: '',
         pageIndex: 1,
         pageSize: 10,
@@ -116,10 +125,11 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
+        proCooperationInfoId: '',
         shenhe: false,
         relationDetails: false,
-        hasType: 'userTeacherId',
-        hasApply: '1'
+        hasType: 'entInfoId',
+        hasApply: '2'
       }
     },
     components: {
@@ -135,7 +145,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/enterprise/project/cooperation/queryCooperationPage'),
+          url: this.$http.adornUrl('/enterprise/project/cooperation/queryProject'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -179,18 +189,34 @@
           this.$refs.addOrUpdate.selectProject()
         })
       },
-      // 合作列表详情
-      cooHandle (id) {
-        this.relationDetails = true
-        this.$nextTick(() => {
-          this.$refs.relationDetails.init(id, this.hasType, '1')
-        })
-      },
-      // 详情
-      detailHandle: function (id) {
+      // 申请列表
+      detailHandle (id) {
         this.shenhe = true
         this.$nextTick(() => {
-          this.$refs.details.init(id, this.hasType)
+          this.$refs.details.init(id, this.hasType, this.hasApply)
+        })
+      },
+      // 结束申请
+      entApplyHandle (id) {
+        this.retreatVisible = true
+        this.proCooperationInfoId = id
+      },
+      // 结束申请
+      entApply () {
+        this.$http({
+          url: this.$http.adornUrl('/enterprise/project/cooperation/entExamine'),
+          method: 'post',
+          params: this.$http.adornParams({
+            'proCooperationInfoId': this.proCooperationInfoId,
+            'inApply': '3'
+          }, false)
+        }).then(({data}) => {
+          this.$message({
+            type: 'success',
+            message: '提交成功!'
+          })
+          this.retreatVisible = false
+          this.getDataList()
         })
       },
       // 删除

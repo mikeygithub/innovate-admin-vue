@@ -30,42 +30,38 @@
       </el-table-column>
       <el-table-column
         sortable
-        prop="projectInfo.proName"
+        prop="entProjectInfo.proName"
         header-align="center"
         align="center"
         label="项目名称">
       </el-table-column>
       <el-table-column
-        prop="cooperationContent"
+        prop="entProjectCooperationInfo.cooperationContent"
         header-align="center"
         align="center"
         label="合作内容">
       </el-table-column>
       <el-table-column
-        prop="cooperationType"
+        prop="entProjectCooperationInfo.cooperationType"
         header-align="center"
         align="center"
         label="合作方式">
       </el-table-column>
       <el-table-column
-        prop="cooperationRequire"
+        prop="entProjectCooperationInfo.cooperationRequire"
         header-align="center"
         align="center"
         label="合作要求">
       </el-table-column>
       <el-table-column
         sortable
-        prop="inApply"
+        prop="entProjectCooperationInfo.inApply"
         header-align="center"
         align="center"
         label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>
-          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>
-          <el-tag v-if="scope.row.inApply === '2'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '4'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '5'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.entProjectCooperationInfo.inApply === '0'" size="small">审核中</el-tag>
+          <el-tag v-if="scope.row.entProjectCooperationInfo.inApply === '1'" size="small">已审核</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -99,130 +95,130 @@
 </template>
 
 <script>
-import CooperationDetails from '../cooperation/cooperation-details'
-import AddOrUpdate from './cooperation-add-or-update'
-import RelationDetails from '../relation/relation-details'
-export default {
-  data () {
-    return {
-      dataForm: {
-        key: ''
-      },
-      dataList: [],
-      proInfoId: '',
-      pageIndex: 1,
-      pageSize: 10,
-      totalPage: 0,
-      dataListLoading: false,
-      dataListSelections: [],
-      addOrUpdateVisible: false,
-      shenhe: false,
-      relationDetails: false,
-      hasType: 'entInfoId',
-      hasApply: '1'
-    }
-  },
-  components: {
-    CooperationDetails,
-    AddOrUpdate,
-    RelationDetails
-  },
-  activated () {
-    this.getDataList()
-  },
-  methods: {
+  import CooperationDetails from '../cooperation/cooperation-details'
+  import AddOrUpdate from './cooperation-add-or-update'
+  import RelationDetails from '../relation/relation-details'
+  export default {
+    data () {
+      return {
+        dataForm: {
+          key: ''
+        },
+        dataList: [],
+        proInfoId: '',
+        pageIndex: 1,
+        pageSize: 10,
+        totalPage: 0,
+        dataListLoading: false,
+        dataListSelections: [],
+        addOrUpdateVisible: false,
+        shenhe: false,
+        relationDetails: false,
+        hasType: 'entInfoId',
+        hasApply: '1'
+      }
+    },
+    components: {
+      CooperationDetails,
+      AddOrUpdate,
+      RelationDetails
+    },
+    activated () {
+      this.getDataList()
+    },
+    methods: {
       // 获取数据列表
-    getDataList () {
-      this.dataListLoading = true
-      this.$http({
-        url: this.$http.adornUrl('/enterprise/person/cooperation/queryMyApply'),
-        method: 'get',
-        params: this.$http.adornParams({
-          'page': this.pageIndex,
-          'limit': this.pageSize,
-          'key': this.dataForm.key,
-          'inApply': this.hasApply,
-          'inType': this.hasType
-        })
-      }).then(({data}) => {
-        console.log(data)
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
-        } else {
-          this.dataList = []
-          this.totalPage = 0
-        }
-        this.dataListLoading = false
-      })
-    },
-        // 每页数
-    sizeChangeHandle (val) {
-      this.pageSize = val
-      this.pageIndex = 1
-      this.getDataList()
-    },
-        // 当前页
-    currentChangeHandle (val) {
-      this.pageIndex = val
-      this.getDataList()
-    },
-        // 多选
-    selectionChangeHandle (val) {
-      this.dataListSelections = val
-    },
-        // 新增 / 修改
-    addOrUpdateHandle (id) {
-      this.addOrUpdateVisible = true
-      this.$nextTick(() => {
-        this.$refs.addOrUpdate.init(id)
-        this.$refs.addOrUpdate.selectProject()
-      })
-    },
-      // 合作列表详情
-    cooHandle (id) {
-      this.relationDetails = true
-      this.$nextTick(() => {
-        this.$refs.relationDetails.init(id, this.hasType, '1')
-      })
-    },
-        // 详情
-    detailHandle: function (id) {
-      this.shenhe = true
-      this.$nextTick(() => {
-        this.$refs.details.init(id, this.hasType)
-      })
-    },
-        // 删除
-    deleteHandle (id) {
-      var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.proCooperationInfoId
-      })
-      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+      getDataList () {
+        this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/enterprise/entprojectcooperationinfo/delete'),
-          method: 'post',
-          data: this.$http.adornData(ids, false)
+          url: this.$http.adornUrl('/enterprise/person/cooperation/queryMyApply'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'page': this.pageIndex,
+            'limit': this.pageSize,
+            'key': this.dataForm.key,
+            'inApply': this.hasApply,
+            'inType': this.hasType
+          })
         }).then(({data}) => {
+          console.log(data)
           if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
+            this.dataList = data.page.list
+            this.totalPage = data.page.totalCount
           } else {
-            this.$message.error(data.msg)
+            this.dataList = []
+            this.totalPage = 0
           }
+          this.dataListLoading = false
         })
-      })
+      },
+      // 每页数
+      sizeChangeHandle (val) {
+        this.pageSize = val
+        this.pageIndex = 1
+        this.getDataList()
+      },
+      // 当前页
+      currentChangeHandle (val) {
+        this.pageIndex = val
+        this.getDataList()
+      },
+      // 多选
+      selectionChangeHandle (val) {
+        this.dataListSelections = val
+      },
+      // 新增 / 修改
+      addOrUpdateHandle (id) {
+        this.addOrUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.selectProject()
+        })
+      },
+      // 合作列表详情
+      cooHandle (id) {
+        this.relationDetails = true
+        this.$nextTick(() => {
+          this.$refs.relationDetails.init(id, this.hasType, '1')
+        })
+      },
+      // 详情
+      detailHandle: function (id) {
+        this.shenhe = true
+        this.$nextTick(() => {
+          this.$refs.details.init(id, null)
+        })
+      },
+      // 删除
+      deleteHandle (id) {
+        var ids = id ? [id] : this.dataListSelections.map(item => {
+          return item.proCooperationInfoId
+        })
+        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/enterprise/entprojectcooperationinfo/delete'),
+            method: 'post',
+            data: this.$http.adornData(ids, false)
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        })
+      }
     }
   }
-}
 </script>
