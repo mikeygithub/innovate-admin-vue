@@ -30,42 +30,26 @@
       </el-table-column>
       <el-table-column
         sortable
-        prop="projectInfo.proName"
+        prop="proName"
         header-align="center"
         align="center"
         label="项目名称">
       </el-table-column>
       <el-table-column
-        prop="cooperationContent"
+        prop="entProjectAchievementInfo.proAchievementContent"
         header-align="center"
         align="center"
-        label="合作内容">
-      </el-table-column>
-      <el-table-column
-        prop="cooperationType"
-        header-align="center"
-        align="center"
-        label="合作方式">
-      </el-table-column>
-      <el-table-column
-        prop="cooperationRequire"
-        header-align="center"
-        align="center"
-        label="合作要求">
+        label="项目成果">
       </el-table-column>
       <el-table-column
         sortable
-        prop="inApply"
+        prop="entProjectAchievementInfo.inApply"
         header-align="center"
         align="center"
         label="状态">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>
-          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>
-          <el-tag v-if="scope.row.inApply === '2'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '4'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '5'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.entProjectAchievementInfo.inApply === '0'" size="small">审核中</el-tag>
+          <el-tag v-if="scope.row.entProjectAchievementInfo.inApply === '1'" size="small">已审核</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -76,7 +60,7 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
+          <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.entProjectAchievementInfo.proAchievementId)">详情</el-button>
           <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
         </template>
@@ -92,16 +76,16 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
-    <cooperation-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
-    <relation-details v-if="relationDetails" ref="relationDetails" @refreshDataList="getDetailsInfo()"/>
+    <achievement-add-or-updeta v-if="achievementVisible" ref="achievement"/>
+    <achievement-details v-if="shenhe" ref="details" @refreshDataList="getDetailsInfo()"/>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
-  import CooperationDetails from '../cooperation/cooperation-details'
   import AddOrUpdate from '../cooperation/cooperation-add-or-update'
-  import RelationDetails from '../relation/relation-details'
+  import AchievementAddOrUpdeta from './achievement-add-or-update'
+  import AchievementDetails from '../achievement/achievement-details'
   export default {
     data () {
       return {
@@ -109,6 +93,7 @@
           key: ''
         },
         dataList: [],
+        achievementVisible: '',
         proInfoId: '',
         pageIndex: 1,
         pageSize: 10,
@@ -123,9 +108,9 @@
       }
     },
     components: {
-      CooperationDetails,
       AddOrUpdate,
-      RelationDetails
+      AchievementAddOrUpdeta,
+      AchievementDetails
     },
     activated () {
       this.getDataList()
@@ -135,7 +120,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/enterprise/project/achievement/list'),
+          url: this.$http.adornUrl('/enterprise/project/achievement/queryMyList'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -173,10 +158,10 @@
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
-        this.addOrUpdateVisible = true
+        this.achievementVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
-          this.$refs.addOrUpdate.selectProject()
+          this.$refs.achievement.init(id)
+          this.$refs.achievement.selectProject()
         })
       },
       // 合作列表详情

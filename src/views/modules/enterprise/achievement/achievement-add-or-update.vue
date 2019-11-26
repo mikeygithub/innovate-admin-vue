@@ -15,21 +15,15 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="合作内容" prop="Cooperation.cooperationContent">
-        <el-input type="textarea" maxlength="400" :rows="5" v-model="dataForm.Cooperation.cooperationContent" placeholder="请输入"></el-input>
-      </el-form-item>
-      <el-form-item label="合作方式" prop="Cooperation.cooperationType">
-        <el-input v-model="dataForm.Cooperation.cooperationType" placeholder="请输入"></el-input>
-      </el-form-item>
-      <el-form-item label="合作要求" prop="Cooperation.cooperationRequire">
-        <el-input type="textarea" maxlength="400" :rows="5" v-model="dataForm.Cooperation.cooperationRequire" placeholder="请输入"></el-input>
+      <el-form-item label="项目成果" prop="proAchievementContent">
+        <el-input type="textarea" maxlength="400" :rows="5" v-model="entProjectAchievementInfo.proAchievementContent" placeholder="请输入"></el-input>
       </el-form-item>
     </el-form>
     <el-form label-width="10rem" style="width: 94%; margin: 0 auto">
       <el-form-item>
         <el-row>
           <el-col :span="10">
-            <span>合作附件</span>
+            <span>成果附件</span>
             <el-upload
               class="upload-demo"
               :action="url"
@@ -55,33 +49,18 @@ export default {
       visible: false,
       url: '',
       dataForm: {
-        Cooperation: {
-          proCooperationInfoId: 0,
-          proInfoId: '',
-          cooperationContent: '',
-          cooperationType: '',
-          cooperationRequire: '',
-          userPerId: '',
-          userTeacherId: '',
-          entInfoId: '',
-          inApply: ''
-        },
+        proAchievementId: '',
         attachments: []
+      },
+      entProjectAchievementInfo: {
+        proInfoId: '',
+        proAchievementContent: ''
       },
       options: null,
       value: '',
       dataRule: {
         proInfoId: [
                     { required: true, message: '项目信息外键不能为空', trigger: 'blur' }
-        ],
-        cooperationContent: [
-                    { required: true, message: '合作内容不能为空', trigger: 'blur' }
-        ],
-        cooperationType: [
-                    { required: true, message: '合作方式不能为空', trigger: 'blur' }
-        ],
-        cooperationRequire: [
-                    { required: true, message: '合作要求不能为空', trigger: 'blur' }
         ]
       }
     }
@@ -94,25 +73,17 @@ export default {
   },
   methods: {
     init (id) {
-      this.dataForm.proCooperationInfoId = id || 0
+      this.dataForm.proAchievementId = id || 0
       this.visible = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
-        if (this.dataForm.proCooperationInfoId) {
+        if (this.dataForm.proAchievementId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/project/cooperation/info/${this.dataForm.proCooperationInfoId}`),
+            url: this.$http.adornUrl(`/enterprise/project/achievement/info/${this.dataForm.proAchievementId}`),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.dataForm.proInfoId = data.entprojectcooperationinfo.proInfoId
-              this.dataForm.cooperationContent = data.entprojectcooperationinfo.cooperationContent
-              this.dataForm.cooperationType = data.entprojectcooperationinfo.cooperationType
-              this.dataForm.cooperationRequire = data.entprojectcooperationinfo.cooperationRequire
-              this.dataForm.userPerId = data.entprojectcooperationinfo.userPerId
-              this.dataForm.userTeacherId = data.entprojectcooperationinfo.userTeacherId
-              this.dataForm.entInfoId = data.entprojectcooperationinfo.entInfoId
-              this.dataForm.inApply = data.entprojectcooperationinfo.inApply
+              this.dataForm.proAchievementId = data.entProjectAchievementInfo.proAchievementId
             }
           })
         }
@@ -129,10 +100,9 @@ export default {
       // 查询用户对应项目信息
     selectProject () {
       this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
         if (!this.dataForm.proCooperationInfoId) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/project/info/queryPeojects`),
+            url: this.$http.adornUrl(`/enterprise/project/info/queryPeojectsByAchieve`),
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
@@ -150,26 +120,18 @@ export default {
       })
     },
     getProInfoId (proInfoId) {
-      this.dataForm.Cooperation.proInfoId = proInfoId
+      this.entProjectAchievementInfo.proInfoId = proInfoId
     },
         // 表单提交
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/enterprise/project/cooperation/${!this.dataForm.proCooperationInfoId ? 'save' : 'update'}`),
+            url: this.$http.adornUrl(`/enterprise/project/achievement/${!this.dataForm.proAchievementId ? 'save' : 'update'}`),
             method: 'post',
             data: this.$http.adornData({
-              'proCooperationInfoId': this.dataForm.proCooperationInfoId ? this.dataForm.proCooperationInfoId : undefined,
-              'Cooperation': this.dataForm.Cooperation,
-              'proInfoId': this.dataForm.Cooperation.proInfoId,
-              'cooperationContent': this.dataForm.Cooperation.cooperationContent,
-              'cooperationType': this.dataForm.Cooperation.cooperationType,
-              'cooperationRequire': this.dataForm.Cooperation.cooperationRequire,
-              'userPerId': this.dataForm.Cooperation.userPerId,
-              'userTeacherId': this.dataForm.Cooperation.userTeacherId,
-              'entInfoId': this.dataForm.Cooperation.entInfoId,
-              'inApply': this.dataForm.Cooperation.inApply,
+              'proAchievementId': this.dataForm.proAchievementId ? this.dataForm.proAchievementId : undefined,
+              'entProjectAchievementInfo': this.entProjectAchievementInfo,
               'attachments': this.dataForm.attachments
             })
           }).then(({data}) => {
