@@ -171,8 +171,8 @@
           <tr align='center'>
             <th colspan="1">在校期间担任学生职务情况</th>
             <td colspan="3"><span v-text="perInfo.perSchoolPost" align="center"></span></td>
-            <th colspan="1">身份证号码</th>
-            <td colspan="3"><span v-text="perInfo.perCardNo" align="center"></span></td>
+<!--            <th colspan="1">身份证号码</th>-->
+<!--            <td colspan="3"><span v-text="perInfo.perCardNo" align="center"></span></td>-->
           </tr>
           <tr align='center'>
             <th colspan="2">在校期间所获等级证书及技能证书</th>
@@ -276,7 +276,7 @@
           <th>职称</th>
           <th>邮箱</th>
           <th>联系电话</th>
-          <th>身份证号</th>
+<!--          <th>身份证号</th>-->
           <th>所在单位/二级学院</th>
         </tr>
         <template v-for="item in userTeacherInfoEntities">
@@ -289,7 +289,7 @@
             <td v-text="item.teacherTitle"></td>
             <td>{{item.sysUserEntity.email}}</td>
             <td>{{item.sysUserEntity.mobile}}</td>
-            <td v-text="item.teacherCardNo"></td>
+<!--            <td v-text="item.teacherCardNo"></td>-->
             <td v-for="institute in instituteList"
                 v-if="item.instituteId === institute.instituteId"
                 v-text="institute.instituteName">

@@ -48,9 +48,9 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="身份证号" prop="legalCardNo">
-        <el-input  v-model="dataForm.legalCardNo" placeholder="请输入"></el-input>
-      </el-form-item>
+<!--      <el-form-item label="身份证号" prop="legalCardNo">-->
+<!--        <el-input  v-model="dataForm.legalCardNo" placeholder="请输入"></el-input>-->
+<!--      </el-form-item>-->
       <el-form-item label="籍贯" prop="legalNative">
         <el-input v-model="dataForm.legalNative" placeholder="请输入"></el-input>
       </el-form-item>
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-  import { isMobile, isEmail, isIdNo } from '@/utils/validate'
+  import { isMobile, isEmail } from '@/utils/validate'
   export default {
     name: 'legal-add-or-update',
     data () {
@@ -103,13 +103,13 @@
           callback()
         }
       }
-      var validateIdNo = (rule, value, callback) => {
-        if (!isIdNo(value)) {
-          callback(new Error('请输入正确的身份证号'))
-        } else {
-          callback()
-        }
-      }
+      // var validateIdNo = (rule, value, callback) => {
+      //   if (!isIdNo(value)) {
+      //     callback(new Error('请输入正确的身份证号'))
+      //   } else {
+      //     callback()
+      //   }
+      // }
       return {
         visible: false,
         instituteList: this.$store.state.user.institute,
@@ -156,10 +156,10 @@
           legalFace: [
             { required: true, message: '政治面貌不能为空', trigger: 'blur' }
           ],
-          legalCardNo: [
-            { required: true, message: '身份证不能为空', trigger: 'blur' },
-            { validator: validateIdNo, trigger: 'blur' }
-          ],
+          // legalCardNo: [
+          //   { required: true, message: '身份证不能为空', trigger: 'blur' },
+          //   { validator: validateIdNo, trigger: 'blur' }
+          // ],
           legalNative: [
             { required: true, message: '籍贯不能为空', trigger: 'blur' }
           ],

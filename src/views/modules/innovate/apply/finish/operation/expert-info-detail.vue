@@ -59,14 +59,14 @@
             <th colspan="2">联系电话</th>
             <th colspan="2">职称</th>
             <th colspan="2">单位</th>
-            <th colspan="2">身份证号</th>
+<!--            <th colspan="2">身份证号</th>-->
           </tr>
           <tr v-for="item in innovateFinishExpertCollect.finishOutExpertEntities">
             <td align="center" colspan="2"><span v-text="item.expertName"></span></td>
             <td align="center" colspan="2"><span v-text="item.expertPhone"></span></td>
             <td align="center" colspan="2"><span v-text="item.expertTitles"></span></td>
             <td align="center" colspan="2"><span v-text="item.expertUnit"></span></td>
-            <td align="center" colspan="2"><span v-text="item.expertIdentity"></span></td>
+<!--            <td align="center" colspan="2"><span v-text="item.expertIdentity"></span></td>-->
           </tr>
         </table>
       </el-row>

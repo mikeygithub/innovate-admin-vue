@@ -62,7 +62,7 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
-          <el-button v-if="inApply == '2'" type="text" size="small" @click="consentHandle(scope.row)">同意申请</el-button>
+          <el-button v-if="inApply == '0'" type="text" size="small" @click="consentHandle(scope.row)">同意申请</el-button>
           <!--          <el-button v-if="inApply == '2'" type="text" size="small" @click="retreatHandle(scope.row)">拒绝</el-button>-->
           <el-button v-if="hasType == 'userPerId'" type="text" size="small" @click="getStuDetailsInfo(scope.row.userPerId)">详情</el-button>
           <el-button v-if="hasType == 'userTeacherId'" type="text" size="small" @click="getTeaDetailsInfo(scope.row.userTeacherId)">详情</el-button>

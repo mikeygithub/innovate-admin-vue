@@ -44,8 +44,8 @@
           <td><span v-text="dataForm.perClassNo" align="center"></span></td>
           <th>宿舍:</th>
           <td><span v-text="dataForm.perCormNo" align="center"></span></td>
-          <th>身份证号:</th>
-          <td colspan="2"><span v-text="dataForm.perCardNo" align="center"></span></td>
+<!--          <th>身份证号:</th>-->
+<!--          <td colspan="2"><span v-text="dataForm.perCardNo" align="center"></span></td>-->
         </tr>
 
         <tr>

@@ -96,8 +96,8 @@
           <td><span v-text="perInfo.perCormNo" align="center"></span></td>
           <th>个人电子邮箱</th>
           <td colspan="2"><span v-text="sysUser.email" align="center"></span></td>
-          <th colspan="1">身份证号码</th>
-          <td colspan="4"><span v-text="perInfo.perCardNo" align="center"></span></td>
+<!--          <th colspan="1">身份证号码</th>-->
+<!--          <td colspan="4"><span v-text="perInfo.perCardNo" align="center"></span></td>-->
         </tr>
         <tr align='center'>
           <th colspan="2">在校期间担任学生职务情况</th>
@@ -184,7 +184,9 @@
             <th>企业名称</th>
             <td colspan="2"><span v-text="ent.entName" align="center"></span></td>
             <th>是否高新区</th>
-            <td colspan="2"><span v-text="ent.newHighZones" align="center"></span></td>
+            <template v-for="newHigh in isNo">
+              <td v-if="ent.newHighZones === newHigh.value" v-text="newHigh.label"></td>
+            </template>
             <th colspan="2">入驻时间</th>
             <td colspan="2"><span v-text="ent.entInTime" align="center"></span></td>
           </tr>
@@ -309,6 +311,9 @@ export default {
       entProjectAttachEntities: [],
       sexList: [
         {value: 1, label: '男'}, {value: 2, label: '女'}
+      ],
+      isNo: [
+        {value: '1', label: '是'}, {value: '0', label: '否'}
       ],
       proTypeList: [
         {value: 1, label: '科研项目'},

@@ -57,9 +57,9 @@ export function isFloatNumber (s) {
  * 身份证号码
  * @param {*} s
  */
-export function isIdNo (s) {
-  return /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(s)
-}
+// export function isIdNo (s) {
+//   return /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(s)
+// }
 
 /**
  * 整数数字

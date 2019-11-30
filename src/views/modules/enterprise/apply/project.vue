@@ -2,15 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-date-picker
-          v-model="dataForm.matchTime"
-          align="right"
-          type="year"
-          placeholder="请选择年度">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.projectName" placeholder="项目名" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -150,6 +142,7 @@ export default {
       hasApply: '0',
       hasType: 'userPerId',
       dataForm: {
+        key: '',
         baseId: '',
         projectName: '',
         matchTime: new Date(),
@@ -211,6 +204,7 @@ export default {
         params: this.$http.adornParams({
           'currPage': this.pageIndex,
           'pageSize': this.pageSize,
+          'key': this.dataForm.key,
           'inApply': this.hasApply,
           'inType': this.hasType
         })

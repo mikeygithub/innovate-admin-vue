@@ -102,11 +102,11 @@
             <el-input  v-model="dataForm.perSchoolHonor"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="身份证号" prop="perCardNo">
-            <el-input  v-model="dataForm.perCardNo"></el-input>
-          </el-form-item>
-        </el-col>
+<!--        <el-col :span="24">-->
+<!--          <el-form-item label="身份证号" prop="perCardNo">-->
+<!--            <el-input  v-model="dataForm.perCardNo"></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
         <el-col :span="24">
           <el-form-item label="籍贯" prop="perNative">
             <el-input v-model="dataForm.perNative"></el-input>
@@ -129,7 +129,7 @@
 </template>
 
 <script>
-  import { isMobile, isEmail, isStuNum, isQQ, isIdNo } from '@/utils/validate'
+  import { isMobile, isEmail, isStuNum, isQQ } from '@/utils/validate'
   export default {
     name: 'student-add-or-update',
     data () {
@@ -161,13 +161,13 @@
           callback()
         }
       }
-      var validateIdNo = (rule, value, callback) => {
-        if (!isIdNo(value)) {
-          callback(new Error('请输入正确的身份证号'))
-        } else {
-          callback()
-        }
-      }
+      // var validateIdNo = (rule, value, callback) => {
+      //   if (!isIdNo(value)) {
+      //     callback(new Error('请输入正确的身份证号'))
+      //   } else {
+      //     callback()
+      //   }
+      // }
       return {
         visible: false,
         addLoading: false,
@@ -229,10 +229,10 @@
           gradeId: [
             { required: true, message: '年级不能为空', trigger: 'blur' }
           ],
-          perCardNo: [
-            { required: true, message: '身份证号不能为空', trigger: 'blur' },
-            { validator: validateIdNo, trigger: 'blur' }
-          ],
+          // perCardNo: [
+          //   { required: true, message: '身份证号不能为空', trigger: 'blur' },
+          //   { validator: validateIdNo, trigger: 'blur' }
+          // ],
           perClassNo: [
             { required: true, message: '班级不能为空', trigger: 'blur' }
           ],

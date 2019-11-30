@@ -118,8 +118,8 @@
             <td><span v-text="perInfo.perCormNo" align="center"></span></td>
             <th>个人电子邮箱</th>
             <td colspan="2"><span v-text="perInfo.sysUserEntity.email" align="center"></span></td>
-            <th colspan="1">身份证号码</th>
-            <td colspan="4"><span v-text="perInfo.perCardNo" align="center"></span></td>
+<!--            <th colspan="1">身份证号码</th>-->
+<!--            <td colspan="4"><span v-text="perInfo.perCardNo" align="center"></span></td>-->
           </tr>
           <tr align='center'>
             <th colspan="2">在校期间担任学生职务情况</th>

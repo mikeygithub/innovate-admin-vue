@@ -193,7 +193,7 @@
       detailHandle (id) {
         this.shenhe = true
         this.$nextTick(() => {
-          this.$refs.details.init(id, this.hasType, this.hasApply)
+          this.$refs.details.init(id, this.hasType, '0')
         })
       },
       // 结束申请

@@ -204,7 +204,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/enterprise/entprojectcooperationinfo/delete'),
+          url: this.$http.adornUrl('/enterprise/project/cooperation/delete'),
           method: 'post',
           data: this.$http.adornData(ids, false)
         }).then(({data}) => {

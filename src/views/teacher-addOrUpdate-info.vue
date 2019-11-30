@@ -53,9 +53,9 @@
       <el-form-item label="手机号" prop="sysUserEntity.mobile">
         <el-input  v-model="dataForm.sysUserEntity.mobile"></el-input>
       </el-form-item>
-      <el-form-item label="身份证号" prop="teacherCardNo">
-        <el-input  v-model="dataForm.teacherCardNo"></el-input>
-      </el-form-item>
+<!--      <el-form-item label="身份证号" prop="teacherCardNo">-->
+<!--        <el-input  v-model="dataForm.teacherCardNo"></el-input>-->
+<!--      </el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -65,17 +65,17 @@
 </template>
 
 <script>
-  import { isMobile, isEmail, isIdNo } from '@/utils/validate'
+  import { isMobile, isEmail } from '@/utils/validate'
   export default {
     name: 'teacher-add-or-update',
     data () {
-      var validateIdNo = (rule, value, callback) => {
-        if (!isIdNo(value)) {
-          callback(new Error('请输入正确的身份证号'))
-        } else {
-          callback()
-        }
-      }
+      // var validateIdNo = (rule, value, callback) => {
+      //   if (!isIdNo(value)) {
+      //     callback(new Error('请输入正确的身份证号'))
+      //   } else {
+      //     callback()
+      //   }
+      // }
       var validateEmail = (rule, value, callback) => {
         if (!isEmail(value)) {
           callback(new Error('邮箱格式错误'))
@@ -132,10 +132,10 @@
           'sysUserEntity.instituteId': [
             { required: true, message: '学院不能为空', trigger: 'blur' }
           ],
-          teacherCardNo: [
-            { required: true, message: '不能为空', trigger: 'blur' },
-            { validator: validateIdNo, trigger: 'blur' }
-          ],
+          // teacherCardNo: [
+          //   { required: true, message: '不能为空', trigger: 'blur' },
+          //   { validator: validateIdNo, trigger: 'blur' }
+          // ],
           teacherSex: [
             { required: true, message: '不能为空', trigger: 'blur' }
           ],

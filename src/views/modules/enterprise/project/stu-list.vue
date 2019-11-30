@@ -2,7 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.projectName" placeholder="项目名" clearable></el-input>
+        <el-input v-model="dataForm.key" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -129,6 +129,7 @@ export default {
       hasApply: '1',
       hasType: 'userPerId',
       dataForm: {
+        key: '',
         baseId: '',
         projectName: '',
         matchTime: new Date(),
@@ -169,11 +170,12 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/enterprise/project/info/list'),
+        url: this.$http.adornUrl('/enterprise/project/info/queryListByUserId'),
         method: 'get',
         params: this.$http.adornParams({
           'currPage': this.pageIndex,
           'pageSize': this.pageSize,
+          'key': this.dataForm.key,
           'inApply': this.hasApply,
           'inType': this.hasType
         })
@@ -220,12 +222,11 @@ export default {
         this.$refs.addOrUpdate.init(id)
       })
     },
-        // 删除
     deleteHandle (id) {
       var canDelete = true
       var matchIds = id ? [id] : this.dataListSelections.map(item => {
         if ((item.projectInfoEntity.projectMatchApplyStatus > 0) ||
-                    !this.isAuth('innovate:match:delete')) {
+          !this.isAuth('enterprise:project:info:delete')) {
           canDelete = false
         } else {
           canDelete = false
@@ -239,7 +240,7 @@ export default {
       }).then(() => {
         if (canDelete) {
           this.$http({
-            url: this.$http.adornUrl('/innovate/match/info/delete'),
+            url: this.$http.adornUrl('/enterprise/project/info/delete'),
             method: 'post',
             data: this.$http.adornData(matchIds, false)
           }).then(({data}) => {

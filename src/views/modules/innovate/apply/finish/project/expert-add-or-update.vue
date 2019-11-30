@@ -18,9 +18,9 @@
       <el-form-item label="联系电话" prop="expertPhone">
         <el-input v-model="dataForm.expertPhone" placeholder="联系电话"></el-input>
       </el-form-item>
-      <el-form-item label="身份证" prop="expertIdentity">
-        <el-input v-model="dataForm.expertIdentity" placeholder="身份证"></el-input>
-      </el-form-item>
+<!--      <el-form-item label="身份证" prop="expertIdentity">-->
+<!--        <el-input v-model="dataForm.expertIdentity" placeholder="身份证"></el-input>-->
+<!--      </el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -68,10 +68,10 @@
           expertPhone: [
             { required: true, message: '联系电话不能为空', trigger: 'blur' },
             {validator: validateMobile, trigger: 'blur'}
-          ],
-          expertIdentity: [
-            { required: true, message: '身份证不能为空', trigger: 'blur' }
           ]
+          // expertIdentity: [
+          //   { required: true, message: '身份证不能为空', trigger: 'blur' }
+          // ]
 
         }
       }

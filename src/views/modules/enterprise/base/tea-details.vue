@@ -35,8 +35,8 @@
           <td><span v-text="dataForm.teacherBackground" align="center"></span></td>
           <th>学位:</th>
           <td><span v-text="dataForm.teacherDegree" align="center"></span></td>
-          <th>身份证号:</th>
-          <td><span v-text="dataForm.gradeId" align="center"></span></td>
+<!--          <th>身份证号:</th>-->
+<!--          <td><span v-text="dataForm.gradeId" align="center"></span></td>-->
         </tr>
 
         <tr>
