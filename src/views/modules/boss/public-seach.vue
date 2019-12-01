@@ -25,7 +25,7 @@
               </div>
             </div>
           </div>
-          <input name="keywords" style="width: 750px;" v-model="form.keywords" class="app-finput" type="text" :placeholder="form.placeholder">
+          <input name="keywords" style="width: 660px;" v-model="form.keywords" class="app-finput" type="text" :placeholder="form.placeholder">
           <input class="app-seach" :type="form.type" :value="form.submit">
         </div>
       </div>

@@ -11,7 +11,9 @@
         <!-- 左边 -->
         <div class="top-left s">
           <h4>{{result.proName}}</h4>
-          <p>项目类型:{{result.proType}} - 项目来源:{{result.proOrigin}} - 项目经费:{{result.proutlay}}</p>
+          <p>项目类型:{{result.proType}}</p>
+          <p>项目来源:{{result.proOrigin}}</p>
+          <p>项目经费:{{result.proOutlay}}</p>
         </div>
         <!-- 右边 -->
         <div class="top-right s">

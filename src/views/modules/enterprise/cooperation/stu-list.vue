@@ -61,11 +61,9 @@
         label="状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.inApply === '0'" size="small">审核中</el-tag>
-          <el-tag v-if="scope.row.inApply === '1'" size="small">已审核</el-tag>
-          <el-tag v-if="scope.row.inApply === '2'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '3'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '4'" size="small">已提交</el-tag>
-          <el-tag v-if="scope.row.inApply === '5'" size="small">已提交</el-tag>
+          <el-tag v-if="scope.row.inApply === '1'" size="small">报名中</el-tag>
+          <el-tag v-if="scope.row.inApply === '2'" size="small">已达成关系</el-tag>
+          <el-tag v-if="scope.row.inApply === '3'" size="small">已达成合作</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -76,6 +74,7 @@
         label="操作">
         <template slot-scope="scope">
           <!-- isAuth('enterprise:info:shenhe') -->
+          <el-button v-if="scope.row.inApply === '2'" type="text" size="small" @click="relationDetail(scope.row.proCooperationInfoId)">申请列表</el-button>
           <el-button v-if="true" type="text" size="small" @click="detailHandle(scope.row.proCooperationInfoId)">详情</el-button>
           <el-button v-if="true" type="text" size="small"  @click="deleteHandle(scope.row.proCooperationInfoId)">删除</el-button>
           <el-button v-else type="text" size="small">无操作</el-button>
@@ -191,6 +190,13 @@ export default {
       this.shenhe = true
       this.$nextTick(() => {
         this.$refs.details.init(id, this.hasType)
+      })
+    },
+    // 申请列表
+    relationDetail (id) {
+      this.relationDetails = true
+      this.$nextTick(() => {
+        this.$refs.relationDetails.init(id, this.hasType, '0')
       })
     },
         // 删除

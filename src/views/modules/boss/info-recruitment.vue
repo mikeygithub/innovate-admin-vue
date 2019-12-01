@@ -62,7 +62,8 @@
         more: {name: '查看更多', url: '#'},
         pageIndex: 1,
         pageSize: 12,
-        hasApply: '1'
+        hasApply: '1',
+        proType: 0
       }
     },
     components: {
@@ -93,7 +94,7 @@
         }
       },
       getPeojectInfos (proType) {
-        let nu = parseInt(proType) + 1
+        this.proType = proType
         this.$http({
           url: this.$http.adornUrl('/webpage/projectInfos'),
           method: 'get',
@@ -101,7 +102,7 @@
             'currPage': this.pageIndex,
             'pageSize': this.pageSize,
             'inApply': this.hasApply,
-            'proType': nu
+            'proType': this.proType
           })
         }).then(({data}) => {
           console.log(data)

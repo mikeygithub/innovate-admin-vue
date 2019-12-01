@@ -50,22 +50,18 @@
         address: {
           title: '联系创新创业学院',
           list: [{name: '梧州学院创新创业学院', url: '#', target: '_blank'}, {name: '地址:梧州市万秀区梧州学院发展中心负一楼', url: '#', target: '_blank'},
-            {name: '联系电话:010-88888888', url: '#', target: '_blank'}, {name: '违法和不良信息举报邮箱:gxuwz@cxcy.com', url: '#', target: '_blank'}]
+            {name: '邮政编码：543000', url: '#', target: '_blank'}, {name: '联系邮箱：www.wzxycxcyjy@163.com', url: '#', target: '_blank'}]
         },
         link: {
           title: '梧州学院校企合作网',
-          list: [{name: '企业服务热线和举报投诉 400 065 5799'}, {name: '工作日 8:00 - 22:00'}, {name: '休息日 9:30 - 18:30'}]
+          list: [{name: '工作日 8:00 - 22:00'}, {name: '休息日 9:30 - 18:30'}]
         },
         copyright: {
-          copyright: 'Copyright &copyright; 2019 梧州学院校企合作网',
+          copyright: '版权所有©梧州学院',
           // eslint-disable-next-line standard/object-curly-even-spacing
-          beian: '桂ICP备14013441号-5桂ICP证888888号',
+          beian: '桂ICP备05000941号',
           // eslint-disable-next-line standard/object-curly-even-spacing
-          zhizhao: { name: '电子营业执照', url: '#', target: '_blank'},
-          // eslint-disable-next-line standard/object-curly-even-spacing
-          gonganju: { name: '桂公网安备88888888888888', url: '#', target: '_blank'},
-          // eslint-disable-next-line standard/object-curly-even-spacing
-          alams: { name: '首都报警', url: '#', target: '_blank'}
+          gonganju: { name: '桂公网安备 45040302000045号', url: '#', target: '_blank'}
         }
       }
     }

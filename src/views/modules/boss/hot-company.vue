@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="app-wrap" v-if="!hide">
     <div class="app-w app-qy mar-t30">
       <h3 class="text-not-wrap" v-if="menu">
