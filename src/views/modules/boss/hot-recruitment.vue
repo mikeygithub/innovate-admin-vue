@@ -10,10 +10,10 @@
         <!-- 列表项 -->
         <ul class="show clearfix">
           <!-- 子项 -->
-          <li v-if="datas" v-for="(item, index) in datas.list" :key="index">
-            <a href="#" target="_blink">
+          <li v-if="datas" v-for="(item, index) in datas.imgList" :key="index">
+            <a :href="item.href" target="_blink">
               <div class="hot-bg"></div>
-              <img :src="item" alt="">
+              <img :src="item.src" alt="">
             </a>
           </li>
         </ul>
@@ -23,38 +23,27 @@
 </template>
 
 <script>
-  import CityImg from '@/assets/img/city_101010100.png'
   // 城市热招
   export default {
     props: {hide: Boolean},
     data () {
       return {
         datas: {
-          title: '创新创业教育相关连接',
-          list: [
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg,
-            CityImg]
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png',
-            // '/src/assets/img/city_101010100.png']
+          title: '梧州学院 | 双创成果',
+          imgList: [
+            {src: '/src/assets/img/city/city1.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1005/1551.htm'},
+            {src: '/src/assets/img/city/city2.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1090/1193.htm'},
+            {src: '/src/assets/img/city/city3.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1091/1663.htm'},
+            {src: '/src/assets/img/city/city4.jpeg', href: 'http://cxcy.gxuwz.edu.cn/info/1091/1623.htm'},
+            {src: '/src/assets/img/city/city5.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1091/1623.htm'},
+            {src: '/src/assets/img/city/city6.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1091/1622.htm'},
+            {src: '/src/assets/img/city/city7.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1091/1622.htm'},
+            {src: '/src/assets/img/city/city8.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1091/1621.htm'},
+            {src: '/src/assets/img/city/city9.png', href: 'http://cxcy.gxuwz.edu.cn/info/1005/1502.htm'},
+            {src: '/src/assets/img/city/city10.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1005/1240.htm'},
+            {src: '/src/assets/img/city/city11.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1005/1203.htm'},
+            {src: '/src/assets/img/city/city12.jpg', href: 'http://cxcy.gxuwz.edu.cn/info/1005/1190.htm'}
+          ]
         }
       }
     }
