@@ -11,9 +11,19 @@
         <!-- 左边 -->
         <div class="top-left s">
           <h4>{{result.proName}}</h4>
-          <p>项目类型:{{result.proType}}</p>
-          <p>项目来源:{{result.proOrigin}}</p>
-          <p>项目经费:{{result.proOutlay}}</p>
+<!--          <div>-->
+<!--            <tr align='center' style="height: 2.5rem">-->
+<!--              <th colspan="2">项目类型</th>-->
+<!--              <td colspan="3" v-for="item in proTypeList"-->
+<!--                  :key="item.value"-->
+<!--                  v-if="item.value === this.result.proType">-->
+<!--                <span v-text="item.label" align="center"></span>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          </div>-->
+          <div>项目类型:{{result.proType}}</div>
+          <div>项目来源:{{result.proOrigin}}</div>
+          <div>项目经费:{{result.proOutlay}}</div>
         </div>
         <!-- 右边 -->
         <div class="top-right s">
@@ -40,7 +50,15 @@
         loading: true,
         visible: false,
         proInfoId: 0,
-        result: null
+        result: null,
+        proTypeList: [
+          {value: 1, label: '科研项目'},
+          {value: 2, label: '横向项目'},
+          {value: 3, label: '企业项目'},
+          {value: 4, label: '大创项目'},
+          {value: 5, label: '企业招聘'},
+          {value: 6, label: '实习项目对接'}
+        ]
       }
     },
     methods: {
@@ -76,6 +94,24 @@
           this.loading = false
           if (data && data.code === 0) {
             this.result = data.data
+            if (this.result.proType === 1) {
+              this.result.proType = '科研项目'
+            }
+            if (this.result.proType === 2) {
+              this.result.proType = '横向项目'
+            }
+            if (this.result.proType === 3) {
+              this.result.proType = '企业项目'
+            }
+            if (this.result.proType === 4) {
+              this.result.proType = '大创项目'
+            }
+            if (this.result.proType === 5) {
+              this.result.proType = '企业招聘'
+            }
+            if (this.result.proType === 6) {
+              this.result.proType = '实习项目对接'
+            }
           }
         })
       }

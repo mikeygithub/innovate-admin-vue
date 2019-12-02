@@ -159,8 +159,8 @@ export default {
         url: this.$http.adornUrl('/enterprise/project/info/list'),
         method: 'get',
         params: this.$http.adornParams({
-          'currPage': this.pageIndex,
-          'pageSize': this.pageSize,
+          'page': this.pageIndex,
+          'limit': this.pageSize,
           'key': this.dataForm.key,
           'inApply': this.hasApply,
           'inType': this.hasType

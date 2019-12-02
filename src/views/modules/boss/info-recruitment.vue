@@ -99,13 +99,12 @@
           url: this.$http.adornUrl('/webpage/projectInfos'),
           method: 'get',
           params: this.$http.adornParams({
-            'currPage': this.pageIndex,
-            'pageSize': this.pageSize,
+            'page': this.pageIndex,
+            'limit': this.pageSize,
             'inApply': this.hasApply,
             'proType': this.proType
           })
         }).then(({data}) => {
-          console.log(data)
           if (data.code === 500) {
             this.$message.error(data.msg)
           } else {
@@ -116,7 +115,6 @@
                 result.push(that.invokeDatas(item))
               })
               this.list = result
-              console.log('list', this.list)
             }
           }
         })

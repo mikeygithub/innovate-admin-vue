@@ -26,15 +26,15 @@
             <h3 class="gg-title">最新项目发布</h3>
             <div class="gg-content" style="height: 280px">
               <ul class="gg-pc" :style="'margin-top:' + -top + 'px'">
-                <li class="gg-pro" v-for="i in da">
+                <li class="gg-pro" v-for="item in da">
                   <p class="gg-textl">
-                    <a href="#" class="gg-text">创新区块链项目</a>
+                    <a href="#" class="gg-text">{{item.data.proName}}</a>
                   </p>
                   <p class="gg-textl">
-                    <span class="gg-text">来源灵感</span>&nbsp;<span class="gg-text">|</span>
-                    <span class="gg-text">上个大学一个APP还不够</span>
+                    <span class="gg-text">{{item.data.proOrigin}}</span>&nbsp;<span class="gg-text">|</span>
+                    <span class="gg-text">{{item.data.proIntroduce}}</span>
                   </p>
-                  <p class="gg-textl">
+                  <p class="gg-textl" v-on:click="joinProject(item.data.proInfoId)">
                     <span class="gg-text">点击查看项目</span>
                   </p>
                 </li>
@@ -44,9 +44,12 @@
         </div>
       </div>
     </div>
+    <!-- 详情 -->
+    <project-join v-if="xiangqing" ref="pj"/>
   </div>
 </template>
 <script>
+  import ProjectJoin from './project-join'
   import Image01 from '@/assets/img/1.jpg'
   import Image02 from '@/assets/img/2.jpg'
   import Image03 from '@/assets/img/3.jpg'
@@ -56,18 +59,73 @@
     props: { hide: Boolean },
     data () {
       return {
+        pageIndex: 1,
+        pageSize: 12,
+        hasApply: '1',
+        xiangqing: false,
+        proType: 0,
         top: 0,
         stepN: 1,
         height: 125,
         max: 0,
-        da: [1, 2, 3, 1, 2, 3],
+        da: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         left: [{url: '#', target: '_blank', src: Image01}, {url: '#', target: '_blank', src: Image02}, {url: '#', target: '_blank', src: Image03}]
       }
     },
+    components: {
+      ProjectJoin
+    },
     mounted () {
       this.scrollTip()
+      this.getPeojectInfos()
     },
     methods: {
+      // 加入项目详情
+      joinProject: function (id) {
+        if (!this.$cookie.get('token')) {
+          this.$message.warning('您还未登入,不能查看加入项目')
+          return
+        }
+        this.xiangqing = true
+        this.$nextTick(() => {
+          this.$refs.pj.init('加入项目详情', id)
+        })
+      },
+      getPeojectInfos () {
+        this.$http({
+          url: this.$http.adornUrl('/webpage/newProjectInfos'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'page': this.pageIndex,
+            'limit': this.pageSize,
+            'inApply': this.hasApply,
+            'proType': this.proType
+          })
+        }).then(({data}) => {
+          console.log(data)
+          if (data.code === 500) {
+            this.$message.error(data.msg)
+          } else {
+            if (data.data) {
+              let that = this
+              const result = []
+              data.data.records && data.data.records.forEach(function (item, index, arr) {
+                result.push(that.invokeDatas(item))
+              })
+              this.da = result
+              console.log(this.da)
+            }
+          }
+        })
+      },
+      // 处理数据格式
+      invokeDatas (data) {
+        return {
+          url: '#',
+          target: '_blank',
+          data: data
+        }
+      },
       scrollTip () {
         this.da.concat(this.da)
         this.max = this.height * (this.da.length / 2 - 1)
