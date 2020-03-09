@@ -90,6 +90,7 @@
               :on-remove="fileRemoveHandler"
               :file-list="fileList">
               <el-button size="small" type="primary">点击上传</el-button>
+              <span v-if="fileIsNull" style="color: crimson">*请上传相关附件</span>
             </el-upload>
           </el-form-item>
         </el-col>
@@ -146,6 +147,7 @@
         upLoadUrl: '',
         upLoadData: {},
         fileAskContent: '无',
+        fileIsNull: false,
         tables: [],
         fileList: [],
         teacherLists: [],
@@ -172,8 +174,8 @@
         statusList: [{value: 1, label: '是'}, {value: 2, label: '否'}],
         finishTypeList: [
           {value: 1, label: '创新训练项目'},
-          {value: 2, label: '创业训练项目'},
-          {value: 3, label: '创业实践项目'}
+          {value: 2, label: '创业训练项目'}
+          // {value: 3, label: '创业实践项目'}
         ],
         dataForm: {
           finishId: '',
@@ -284,6 +286,10 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           this.dataForm.finishId = this.dataForm.finishId || undefined
+          if (this.attachLists.length < 1) {
+            this.fileIsNull = true
+            return
+          }
           if (valid) {
             if (this.dataForm.finishId) {
               this.dataForm.projectSetDate = Number(this.dataForm.projectSetDate)
@@ -465,6 +471,7 @@
       successHandle1 (response, file, fileList) {
         if (response && response.code === 0) {
           this.attachLists.push(response.finishAttachEntity)
+          this.fileIsNull = false
         } else {
           this.$message.error(response.msg)
         }

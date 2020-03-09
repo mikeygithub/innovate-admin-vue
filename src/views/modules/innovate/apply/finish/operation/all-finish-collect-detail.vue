@@ -25,33 +25,33 @@
         </tr>
         <tr align='center' v-if="">
           <th>序号</th>
-          <th colspan="1">申报名称</th>
+          <th colspan="5">申报名称</th>
           <th colspan="2">项目负责人姓名</th>
           <th colspan="2">项目负责人学号</th>
           <th colspan="2">申报类型</th>
           <th colspan="2">申报时间</th>
-          <th colspan="2">参与学生人数</th>
-          <th colspan="3">项目其他成员信息</th>
+          <!--<th colspan="2">参与学生人数</th>-->
+          <!--<th colspan="3">项目其他成员信息</th>-->
           <!--李四/112583030116,王五/112583030114  -->
           <th colspan="2">指导老师姓名</th>
           <th colspan="2">指导教师职称</th>
           <!--<td>平均分</td>-->
-          <td>学院</td>
+          <td colspan="2">学院</td>
         </tr>
 
         <template>
           <tr align='center' v-if="finishInfoList.length === 0">
             <td>暂无数据</td>
-            <td colspan="1">暂无数据</td>
+            <td colspan="65">暂无数据</td>
             <td colspan="2">暂无数据</td>
             <td colspan="2">暂无数据</td>
             <td colspan="2">暂无数据</td>
             <td colspan="2">暂无数据</td>
+            <!--<td colspan="2">暂无数据</td>-->
+            <!--<td colspan="3">暂无数据</td>-->
             <td colspan="2">暂无数据</td>
-            <td colspan="3">暂无数据</td>
             <td colspan="2">暂无数据</td>
             <td colspan="2">暂无数据</td>
-            <td>暂无数据</td>
           </tr>
         </template>
         <template>
@@ -59,7 +59,7 @@
               <!--v-if="item.finishInfoEntity.projectFinishApplyStatus !==0 && item.finishInfoEntity.finishNoPass === 0">-->
             <!--TODO:整改-->
             <td v-text="index+1"></td>
-            <td colspan="1" v-text="item.finishInfoEntity.finishName"></td>
+            <td colspan="5" v-text="item.finishInfoEntity.finishName"></td>
             <td colspan="2">
                 <span v-for="user in item.userPersonInfoEntities" >
                   <span v-text="user.sysUserEntity.name"></span>
@@ -76,10 +76,10 @@
             <td colspan="2">
               <span v-text="item.finishInfoEntity.finishTime"></span>
             </td>
-            <td colspan="2" v-text="item.finishStaffInfoEntities.length+1"></td>
-            <td colspan="3">
-              <span v-for="staff in item.finishStaffInfoEntities" v-text="staff.staffName+'/'+staff.staffStuNo+','" align="center"></span>
-            </td>
+            <!--<td colspan="2" v-text="item.finishStaffInfoEntities.length+1"></td>-->
+            <!--<td colspan="3">-->
+              <!--<span v-for="staff in item.finishStaffInfoEntities" v-text="staff.staffName+'/'+staff.staffStuNo+','" align="center"></span>-->
+            <!--</td>-->
             <td colspan="2">
                 <span v-for="teacher in userTeacherInfoEntities">
                   <span v-for="teacher2 in item.finishTeacherEntities"
@@ -96,7 +96,7 @@
                   </span>
                 </span>
             </td>
-          <td>
+          <td colspan="2">
             <!--<span v-text="item.finishInfoEntity.finishScoreAvg"></span>-->
             <!--二级学院-->
             <!--<span :key="index" v-for="inst in instituteList" v-if="item.userPersonInfoEntities[0].sysUserEntity.instituteId === inst.instituteId" v-text="inst.instituteName"></span>          </td>-->

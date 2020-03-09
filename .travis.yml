@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+- 10.16.0
+branches:
+  only:
+  - master
+install:
+- npm install
+script:
+- npm run build
+addons:
+  ssh_known_hosts:
+  - "$SERVER_IP"
+after_success:
+- chmod 600 ~/.ssh/id_rsa
+- rsync -az --delete ./dist/* root@$SERVER_IP:/usr/share/nginx/innovate-admin-vue
+before_install:
+- openssl aes-256-cbc -K $encrypted_05b1fa602022_key -iv $encrypted_05b1fa602022_iv
+  -in id_rsa.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+- echo -e "Host $SERVER_IP\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config

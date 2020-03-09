@@ -51,7 +51,6 @@
         prop="finishInfoEntity.finishName"
         header-align="center"
         align="center"
-        width="250"
         label="申报名称">
       </el-table-column>
       <el-table-column
@@ -72,27 +71,28 @@
         prop="finishInfoEntity.finishType"
         header-align="center"
         align="center"
+        width="100"
         label="类型">
         <template slot-scope="scope">
           <span v-for="temp in finishTypeList" v-if="temp.value === scope.row.finishInfoEntity.finishType" v-text="temp.label"></span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="finishStaffInfoEntities.length"
-        header-align="center"
-        align="center"
-        width="60"
-        label="学生人数">
-      </el-table-column>
-      <el-table-column
-        prop="finishStaffInfoEntities"
-        header-align="center"
-        align="center"
-        label="成员信息">
-        <template slot="" slot-scope="scope">
-          <span v-for="stu in scope.row.finishStaffInfoEntities" v-text="stu.staffName+' '"></span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="finishStaffInfoEntities.length"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--width="60"-->
+        <!--label="学生人数">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+        <!--prop="finishStaffInfoEntities"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="成员信息">-->
+        <!--<template slot="" slot-scope="scope">-->
+          <!--<span v-for="stu in scope.row.finishStaffInfoEntities" v-text="stu.staffName+' '"></span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="finishUserTeacherInfoEntities"
         header-align="center"
@@ -128,7 +128,7 @@
         prop="finishInfoEntity.finishScoreAvg"
         header-align="center"
         align="center"
-        width="180"
+        width="200"
         label="学院">
         <template slot-scope="scope">
           <!--<el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg === null || scope.row.finishInfoEntity.finishScoreAvg === ''">未评分</el-tag>-->

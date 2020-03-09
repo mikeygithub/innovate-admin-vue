@@ -5,7 +5,6 @@
         <el-select v-model="dataForm.instituteId" placeholder="请选择二级学院" disabled="">
           <el-option
             @change="getDataList"
-            :editable="false"
             v-for="inst in instituteList"
             :key="inst.instituteName"
             :label="inst.instituteName"
@@ -17,10 +16,10 @@
         <el-date-picker
           @change="getDataList"
           v-model="dataForm.finishTime"
-          editable="false"
+          :editable="false"
           align="right"
           type="year"
-          clearable="false"
+          :clearable="false"
           placeholder="请选择年度">
         </el-date-picker>
         <!--年度 end-->
@@ -75,22 +74,22 @@
           <span v-for="temp in finishTypeList" v-if="temp.value === scope.row.finishInfoEntity.finishType" v-text="temp.label"></span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="finishStaffInfoEntities.length"
-        header-align="center"
-        align="center"
-        width="60"
-        label="学生人数">
-      </el-table-column>
-      <el-table-column
-        prop="finishStaffInfoEntities"
-        header-align="center"
-        align="center"
-        label="成员信息">
-        <template slot="" slot-scope="scope">
-          <span v-for="stu in scope.row.finishStaffInfoEntities" v-text="stu.staffName+' '"></span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="finishStaffInfoEntities.length"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--width="60"-->
+        <!--label="学生人数">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+        <!--prop="finishStaffInfoEntities"-->
+        <!--header-align="center"-->
+        <!--align="center"-->
+        <!--label="成员信息">-->
+        <!--<template slot="" slot-scope="scope">-->
+          <!--<span v-for="stu in scope.row.finishStaffInfoEntities" v-text="stu.staffName+' '"></span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="finishUserTeacherInfoEntities"
         header-align="center"
@@ -123,11 +122,15 @@
         <!--</template>-->
       <!--</el-table-column>-->
       <el-table-column
-        prop="finishInfoEntity.finishScoreAvg"
         header-align="center"
         align="center"
-        width="80"
-        label="平均分">
+        width="180"
+        label="学院">
+        <template slot-scope="scope">
+          <span v-if="scope.row.userPersonInfoEntities!==null&&scope.row.userPersonInfoEntities.length!==0"  v-for="inst in instituteList">
+              <span v-if="scope.row.userPersonInfoEntities[0].sysUserEntity.instituteId === inst.instituteId" v-text="inst.instituteName"></span>
+            </span>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"

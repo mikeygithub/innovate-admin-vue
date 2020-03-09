@@ -12,7 +12,7 @@
           <td colspan="20" style="height: 1.2rem"></td>
         </tr>
         <tr class="contents" align="center">
-          <th colspan="20">梧州学院2019“互联网+”大学生创新创业结题项目汇总表</th>
+          <th colspan="20">梧州学院 “互联网+”大学生创新创业结题项目汇总表</th>
           <!--<th colspan="20">梧州学院{{finishYear}}“互联网+”大学生创新创业结题项目汇总表</th>-->
         </tr>
         <tr align='center' style="height: 3.0rem">
@@ -25,39 +25,40 @@
         </tr>
         <tr align='center' v-if="">
           <th>序号</th>
-          <th colspan="1">申报名称</th>
+          <th colspan="5">申报名称</th>
           <th colspan="2">项目负责人姓名</th>
           <th colspan="2">项目负责人学号</th>
           <th colspan="2">申报类型</th>
           <th colspan="2">申报时间</th>
-          <th colspan="2">参与学生人数</th>
-          <th colspan="3">项目其他成员信息</th>
+          <!--<th colspan="2">参与学生人数</th>-->
+          <!--<th colspan="3">项目其他成员信息</th>-->
           <!--李四/112583030116,王五/112583030114  -->
           <th colspan="2">指导老师姓名</th>
           <th colspan="2">指导教师职称</th>
-          <td>平均分</td>
+          <!--<td>平均分</td>-->
+          <th colspan="2">学院</th>
         </tr>
 
         <template>
           <tr align='center' v-if="finishInfoList.length === 0">
             <td>暂无数据</td>
-            <td colspan="1">暂无数据</td>
+            <td colspan="5">暂无数据</td>
             <td colspan="2">暂无数据</td>
             <td colspan="2">暂无数据</td>
             <td colspan="2">暂无数据</td>
             <td colspan="2">暂无数据</td>
+            <!--<td colspan="2">暂无数据</td>-->
+            <!--<td colspan="3">暂无数据</td>-->
             <td colspan="2">暂无数据</td>
-            <td colspan="3">暂无数据</td>
             <td colspan="2">暂无数据</td>
             <td colspan="2">暂无数据</td>
-            <td>暂无数据</td>
           </tr>
         </template>
         <template>
-          <tr v-for="(item,index) in finishInfoList" align="center"
-              v-if="item.finishInfoEntity.projectFinishApplyStatus !==0 && item.finishInfoEntity.finishNoPass === 0">
+          <tr v-for="(item,index) in finishInfoList" align="center">
+              <!--v-if="item.finishInfoEntity.projectFinishApplyStatus !==0 && item.finishInfoEntity.finishNoPass === 0">-->
             <td v-text="index+1"></td>
-            <td colspan="1" v-text="item.finishInfoEntity.finishName"></td>
+            <td colspan="5" v-text="item.finishInfoEntity.finishName"></td>
             <td colspan="2">
                 <span v-for="user in item.userPersonInfoEntities" >
                   <span v-text="user.sysUserEntity.name"></span>
@@ -74,10 +75,10 @@
             <td colspan="2">
               <span v-text="item.finishInfoEntity.finishTime"></span>
             </td>
-            <td colspan="2" v-text="item.finishStaffInfoEntities.length+1"></td>
-            <td colspan="3">
-              <span v-for="staff in item.finishStaffInfoEntities" v-text="staff.staffName+'/'+staff.staffStuNo+','" align="center"></span>
-            </td>
+            <!--<td colspan="2" v-text="item.finishStaffInfoEntities.length+1"></td>-->
+            <!--<td colspan="3">-->
+              <!--<span v-for="staff in item.finishStaffInfoEntities" v-text="staff.staffName+'/'+staff.staffStuNo+','" align="center"></span>-->
+            <!--</td>-->
             <td colspan="2">
                 <span v-for="teacher in userTeacherInfoEntities">
                   <span v-for="teacher2 in item.finishTeacherEntities"
@@ -94,9 +95,11 @@
                   </span>
                 </span>
             </td>
-          <td>
-            <span v-text="item.finishInfoEntity.finishScoreAvg"></span>
-
+          <td colspan="2">
+            <!--<span v-text="item.finishInfoEntity.finishScoreAvg"></span>-->
+            <span v-if="item.userPersonInfoEntities!==null&&item.userPersonInfoEntities.length!==0" :key="index" v-for="inst in instituteList">
+              <span v-if="item.userPersonInfoEntities[0].sysUserEntity.instituteId === inst.instituteId" v-text="inst.instituteName"></span>
+            </span>
           </td>
           </tr>
         </template>
@@ -193,6 +196,7 @@
               'project_finish_apply_status_more': 2,
               'noPassStatus': 0,
               'noPass': 'finish_no_pass',
+              'isEr': true,
               'isDel': 0,
               'pageSize': 1000000,
               'currPage': 1,
