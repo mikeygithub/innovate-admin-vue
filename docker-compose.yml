@@ -2,4 +2,5 @@ version: '2'
 services:
   innovate-admin:
     image: mikeyboom/innovate-admin-vue
-
+    ports:
+      - 8001:8001
