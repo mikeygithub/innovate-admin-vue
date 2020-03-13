@@ -64,7 +64,7 @@
         <el-col :span="24">
           <el-form-item label="项目简介(200字之内)" prop="declareDescribe">
 
-            <el-input type="textarea" maxlength="400"
+            <el-input type="textarea" maxlength="200"
                       :rows="5"
                       v-model="dataForm.declareDescribe"
                       placeholder="请输入"></el-input>

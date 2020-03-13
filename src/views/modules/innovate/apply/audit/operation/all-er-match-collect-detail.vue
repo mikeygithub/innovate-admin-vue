@@ -193,11 +193,11 @@
           <th>备注：</th>
           <td colspan="9" style="height: 1.5rem">已核实所有参赛队员学籍信息，均符合参赛要求</td>
           <th>二级学院领导签名：</th>
-          <td colspan="9" style="height: 1.5rem"></td>
+          <td colspan="10" style="height: 1.5rem"></td>
         </tr>
         <!--附件结束-->
         <tr align='center'>
-          <td colspan="20" style="height: 1.2rem"></td>
+          <td colspan="21" style="height: 1.2rem"></td>
         </tr>
       </table>
     </el-row>
