@@ -21,8 +21,24 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="24">
+          <el-form-item label="项目等级" prop="declareGrade">
+            <el-select v-model="dataForm.declareGrade"  placeholder="请选择">
+              <el-option v-for="item in declareGradeList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="项目年限" prop="declareYear">
+            <el-select v-model="dataForm.declareYear"  placeholder="请选择">
+              <el-option v-for="item in declareYearList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
         <el-col>
-        <el-form-item label="所属学科" prop="subjectId">
+        <el-form-item label="所属专业类" prop="subjectId">
           <el-select v-model="dataForm.subjectId" placeholder="请选择">
             <el-option
               v-for="item in subjectList"
@@ -33,20 +49,20 @@
           </el-select>
         </el-form-item>
         </el-col>
-        <el-col>
-        <el-form-item label="所在二级学院" prop="instituteId">
-          <el-select v-model="dataForm.instituteId" placeholder="请选择">
-            <el-option
-              v-for="item in instituteList"
-              :key="item.instituteId"
-              :label="item.instituteName"
-              :value="item.instituteId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        </el-col>
+        <!--<el-col>-->
+        <!--<el-form-item label="所在二级学院" prop="instituteId">-->
+          <!--<el-select v-model="dataForm.instituteId" placeholder="请选择">-->
+            <!--<el-option-->
+              <!--v-for="item in instituteList"-->
+              <!--:key="item.instituteId"-->
+              <!--:label="item.instituteName"-->
+              <!--:value="item.instituteId">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
         <el-col :span="24">
-          <el-form-item label="项目简介(300字之内)" prop="declareDescribe">
+          <el-form-item label="项目简介(200字之内)" prop="declareDescribe">
 
             <el-input type="textarea" maxlength="400"
                       :rows="5"
@@ -303,18 +319,28 @@
           {value: 2, label: '创业训练项目'},
           {value: 3, label: '创业实践项目'}
         ],
+        declareYearList: [
+          {value: 1, label: '一年期'},
+          {value: 2, label: '二年期'}
+        ],
+        declareGradeList: [
+          {value: 1, label: '国家级'},
+          {value: 2, label: '自治区级'}
+        ],
         dataForm: {
           declareId: '',
           eventId: '',
-          instituteId: '',
           subjectId: '',
           projectUserId: this.$store.state.user.id,
           declareName: '',
           declareType: '',
+          declareGrade: '',
+          declareYear: '',
           // matchDescribe: '',
           // matchBrightSpot: '',
           // matchExpect: '',
-          projectAuditApplyStatus: 0,
+          instituteId: this.$store.state.user.instituteId,
+          projectAuditApplyStatus: 1,
           isUpdate: 0,
           isDel: 0
         },
@@ -336,6 +362,12 @@
           ],
           declareType: [
             { required: true, message: '请选择申报类型', trigger: 'blur' }
+          ],
+          declareYear: [
+            { required: true, message: '请选择申报年限', trigger: 'blur' }
+          ],
+          declareGrade: [
+            { required: true, message: '请选择申报等级', trigger: 'blur' }
           ],
           // matchDescribe: [
           //   { required: true, message: '项目概述不能为空', trigger: 'blur' }
@@ -432,36 +464,43 @@
               this.dataForm.projectInDate = Number(this.dataForm.projectInDate)
               this.dataForm.projectRegDate = Number(this.dataForm.projectRegDate)
             }
-            this.dataForm.isUpdate = 0
-            this.addLoading = true
-            this.$http({
-              url: this.$http.adornUrl(`/innovate/declare/info/${!this.dataForm.declareId ? 'save' : 'update'}`),
-              method: 'post',
-              data: this.$http.adornData({
-                'declareInfoEntity': this.dataForm,
-                // 'projectLegalInfoEntities': this.legalLists,
-                'userPersonInfoEntities': this.personInfoList,
-                'declareTeacherEntities': this.teacherLists,
-                'declareAttachEntities': this.attachLists,
-                'declareStaffInfoEntities': this.staffInfoLists,
-                'declareAwardEntities': this.awardInfoLists
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
+
+            this.$confirm(`即将提交项目申请，提交后将不能再对申请信息进行修改，确认要提交吗？`, '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.dataForm.isUpdate = 0
+              this.addLoading = true
+              this.$http({
+                url: this.$http.adornUrl(`/innovate/declare/info/${!this.dataForm.declareId ? 'save' : 'update'}`),
+                method: 'post',
+                data: this.$http.adornData({
+                  'declareInfoEntity': this.dataForm,
+                  // 'projectLegalInfoEntities': this.legalLists,
+                  'userPersonInfoEntities': this.personInfoList,
+                  'declareTeacherEntities': this.teacherLists,
+                  'declareAttachEntities': this.attachLists,
+                  'declareStaffInfoEntities': this.staffInfoLists,
+                  'declareAwardEntities': this.awardInfoLists
                 })
-              } else {
-                this.$message.error(data.msg)
-                this.addLoading = true
-              }
-            })
+              }).then(({data}) => {
+                if (data && data.code === 0) {
+                  this.$message({
+                    message: '操作成功',
+                    type: 'success',
+                    duration: 1500,
+                    onClose: () => {
+                      this.visible = false
+                      this.$emit('refreshDataList')
+                    }
+                  })
+                } else {
+                  this.$message.error(data.msg)
+                  this.addLoading = true
+                }
+              })
+            }).catch(() => {})
           }
         })
       },
