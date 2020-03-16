@@ -11,16 +11,6 @@
         <!-- 左边 -->
         <div class="top-left s">
           <h4>{{result.proName}}</h4>
-<!--          <div>-->
-<!--            <tr align='center' style="height: 2.5rem">-->
-<!--              <th colspan="2">项目类型</th>-->
-<!--              <td colspan="3" v-for="item in proTypeList"-->
-<!--                  :key="item.value"-->
-<!--                  v-if="item.value === this.result.proType">-->
-<!--                <span v-text="item.label" align="center"></span>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--          </div>-->
           <div>项目类型:{{result.proType}}</div>
           <div>项目来源:{{result.proOrigin}}</div>
           <div>项目经费:{{result.proOutlay}}</div>

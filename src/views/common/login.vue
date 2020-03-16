@@ -1,48 +1,54 @@
 <template>
-  <el-dialog
-    :title="''"
-    :close-on-click-modal="false"
-    width="26rem"
-    :visible.sync="visible">
-    <h3 class="login-title">用户登录</h3>
-        <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
-          <el-form-item prop="userName">
-            <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
-          </el-form-item>
-          <el-form-item prop="captcha">
-            <el-row :gutter="20">
-              <el-col :span="14">
-                <el-input v-model="dataForm.captcha" placeholder="验证码">
-                </el-input>
-              </el-col>
-              <el-col :span="10" class="login-captcha">
-                <img style="display: block;width: 100%;" :src="captchaPath" @click="getCaptcha()" alt="">
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-form-item>
-            <el-row :gutter="38">
-              <el-col :span="12">
-                <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()" :loading="loginLoading">
-                  登录
-                </el-button>
-              </el-col>
-              <el-col :span="12">
-                <el-button class="login-btn-submit" type="primary" @click="visible = false">取消</el-button>
-              </el-col>
-            </el-row>
-          </el-form-item>
-        </el-form>
-      <!--</div>-->
-    <!--</el-form>-->
-  </el-dialog>
+  <div>
+    <el-dialog
+      :title="''"
+      :close-on-click-modal="false"
+      width="26rem"
+      :visible.sync="visible">
+      <h3 class="login-title">用户登录</h3>
+          <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
+            <el-form-item prop="userName">
+              <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
+            </el-form-item>
+            <el-form-item prop="captcha">
+              <el-row :gutter="20">
+                <el-col :span="14">
+                  <el-input v-model="dataForm.captcha" placeholder="验证码">
+                  </el-input>
+                </el-col>
+                <el-col :span="10" class="login-captcha">
+                  <img style="display: block;width: 100%;" :src="captchaPath" @click="getCaptcha()" alt="">
+                </el-col>
+                <el-col :span="10">
+                  <el-button type="text" @click="forgotPassword()">忘记账号/密码？</el-button>
+                </el-col>
+              </el-row>
+            </el-form-item>
+            <el-form-item>
+              <el-row :gutter="38">
+                <el-col :span="12">
+                  <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()" :loading="loginLoading">
+                    登录
+                  </el-button>
+                </el-col>
+                <el-col :span="12">
+                  <el-button class="login-btn-submit" type="primary" @click="visible = false">取消</el-button>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
+    </el-dialog>
+    <!-- 忘记密码弹窗 -->
+    <forget-details v-if="forget" ref="forget"/>
+  </div>
 </template>
 
 <script>
   import { getUUID } from '@/utils'
+  import ForgetDetails from './forget'
 
   export default {
     data () {
@@ -50,6 +56,7 @@
         visible: false,
         registerVisible: false,
         loginLoading: false,
+        forget: false,
         dataForm: {
           userName: '',
           password: '',
@@ -72,6 +79,7 @@
       }
     },
     components: {
+      ForgetDetails
     },
     created () {
       this.getCaptcha()
@@ -135,6 +143,13 @@
         this.registerVisible = false
         this.dataForm.uuid = getUUID()
         this.captchaPath = this.$http.adornUrl(`/captcha.jpg?uuid=${this.dataForm.uuid}`)
+      },
+        // 忘记密码窗口弹窗
+      forgotPassword: function () {
+        this.forget = true
+        this.$nextTick(() => {
+          this.$refs.forget.init()
+        })
       },
       // 获取数据信息
       getDate () {

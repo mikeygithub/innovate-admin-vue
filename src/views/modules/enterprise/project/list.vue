@@ -138,8 +138,23 @@ export default {
   },
   methods: {
       // 格式化区域显示
-    formatterZone (row, column, cellValue) {
-      return cellValue === '0' ? '是' : '否'
+    formatterZone (row, column) {
+      switch (row.proType) {
+        case 1:
+          return '1科研项目'
+        case 2:
+          return '2横向项目'
+        case 3:
+          return '3企业项目'
+        case 4:
+          return '4大创项目'
+        case 5:
+          return '5企业招聘'
+        case 6:
+          return '6实习项目对接'
+        default:
+          return '/'
+      }
     },
       // 详情
     detailHandle (id) {
