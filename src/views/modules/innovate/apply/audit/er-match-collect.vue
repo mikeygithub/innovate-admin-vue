@@ -80,6 +80,9 @@
         align="center"
         width="60"
         label="学生人数">
+        <template slot="" slot-scope="scope">
+          <span v-text="scope.row.declareStaffInfoEntities.length+1"></span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="declareStaffInfoEntities"

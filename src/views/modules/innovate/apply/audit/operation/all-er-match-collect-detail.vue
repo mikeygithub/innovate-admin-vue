@@ -111,7 +111,7 @@
             <!--<span v-for="temp in declareType" v-if="temp.value === item.declareInfoEntity.declareType" v-text="temp.label"/>-->
             <!--</td>-->
             <!--学生人数-->
-            <td v-text="item.declareStaffInfoEntities.length"></td>
+            <td v-text="item.declareStaffInfoEntities.length+1"></td>
             <td colspan="2">
               <span v-for="staff in item.declareStaffInfoEntities" v-text="staff.staffName+'  '" align="center"></span>
             </td>
