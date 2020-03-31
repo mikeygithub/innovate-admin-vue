@@ -16,6 +16,13 @@
         </el-row>
       </el-form-item >
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px" v-if="codeDiv==true">
+        <el-form-item label="验证码" prop="captcha">
+          <el-row :gutter="10">
+            <el-col :span="10">
+              <el-input type="text" v-model="dataForm.captcha"></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
         <el-form-item label="账号">
           <el-input v-model="this.user" disabled></el-input>
         </el-form-item>
@@ -24,13 +31,6 @@
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPassword">
           <el-input type="password" v-model="dataForm.confirmPassword"></el-input>
-        </el-form-item>
-        <el-form-item label="验证码" prop="captcha">
-          <el-row :gutter="10">
-            <el-col :span="10">
-              <el-input type="text" v-model="dataForm.captcha"></el-input>
-            </el-col>
-          </el-row>
         </el-form-item>
       </el-form>
     </el-form>
