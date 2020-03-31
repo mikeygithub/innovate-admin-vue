@@ -219,7 +219,12 @@
           }).then(({data}) => {
             if (data && data.code === 0) {
               clearLoginInfo()
-              this.$message.success('账号已退出')
+              // this.$message.success('账号已退出')
+              this.$notify({
+                title: '操作成功',
+                message: '账号已退出',
+                type: 'success'
+              })
               this.$router.push({ name: 'index' })
               this.$router.go(0)
             }

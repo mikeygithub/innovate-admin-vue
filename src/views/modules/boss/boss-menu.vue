@@ -27,16 +27,18 @@
             <div class="gg-content" style="height: 280px">
               <ul class="gg-pc" :style="'margin-top:' + -top + 'px'">
                 <li class="gg-pro" v-for="item in da">
-                  <p class="gg-textl">
-                    <a href="#" class="gg-text">{{item.data.proName}}</a>
-                  </p>
-                  <p class="gg-textl">
-                    <span class="gg-text">{{item.data.proOrigin}}</span>&nbsp;<span class="gg-text">|</span>
-                    <span class="gg-text">{{item.data.proIntroduce}}</span>
-                  </p>
-                  <p class="gg-textl" v-on:click="joinProject(item.data.proInfoId)">
-                    <span class="gg-text">点击查看项目</span>
-                  </p>
+                  <div v-if="item.data!=null">
+                    <p class="gg-textl">
+                      <a href="#" class="gg-text">{{item.data.proName}}</a>
+                    </p>
+                    <p class="gg-textl">
+                      <span class="gg-text">{{item.data.proOrigin}}</span>&nbsp;<span class="gg-text">|</span>
+                      <span class="gg-text">{{item.data.proIntroduce}}</span>
+                    </p>
+                    <p class="gg-textl" v-on:click="joinProject(item.data.proInfoId)">
+                      <span class="gg-text">点击查看项目</span>
+                    </p>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -102,7 +104,7 @@
             'proType': this.proType
           })
         }).then(({data}) => {
-          console.log(data)
+          // console.log(data)
           if (data.code === 500) {
             this.$message.error(data.msg)
           } else {
@@ -113,7 +115,7 @@
                 result.push(that.invokeDatas(item))
               })
               this.da = result
-              console.log(this.da)
+              // console.log(this.da)
             }
           }
         })

@@ -35,7 +35,7 @@
                 </p>
               </a>
               <a class="user-info" @click="join2project(item.data.proInfoId)" href="javascript:void(1)">
-                <p><sapn class="user-text">点击查看项目</sapn></p>
+                <p><span class="user-text">点击查看项目</span></p>
               </a>
             </div>
           </li>
@@ -51,6 +51,7 @@
 <script>
   // 招聘信息
   import ProjectJoin from './project-join'
+
   export default {
     props: {hide: Boolean},
     data () {
