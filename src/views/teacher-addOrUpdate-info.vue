@@ -2,6 +2,9 @@
   <el-dialog
     title="修改信息"
     :visible.sync="visible"
+    :show-close=false
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
     :append-to-body="true">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-form-item label="姓名" prop="sysUserEntity.name">
@@ -58,7 +61,7 @@
 <!--      </el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
+      <!--<el-button @click="visible = false">取消</el-button>-->
       <el-button type="primary" @click="dataFormSubmit()" :loading="addLoading">确定</el-button>
     </span>
   </el-dialog>
