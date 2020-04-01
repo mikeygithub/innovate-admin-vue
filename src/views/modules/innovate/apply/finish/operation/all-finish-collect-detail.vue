@@ -25,7 +25,9 @@
         </tr>
         <tr align='center' v-if="">
           <th>序号</th>
-          <th colspan="5">申报名称</th>
+          <th colspan="3">项目名称</th>
+          <th colspan="1">项目等级</th>
+          <th colspan="1">立项年份</th>
           <th colspan="2">项目负责人姓名</th>
           <th colspan="2">项目负责人学号</th>
           <th colspan="2">申报类型</th>
@@ -59,7 +61,9 @@
               <!--v-if="item.finishInfoEntity.projectFinishApplyStatus !==0 && item.finishInfoEntity.finishNoPass === 0">-->
             <!--TODO:整改-->
             <td v-text="index+1"></td>
-            <td colspan="5" v-text="item.finishInfoEntity.finishName"></td>
+            <td colspan="3" v-text="item.finishInfoEntity.finishName"></td>
+            <td colspan="1"><span v-for="grade in finishGradeList" v-if="grade.value === item.finishInfoEntity.finishGrade" v-text="grade.label"></span></td>
+            <td colspan="1" v-text="item.finishInfoEntity.finishYear"></td>
             <td colspan="2">
                 <span v-for="user in item.userPersonInfoEntities" >
                   <span v-text="user.sysUserEntity.name"></span>

@@ -9,25 +9,44 @@
     <el-row :gutter="20">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="16rem" style="width: 94%; margin: 0 auto">
         <el-col :span="24">
-          <el-form-item label="申报名称" prop="finishName">
+          <el-form-item label="项目名称" prop="finishName">
             <el-input v-model="dataForm.finishName" placeholder="请输入申报名称"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="申报类型" prop="finishType">
+        <el-col :span="12">
+          <el-form-item label="项目类型" prop="finishType">
             <el-select v-model="dataForm.finishType"  placeholder="请选择">
               <el-option v-for="item in finishTypeList" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item label="项目等级" prop="finishGrade">
+            <el-select v-model="dataForm.finishGrade"  placeholder="请选择">
+              <el-option v-for="item in finishGradeList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="立项年份" prop="finishYear">
+            <el-date-picker
+              v-model="dataForm.finishYear"
+              align="right"
+              type="year"
+              :editable="false"
+              placeholder="请选择年度">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
         <el-col :span="24">
-          <el-form-item label="项目简介(300字之内)" prop="finishDescribe">
+          <el-form-item label="项目简介" prop="finishDescribe">
 
-            <el-input type="textarea" maxlength="400"
+            <el-input type="textarea" maxlength="300"
                       :rows="5"
                       v-model="dataForm.finishDescribe"
-                      placeholder="请输入"></el-input>
+                      placeholder="请输入项目简介(300字之内)"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -177,12 +196,18 @@
           {value: 2, label: '创业训练项目'}
           // {value: 3, label: '创业实践项目'}
         ],
+        finishGradeList: [
+          {value: 1, label: '国家级'},
+          {value: 2, label: '自治区级'}
+        ],
         dataForm: {
           finishId: '',
           projectUserId: this.$store.state.user.id,
           finishName: '',
           finishDescribe: '',
           finishType: '',
+          finishGrade: '',
+          finishYear: '',
           finishExpect: '',
           projectFinishApplyStatus: 1,
           isUpdate: 0,
@@ -200,6 +225,12 @@
           ],
           finishDescribe: [
             { required: true, message: '请填写项目简介', trigger: 'blur' }
+          ],
+          finishGrade: [
+            { required: true, message: '请选择项目等级', trigger: 'blur' }
+          ],
+          finishYear: [
+            { required: true, message: '请选择立项年份', trigger: 'blur' }
           ],
           teacherLists: [
             { validator: validateTeacher, trigger: 'blur' }
@@ -297,6 +328,7 @@
               this.dataForm.projectRegDate = Number(this.dataForm.projectRegDate)
             }
             this.dataForm.isUpdate = 0
+            this.dataForm.finishYear = this.dataForm.finishYear.getFullYear()
             this.$http({
               url: this.$http.adornUrl(`/innovate/finish/info/${!this.dataForm.finishId ? 'save' : 'update'}`),
               method: 'post',
