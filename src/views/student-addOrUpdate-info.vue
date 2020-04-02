@@ -40,23 +40,23 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="学号" prop="perStuNo">
             <el-input v-model="dataForm.perStuNo" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="学院" prop="sysUserEntity.instituteId">
-            <el-select v-model="dataForm.sysUserEntity.instituteId" placeholder="请选择">
-              <el-option
-                v-for="item in instituteList"
-                :key="item.instituteId"
-                :label="item.instituteName"
-                :value="item.instituteId">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
+        <!--<el-col :span="12">-->
+          <!--<el-form-item label="学院" prop="sysUserEntity.instituteId">-->
+            <!--<el-select v-model="dataForm.sysUserEntity.instituteId" placeholder="请选择">-->
+              <!--<el-option-->
+                <!--v-for="item in instituteList"-->
+                <!--:key="item.instituteId"-->
+                <!--:label="item.instituteName"-->
+                <!--:value="item.instituteId">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
         <el-col :span="12">
           <el-form-item label="手机号" prop="sysUserEntity.mobile">
             <el-input  v-model="dataForm.sysUserEntity.mobile"></el-input>

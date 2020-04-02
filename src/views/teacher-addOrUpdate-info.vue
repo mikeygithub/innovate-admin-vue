@@ -20,16 +20,16 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="学院" prop="sysUserEntity.instituteId">
-        <el-select v-model="dataForm.sysUserEntity.instituteId" placeholder="请选择">
-          <el-option
-            v-for="item in instituteList"
-            :key="item.instituteId"
-            :label="item.instituteName"
-            :value="item.instituteId">
-          </el-option>
-        </el-select>
-      </el-form-item>
+      <!--<el-form-item label="学院" prop="sysUserEntity.instituteId">-->
+        <!--<el-select v-model="dataForm.sysUserEntity.instituteId" placeholder="请选择">-->
+          <!--<el-option-->
+            <!--v-for="item in instituteList"-->
+            <!--:key="item.instituteId"-->
+            <!--:label="item.instituteName"-->
+            <!--:value="item.instituteId">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
+      <!--</el-form-item>-->
       <el-form-item label="职务" prop="teacherPost">
         <el-input  v-model="dataForm.teacherPost"></el-input>
       </el-form-item>
