@@ -165,6 +165,10 @@
         sexList: [
           {value: 1, label: '男'}, {value: 2, label: '女'}
         ],
+        finishGradeList: [
+          {value: 1, label: '国家级'},
+          {value: 2, label: '自治区级'}
+        ],
         instinctList: this.$store.state.user.title,
         awardRankList: [
           {value: 1, label: '特等奖'}, {value: 2, label: '一等奖'},
@@ -205,7 +209,7 @@
             'noPass': 'finish_no_pass',
             'noPassStatus': 0,
             'apply': 'project_finish_apply_status',
-            'project_finish_apply_status_more': 2,
+            'applyStatus': 2,
             'isDel': 0,
             'finishTime': time.getFullYear(),
             'instituteId': instituteId,

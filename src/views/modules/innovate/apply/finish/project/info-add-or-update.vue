@@ -13,7 +13,7 @@
             <el-input v-model="dataForm.finishName" placeholder="请输入申报名称"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="项目类型" prop="finishType">
             <el-select v-model="dataForm.finishType"  placeholder="请选择">
               <el-option v-for="item in finishTypeList" :key="item.value" :label="item.label" :value="item.value">
@@ -21,7 +21,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="项目等级" prop="finishGrade">
             <el-select v-model="dataForm.finishGrade"  placeholder="请选择">
               <el-option v-for="item in finishGradeList" :key="item.value" :label="item.label" :value="item.value">
@@ -29,7 +29,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="立项年份" prop="finishYear">
             <el-date-picker
               v-model="dataForm.finishYear"
@@ -117,7 +117,7 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button type="primary" @click="dataFormSubmit()"  :loading="addLoading">确定</el-button>
     </span>
     <teacher-add-or-update v-if="teacherAddOrUpdateVisible" ref="teacherAddOrUpdate" @refreshDataList="teacherRef"></teacher-add-or-update>
     <person-add-or-update v-if="personAddOrUpdateVisible" ref="personAddOrUpdate" @refreshDataList="personRef"></person-add-or-update>
@@ -184,6 +184,7 @@
         moneyAddOrUpdateVisible: false,
         stationVisible: false,
         visible: false,
+        addLoading: false,
         staffInfoVisible: false,
         leadVisible: false,
         ptStaffInfoVisible: false,
@@ -315,10 +316,12 @@
       },
       // 表单提交
       dataFormSubmit () {
+        this.addLoading = true
         this.$refs['dataForm'].validate((valid) => {
           this.dataForm.finishId = this.dataForm.finishId || undefined
           if (this.attachLists.length < 1) {
             this.fileIsNull = true
+            this.addLoading = false
             return
           }
           if (valid) {
@@ -356,6 +359,7 @@
               }
             })
           }
+          this.addLoading = false
         })
       },
       // 子组件的各类方法

@@ -224,14 +224,13 @@
               'hasApply': this.hasApply,
               'noPass': 'finish_no_pass',
               'noPassStatus': 0,
-              // 'isTeacher': true
-              // 'isStudent': true
               'apply': 'project_finish_apply_status',
               'applyStatus': 3,
               'isDel': 0
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
+              // console.log(data)
               this.dataList = data.page.list
               this.totalPage = data.page.totalCount
             } else {

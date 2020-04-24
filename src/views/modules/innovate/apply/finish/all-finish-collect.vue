@@ -133,7 +133,7 @@
         <template slot-scope="scope">
           <!--<el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg === null || scope.row.finishInfoEntity.finishScoreAvg === ''">未评分</el-tag>-->
           <!--<el-tag type="small" v-if="scope.row.finishInfoEntity.finishScoreAvg != null" v-text="scope.row.finishInfoEntity.finishScoreAvg"></el-tag>-->
-          <span v-if="scope.row.userPersonInfoEntities!==null&&scope.row.userPersonInfoEntities.length!==0" :key="index" v-for="inst in instituteList">
+          <span v-if="scope.row.userPersonInfoEntities!==null&&scope.row.userPersonInfoEntities.length!==0" :key="inst.index" v-for="inst in instituteList">
               <span v-if="scope.row.userPersonInfoEntities[0].sysUserEntity.instituteId === inst.instituteId" v-text="inst.instituteName"></span>
             </span>
         </template>
@@ -211,14 +211,15 @@
           params: this.$http.adornParams({
             'instituteId': this.dataForm.instituteId,
             'finishTime': this.dataForm.finishTime == null ? '' : this.dataForm.finishTime.getFullYear(),
-            'project_finish_apply_status_more': 2,
-            'noPassStatus': 0,
-            'noPass': 'finish_no_pass',
-            'isDel': 0,
-            'isEr': true,
             'currPage': this.pageIndex,
-            'pageSize': this.pageSize
-            // 'isEr': true
+            'pageSize': this.pageSize,
+            'userId': this.$store.state.user.id,
+            'hasApply': 2,
+            'noPass': 'finish_no_pass',
+            'noPassStatus': 0,
+            'apply': 'project_finish_apply_status',
+            'applyStatus': 2,
+            'isDel': 0
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
