@@ -36,7 +36,7 @@
     </el-card>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button type="primary" @click="dataFormSubmit()" :loading="addLoading">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -49,6 +49,7 @@
         userId: this.$store.state.user.id,
         visible: false,
         loading: false,
+        addLoading: false,
         reApply: 'false',
         userMap: [],
         sysUserEntities: [],
@@ -115,6 +116,7 @@
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.addLoading = true
             this.$http({
               url: this.$http.adornUrl(`/innovate/finish/review/review`),
               method: 'post',
@@ -134,11 +136,13 @@
                   duration: 1500,
                   onClose: () => {
                     this.visible = false
+                    this.addLoading = false
                     this.$emit('refreshDataList')
                   }
                 })
               } else {
                 this.$message.error(data.msg)
+                this.addLoading = false
               }
             })
           }
@@ -146,6 +150,7 @@
       },
       closeDialog () {
         this.visible = false
+        this.addLoading = false
         this.$emit('refreshDataList')
       }
     }
