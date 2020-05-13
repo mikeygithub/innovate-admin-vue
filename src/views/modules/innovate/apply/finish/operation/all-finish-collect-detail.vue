@@ -84,19 +84,33 @@
             <!--<td colspan="3">-->
               <!--<span v-for="staff in item.finishStaffInfoEntities" v-text="staff.staffName+'/'+staff.staffStuNo+','" align="center"></span>-->
             <!--</td>-->
+
+            <!--指导老师-->
+            <!--<td colspan="2">-->
+                <!--<span v-for="teacher in userTeacherInfoEntities">-->
+                  <!--<span v-for="teacher2 in item.finishTeacherEntities"-->
+                        <!--v-if="teacher.userId === teacher2.userId"-->
+                        <!--v-text="teacher.sysUserEntity.name+'  '" align="center">-->
+                  <!--</span>-->
+                <!--</span>-->
+            <!--</td>-->
             <td colspan="2">
-                <span v-for="teacher in userTeacherInfoEntities">
-                  <span v-for="teacher2 in item.finishTeacherEntities"
-                        v-if="teacher.userId === teacher2.userId"
-                        v-text="teacher.sysUserEntity.name+'  '" align="center">
-                  </span>
+                <span v-for="finishTeacher in item.finishTeacherEntities">
+                  <span v-for="allT in userTeacherInfoEntities" v-if="finishTeacher.userId === allT.userId" v-text="allT.sysUserEntity.name+'  '" align="center"></span>
                 </span>
             </td>
+            <!--职称-->
             <td colspan="2">
-              <span v-for="teacher in userTeacherInfoEntities">
-                  <span v-for="teacher2 in item.finishTeacherEntities"
-                        v-if="teacher.userId === teacher2.userId">
-                     <span v-for="temp in teacherTitleList" v-if="temp.titleId === teacher.teacherTitle" v-text="temp.titleName"></span>
+              <!--<span v-for="teacher in userTeacherInfoEntities">-->
+                  <!--<span v-for="teacher2 in item.finishTeacherEntities"-->
+                        <!--v-if="teacher.userId === teacher2.userId">-->
+                     <!--<span v-for="temp in teacherTitleList" v-if="temp.titleId === teacher.teacherTitle" v-text="temp.titleName"></span>-->
+                  <!--</span>-->
+                <!--</span>-->
+
+              <span v-for="finishTeacher in item.finishTeacherEntities">
+                  <span v-for="allT in userTeacherInfoEntities" v-if="finishTeacher.userId === allT.userId" align="center">
+                    <span v-for="tmp in teacherTitleList" v-if="tmp.titleId === allT.teacherTitle" v-text="tmp.titleName+' '"></span>
                   </span>
                 </span>
             </td>

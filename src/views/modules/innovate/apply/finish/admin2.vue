@@ -23,6 +23,7 @@
       <el-radio-group v-model="hasApply" @change="getDataList">
         <el-radio label="1">未审批</el-radio>
         <el-radio label="2">已审批</el-radio>
+        <el-radio label="10">未打分项目</el-radio>
       </el-radio-group>
     </el-card>
     <el-table
