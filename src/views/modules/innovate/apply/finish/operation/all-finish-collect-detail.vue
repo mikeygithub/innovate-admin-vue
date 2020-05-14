@@ -9,10 +9,10 @@
     <el-row>
       <table border="1" cellspacing="0" width="100%" class="table" id="out-table">
         <tr align='center'>
-          <td colspan="20" style="height: 1.2rem"></td>
+          <td colspan="21" style="height: 1.2rem"></td>
         </tr>
         <tr class="contents" align="center">
-          <th colspan="20">梧州学院 “互联网+” 大学生创新创业结题项目汇总表</th>
+          <th colspan="21">梧州学院 “互联网+” 大学生创新创业结题项目汇总表</th>
           <!--<th colspan="20">梧州学院{{finishYear}}“互联网+”大学生创新创业结题项目汇总表</th>-->
         </tr>
         <tr align='center' style="height: 3.0rem">
@@ -21,7 +21,7 @@
           <th>联系人：</th>
           <td colspan="5" style="height: 1rem"></td>
           <th>联系电话：</th>
-          <td colspan="5" style="height: 1rem"></td>
+          <td colspan="6" style="height: 1rem"></td>
         </tr>
         <tr align='center' v-if="">
           <th>序号</th>
@@ -39,21 +39,13 @@
           <th colspan="2">指导教师职称</th>
           <!--<td>平均分</td>-->
           <td colspan="2">学院</td>
+          <td colspan="1">最终评分</td>
         </tr>
 
         <template>
           <tr align='center' v-if="finishInfoList.length === 0">
             <td>暂无数据</td>
-            <td colspan="65">暂无数据</td>
-            <td colspan="2">暂无数据</td>
-            <td colspan="2">暂无数据</td>
-            <td colspan="2">暂无数据</td>
-            <td colspan="2">暂无数据</td>
-            <!--<td colspan="2">暂无数据</td>-->
-            <!--<td colspan="3">暂无数据</td>-->
-            <td colspan="2">暂无数据</td>
-            <td colspan="2">暂无数据</td>
-            <td colspan="2">暂无数据</td>
+            <td colspan="21">暂无数据</td>
           </tr>
         </template>
         <template>
@@ -121,17 +113,18 @@
             <span v-if="item.userPersonInfoEntities!==null&&item.userPersonInfoEntities.length!==0" :key="index" v-for="inst in instituteList">
               <span v-if="item.userPersonInfoEntities[0].sysUserEntity.instituteId === inst.instituteId" v-text="inst.instituteName"></span>
             </span></td>
+            <td><span v-text="item.finishInfoEntity.finishScoreAvg!=null?item.finishInfoEntity.finishScoreAvg:'未完成评分'"></span></td>
           </tr>
         </template>
         <tr align='center'  style="height: 3.0rem">
           <th>备注：</th>
           <td colspan="9" style="height: 1.5rem">已核实所有参赛队员学籍信息，均符合参赛要求</td>
           <th>二级学院领导签名：</th>
-          <td colspan="9" style="height: 1.5rem"></td>
+          <td colspan="10" style="height: 1.5rem"></td>
         </tr>
         <!--附件结束-->
         <tr align='center'>
-          <td colspan="20" style="height: 1.2rem"></td>
+          <td colspan="21" style="height: 1.2rem"></td>
         </tr>
       </table>
     </el-row>
