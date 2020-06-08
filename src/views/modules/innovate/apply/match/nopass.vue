@@ -88,7 +88,7 @@
           <el-tag v-if="scope.row.matchInfoEntity.matchGroupType === 1" size="small">创意组</el-tag>
           <el-tag v-if="scope.row.matchInfoEntity.matchGroupType === 2" size="small">初创组</el-tag>
           <el-tag v-if="scope.row.matchInfoEntity.matchGroupType === 3" size="small">成长组</el-tag>
-          <el-tag v-if="scope.row.matchInfoEntity.matchGroupType === 4" size="small">就业创业组</el-tag>
+          <el-tag v-if="scope.row.matchInfoEntity.matchGroupType === 4" size="small">师生共创组</el-tag>
           <el-tag v-if="scope.row.matchInfoEntity.matchGroupType === 5" size="small">"青年红色梦之旅"赛道</el-tag>
         </template>
       </el-table-column>

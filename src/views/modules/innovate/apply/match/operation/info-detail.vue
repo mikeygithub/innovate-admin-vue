@@ -393,7 +393,7 @@
         ],
         matchGroupTypeList: [
           {value: 1, label: '创意组'}, {value: 2, label: '初创组'},
-          {value: 3, label: '成长组'}, {value: 4, label: '就业创业组'},
+          {value: 3, label: '成长组'}, {value: 4, label: '师生共创组'},
           {value: 5, label: '"青年红色梦之旅"赛道'}
         ],
         sexList: [
