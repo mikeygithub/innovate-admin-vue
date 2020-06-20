@@ -292,7 +292,7 @@
       applyHandle (entity, type) {
         this.scoreVisible = true
         this.$nextTick(() => {
-          this.$refs.score.init(entity.id, entity.eventId, type)
+          this.$refs.score.init(entity.matchId, entity.eventId, type)
         })
       }
     }
