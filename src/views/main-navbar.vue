@@ -2,8 +2,8 @@
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
     <div class="site-navbar__header">
       <h1 class="site-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="site-navbar__brand-lg" href="javascript:;">校企合作及双创管理平台</a>
-        <a class="site-navbar__brand-mini" href="javascript:;">平台</a>
+        <a class="site-navbar__brand-lg" href="javascript:;">创新创业管理信息系统</a>
+        <a class="site-navbar__brand-mini" href="javascript:;">双创</a>
       </h1>
     </div>
     <div class="site-navbar__body clearfix">
@@ -17,14 +17,14 @@
       <el-menu
         class="site-navbar__menu site-navbar__menu--right"
         mode="horizontal">
-        <el-menu-item index="1" @click="openFrontPage()">
-          <template slot="title">
-            <el-badge>
-              <icon-svg name="shezhi" class="el-icon-setting"></icon-svg>
-              前台信息页面
-            </el-badge>
-          </template>
-        </el-menu-item>
+        <!--<el-menu-item index="1" @click="openFrontPage()">-->
+          <!--<template slot="title">-->
+            <!--<el-badge>-->
+              <!--<icon-svg name="shezhi" class="el-icon-setting"></icon-svg>-->
+              <!--前台信息页面-->
+            <!--</el-badge>-->
+          <!--</template>-->
+        <!--</el-menu-item>-->
         <el-menu-item index="1" @click="$router.push({ name: 'theme' })">
           <template slot="title">
             <el-badge>
@@ -273,7 +273,7 @@
           }).then(({data}) => {
             if (data && data.code === 0) {
               clearLoginInfo()
-              this.$router.push({ name: 'index' })
+              this.$router.push({ name: 'login' })
             }
           })
         }).catch(() => {})

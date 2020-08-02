@@ -8,12 +8,14 @@
     :visible.sync="visible">
     <el-row :gutter="20">
       <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="16rem" style="width: 94%; margin: 0 auto">
-        <el-col :span="24">
-          <el-form-item label="项目名称" prop="finishName">
-            <el-input v-model="dataForm.finishName" placeholder="请输入申报名称"></el-input>
+        <el-col :span="12">
+          <el-form-item label="项目名称" prop="declareId">
+            <el-select v-model="dataForm.declareId"  placeholder="请选择">
+              <el-option v-for="item in finishList" :key="item.declareName" :label="item.declareName" :value="item.declareId"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="项目类型" prop="finishType">
             <el-select v-model="dataForm.finishType"  placeholder="请选择">
               <el-option v-for="item in finishTypeList" :key="item.value" :label="item.label" :value="item.value">
@@ -21,7 +23,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="项目等级" prop="finishGrade">
             <el-select v-model="dataForm.finishGrade"  placeholder="请选择">
               <el-option v-for="item in finishGradeList" :key="item.value" :label="item.label" :value="item.value">
@@ -29,7 +31,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="立项年份" prop="finishYear">
             <el-date-picker
               v-model="dataForm.finishYear"
@@ -40,15 +42,15 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="项目简介" prop="finishDescribe">
+        <!--<el-col :span="24">-->
+          <!--<el-form-item label="项目简介" prop="finishDescribe">-->
 
-            <el-input type="textarea" maxlength="300"
-                      :rows="5"
-                      v-model="dataForm.finishDescribe"
-                      placeholder="请输入项目简介(300字之内)"></el-input>
-          </el-form-item>
-        </el-col>
+            <!--<el-input type="textarea" maxlength="300"-->
+                      <!--:rows="5"-->
+                      <!--v-model="dataForm.finishDescribe"-->
+                      <!--placeholder="请输入项目简介(300字之内)"></el-input>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
         <el-col :span="24">
           <el-form-item label="指导老师" prop="teacherLists">
             <el-button size="mini"
@@ -169,6 +171,7 @@
         fileIsNull: false,
         tables: [],
         fileList: [],
+        finishList: [],
         teacherLists: [],
         personInfoList: [],
         attachLists: [],
@@ -203,6 +206,7 @@
         ],
         dataForm: {
           finishId: '',
+          declareId: '',
           projectUserId: this.$store.state.user.id,
           finishName: '',
           finishDescribe: '',
@@ -214,13 +218,24 @@
           isUpdate: 0,
           isDel: 0
         },
+        declareInfoEntity: {
+          declareId: '',
+          eventId: '',
+          subjectId: '',
+          declareName: '',
+          declareType: '',
+          declareGrade: '',
+          declareYear: '',
+          isUpdate: 0,
+          isDel: 0
+        },
         dataRule: {
           finishName: [
             { required: true, message: '申报名称不能为空', trigger: 'blur' }
           ],
-          // eventId: [
-          //   { required: true, message: '请选择结题赛事', trigger: 'blur' }
-          // ],
+          declareId: [
+            { required: true, message: '申报名称不能为空', trigger: 'blur' }
+          ],
           finishType: [
             { required: true, message: '请选择结题类型', trigger: 'blur' }
           ],
@@ -268,6 +283,20 @@
             }
           })
           this.$refs['dataForm'].resetFields()
+          // 查询可结题的大创
+          // console.log(JSON.stringify(this.$store.state.user))
+          this.$http({
+            url: this.$http.adornUrl(`/innovate/declare/info/canfinish`),
+            method: 'get',
+            params: this.$http.adornParams({
+              'userId': this.$store.state.user.id,
+              'status': 4
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.finishList = data.declareInfoEntities
+            }
+          })
           if (this.dataForm.finishId) {
             this.$http({
               url: this.$http.adornUrl(`/innovate/finish/info/info`),
@@ -332,6 +361,13 @@
             }
             this.dataForm.isUpdate = 0
             this.dataForm.finishYear = this.dataForm.finishYear.getFullYear()
+            // 填充描述
+            this.finishList.forEach((value) => {
+              if (value.declareId === this.dataForm.declareId) {
+                this.dataForm.finishName = value.declareName
+                this.dataForm.finishDescribe = value.declareDescribe
+              }
+            })
             this.$http({
               url: this.$http.adornUrl(`/innovate/finish/info/${!this.dataForm.finishId ? 'save' : 'update'}`),
               method: 'post',

@@ -2,6 +2,7 @@
   <el-dialog
     :title="'账号/密码找回'"
     :close-on-click-modal="false"
+    width="30%"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px" status-icon>
       <el-form-item label="手机号码" prop="userName">
@@ -121,6 +122,7 @@
             this.user = data.user
             if (this.user === '') {
               this.$message.error('手机号未注册！')
+              this.codeDisable = false
             } else {
               this.$http({
                 url: this.$http.adornUrl(`/webpage/message`),

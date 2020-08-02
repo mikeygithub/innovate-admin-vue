@@ -142,6 +142,7 @@
               } else {
                 this.$message.error(data.msg)
               }
+              this.addLoading = false
             })
           }
         })

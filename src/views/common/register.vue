@@ -3,114 +3,114 @@
     :title="'注册'"
     @close="closeRegister"
     :close-on-click-modal="false"
-    width="50rem"
+    width="20%"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
       <el-form-item prop="type" style="text-align: center">
         <template>
           <el-row>
-            <el-col :span="7" >
+            <el-col :span="11" >
               <el-radio v-model="dataForm.type" label="1" border style="width: 100%">学生</el-radio>
             </el-col>
-            <el-col :span="7" :offset="1">
+            <el-col :span="12" :offset="1">
               <el-radio v-model="dataForm.type" label="2" border style="width: 100%">教师</el-radio>
             </el-col>
-            <el-col :span="7" :offset="1">
-              <el-radio v-model="dataForm.type" label="3" border style="width: 100%">企业</el-radio>
-            </el-col>
+            <!--<el-col :span="7" :offset="1">-->
+              <!--<el-radio v-model="dataForm.type" label="3" border style="width: 100%">企业</el-radio>-->
+            <!--</el-col>-->
           </el-row>
         </template>
       </el-form-item>
       <!-- S 企业基本信息 -->
-      <el-form-item v-if="dataForm.type === '3'" prop="ent.entName">
-        <el-input v-model="dataForm.ent.entName" placeholder="企业名称"></el-input>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type === '3'" prop="ent.entCorporate">
-        <el-input v-model="dataForm.ent.entCorporate" placeholder="法人代表"></el-input>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type === '3'" prop="ent.entCode">
-        <el-input v-model="dataForm.ent.entCode" placeholder="统一信用代码"></el-input>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type === '3'" prop="ent.entRegister">
-        <el-input v-model.number="dataForm.ent.entRegister" placeholder="注册资本"></el-input>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type === '3'" >
-        <el-row>
-          <el-col :span="8" prop="ent.newHighZones" style="text-align: center;">
-            <span>是否高新区</span>
-            <el-radio v-model="dataForm.ent.newHighZones" label="0" border style="width: 30%">是</el-radio>
-            <el-radio v-model="dataForm.ent.newHighZones" label="1" border style="width: 30%">否</el-radio>
-          </el-col>
-          <el-col :span="14" :offset="1">
-            <span >成立时间</span>
-            <el-date-picker v-model="dataForm.ent.entFoundingTime" type="datetime" style="width: 45%" prop="ent.entFoundingTime" placeholder="成立时间"></el-date-picker>
-            <span >经营状态</span>
-            <el-select placeholder="请选择经营状态"  v-model="dataForm.ent.entStatus" style="width: 25%" prop="ent.entStatus" >
-              <el-option v-for="(item, index) in entStatus" :label="item.lable" :value="item.value" :key="index"></el-option>
-            </el-select>
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type === '3'" >
-        <el-row>
-          <el-col :span="8" style="text-align: center;">
-            <span >企业类型</span>
-            <el-select placeholder="企业类型"  v-model="dataForm.ent.entType" style="width: 70%" prop="ent.entType" >
-              <el-option v-for="(item, index) in entType" :label="item.lable" :value="item.lable" :key="index"></el-option>
-            </el-select>
-          </el-col>
-        </el-row>
-      </el-form-item>
+      <!--<el-form-item v-if="dataForm.type === '3'" prop="ent.entName">-->
+        <!--<el-input v-model="dataForm.ent.entName" placeholder="企业名称"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item v-if="dataForm.type === '3'" prop="ent.entCorporate">-->
+        <!--<el-input v-model="dataForm.ent.entCorporate" placeholder="法人代表"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item v-if="dataForm.type === '3'" prop="ent.entCode">-->
+        <!--<el-input v-model="dataForm.ent.entCode" placeholder="统一信用代码"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item v-if="dataForm.type === '3'" prop="ent.entRegister">-->
+        <!--<el-input v-model.number="dataForm.ent.entRegister" placeholder="注册资本"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item v-if="dataForm.type === '3'" >-->
+        <!--<el-row>-->
+          <!--<el-col :span="8" prop="ent.newHighZones" style="text-align: center;">-->
+            <!--<span>是否高新区</span>-->
+            <!--<el-radio v-model="dataForm.ent.newHighZones" label="0" border style="width: 30%">是</el-radio>-->
+            <!--<el-radio v-model="dataForm.ent.newHighZones" label="1" border style="width: 30%">否</el-radio>-->
+          <!--</el-col>-->
+          <!--<el-col :span="14" :offset="1">-->
+            <!--<span >成立时间</span>-->
+            <!--<el-date-picker v-model="dataForm.ent.entFoundingTime" type="datetime" style="width: 45%" prop="ent.entFoundingTime" placeholder="成立时间"></el-date-picker>-->
+            <!--<span >经营状态</span>-->
+            <!--<el-select placeholder="请选择经营状态"  v-model="dataForm.ent.entStatus" style="width: 25%" prop="ent.entStatus" >-->
+              <!--<el-option v-for="(item, index) in entStatus" :label="item.lable" :value="item.value" :key="index"></el-option>-->
+            <!--</el-select>-->
+          <!--</el-col>-->
+        <!--</el-row>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item v-if="dataForm.type === '3'" >-->
+        <!--<el-row>-->
+          <!--<el-col :span="8" style="text-align: center;">-->
+            <!--<span >企业类型</span>-->
+            <!--<el-select placeholder="企业类型"  v-model="dataForm.ent.entType" style="width: 70%" prop="ent.entType" >-->
+              <!--<el-option v-for="(item, index) in entType" :label="item.lable" :value="item.lable" :key="index"></el-option>-->
+            <!--</el-select>-->
+          <!--</el-col>-->
+        <!--</el-row>-->
+      <!--</el-form-item>-->
 
-      <el-form-item v-if="dataForm.type === '3'">
-        <el-row>
-          <el-col :span="7">
-            <span>企业LOGO</span>
-            <el-upload
-              class="avatar-uploader"
-              :action="url"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              <i v-if="upload" class="el-icon-plus">上传中</i>
-            </el-upload>
-          </el-col>
-          <el-col :span="16" :offset="1">
-            <span>企业证明材料</span>
-            <el-upload
-              class="upload-demo"
-              :action="url"
-              :on-change="handleChange"
-              :file-list="dataForm.attachments">
-              <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5mb</div>
-            </el-upload>
-          </el-col>
-        </el-row>
-      </el-form-item>
+      <!--<el-form-item v-if="dataForm.type === '3'">-->
+        <!--<el-row>-->
+          <!--<el-col :span="7">-->
+            <!--<span>企业LOGO</span>-->
+            <!--<el-upload-->
+              <!--class="avatar-uploader"-->
+              <!--:action="url"-->
+              <!--:show-file-list="false"-->
+              <!--:on-success="handleAvatarSuccess"-->
+              <!--:before-upload="beforeAvatarUpload">-->
+              <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+              <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+              <!--<i v-if="upload" class="el-icon-plus">上传中</i>-->
+            <!--</el-upload>-->
+          <!--</el-col>-->
+          <!--<el-col :span="16" :offset="1">-->
+            <!--<span>企业证明材料</span>-->
+            <!--<el-upload-->
+              <!--class="upload-demo"-->
+              <!--:action="url"-->
+              <!--:on-change="handleChange"-->
+              <!--:file-list="dataForm.attachments">-->
+              <!--<el-button size="small" type="primary">点击上传</el-button>-->
+              <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5mb</div>-->
+            <!--</el-upload>-->
+          <!--</el-col>-->
+        <!--</el-row>-->
+      <!--</el-form-item>-->
 
-      <el-form-item v-if="dataForm.type === '3'" prop="ent.entBusiness">
-        <el-input type="textarea" :rows="2" v-model.number="dataForm.ent.entBusiness" placeholder="经营范围"></el-input>
-      </el-form-item>
+      <!--<el-form-item v-if="dataForm.type === '3'" prop="ent.entBusiness">-->
+        <!--<el-input type="textarea" :rows="2" v-model.number="dataForm.ent.entBusiness" placeholder="经营范围"></el-input>-->
+      <!--</el-form-item>-->
 
-      <el-form-item v-if="dataForm.type === '3'" prop="ent.entRegisterAddress">
-        <el-input type="textarea" :rows="2" v-model.number="dataForm.ent.entRegisterAddress" placeholder="注册地址"></el-input>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type === '3'" prop="ent.entIntroduce">
-        <el-input type="textarea" :rows="2" v-model.number="dataForm.ent.entIntroduce" placeholder="企业介绍"></el-input>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type === '3'" prop="ent.entAddress">
-        <el-input type="textarea" :rows="2" v-model.number="dataForm.ent.entAddress" placeholder="企业地址"></el-input>
-      </el-form-item>
-      <!-- E 企业基本信息 -->
-      <el-form-item v-if="dataForm.type === '3'">
-        <div style="text-align: center;border-bottom: 1px solid rgb(226, 226, 226);">下一步</div>
-      </el-form-item>
+      <!--<el-form-item v-if="dataForm.type === '3'" prop="ent.entRegisterAddress">-->
+        <!--<el-input type="textarea" :rows="2" v-model.number="dataForm.ent.entRegisterAddress" placeholder="注册地址"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item v-if="dataForm.type === '3'" prop="ent.entIntroduce">-->
+        <!--<el-input type="textarea" :rows="2" v-model.number="dataForm.ent.entIntroduce" placeholder="企业介绍"></el-input>-->
+      <!--</el-form-item>-->
+      <!--<el-form-item v-if="dataForm.type === '3'" prop="ent.entAddress">-->
+        <!--<el-input type="textarea" :rows="2" v-model.number="dataForm.ent.entAddress" placeholder="企业地址"></el-input>-->
+      <!--</el-form-item>-->
+      <!--&lt;!&ndash; E 企业基本信息 &ndash;&gt;-->
+      <!--<el-form-item v-if="dataForm.type === '3'">-->
+        <!--<div style="text-align: center;border-bottom: 1px solid rgb(226, 226, 226);">下一步</div>-->
+      <!--</el-form-item>-->
 
       <el-form-item prop="username">
-        <el-input v-model="dataForm.username" placeholder="帐号"></el-input>
+        <el-input v-model="dataForm.username" placeholder="学号/工号"></el-input>
       </el-form-item>
       <el-form-item prop="name">
         <el-input v-model="dataForm.name" placeholder="姓名"></el-input>
@@ -118,9 +118,9 @@
       <el-form-item prop="userPhone">
         <el-input v-model="dataForm.userPhone" placeholder="手机号"></el-input>
       </el-form-item>
-      <el-form-item prop="userEmail">
-        <el-input v-model="dataForm.userEmail" placeholder="邮箱"></el-input>
-      </el-form-item>
+      <!--<el-form-item prop="userEmail">-->
+        <!--<el-input v-model="dataForm.userEmail" placeholder="邮箱"></el-input>-->
+      <!--</el-form-item>-->
       <el-form-item prop="userPassword">
         <el-input v-model="dataForm.userPassword" type="password" placeholder="密码"></el-input>
       </el-form-item>
@@ -180,7 +180,7 @@
 </style>
 
 <script>
-  import {isEmail, isMobile} from '@/utils/validate'
+  import {isMobile} from '@/utils/validate'
 
   export default {
     data () {
@@ -191,13 +191,13 @@
           callback()
         }
       }
-      var validateEmail = (rule, value, callback) => {
-        if (!isEmail(value)) {
-          callback(new Error('邮箱格式错误'))
-        } else {
-          callback()
-        }
-      }
+      // var validateEmail = (rule, value, callback) => {
+      //   if (!isEmail(value)) {
+      //     callback(new Error('邮箱格式错误'))
+      //   } else {
+      //     callback()
+      //   }
+      // }
       var validateSurePassword = (rule, value, callback) => {
         if (this.dataForm.userPassword !== this.dataForm.surePassword) {
           callback(new Error('密码不一致'))
@@ -267,54 +267,54 @@
           }
         },
         dataRule: {
-          ent: {
-            entType: [
-              {required: true, message: '企业类型不能为空', trigger: 'blur'}
-            ],
-            entBusiness: [
-              {required: true, message: '经营范围不能为空', trigger: 'blur'}
-            ],
-            newHighZones: [
-              {required: true, message: '是否高新区不能为空', trigger: 'blur'}
-            ],
-            entStatus: [
-              {required: true, message: '经营状态不能为空', trigger: 'blur'}
-            ],
-            entRegisterAddress: [
-              {required: true, message: '注册地址不能为空', trigger: 'blur'}
-            ],
-            entAddress: [
-              {required: true, message: '企业地址不能为空', trigger: 'blur'}
-            ],
-            entIntroduce: [
-              {required: true, message: '企业介绍不能为空', trigger: 'blur'}
-            ],
-            entFoundingTime: [
-              {required: true, message: '成立时间不能为空', trigger: 'blur'}
-            ],
-            entRegister: [
-              { required: true, type: 'number', message: '只能输入数字', trigger: 'blur' }
-            ],
-            entCode: [
-              {required: true, message: '统一信用代码', trigger: 'blur'}
-            ],
-            entCorporate: [
-              {required: true, message: '法人代表不能为空', trigger: 'blur'}
-            ],
-            entName: [
-              {required: true, message: '企业名称不能为空', trigger: 'blur'}
-            ]
-          },
+          // ent: {
+          //   entType: [
+          //     {required: true, message: '企业类型不能为空', trigger: 'blur'}
+          //   ],
+          //   entBusiness: [
+          //     {required: true, message: '经营范围不能为空', trigger: 'blur'}
+          //   ],
+          //   newHighZones: [
+          //     {required: true, message: '是否高新区不能为空', trigger: 'blur'}
+          //   ],
+          //   entStatus: [
+          //     {required: true, message: '经营状态不能为空', trigger: 'blur'}
+          //   ],
+          //   entRegisterAddress: [
+          //     {required: true, message: '注册地址不能为空', trigger: 'blur'}
+          //   ],
+          //   entAddress: [
+          //     {required: true, message: '企业地址不能为空', trigger: 'blur'}
+          //   ],
+          //   entIntroduce: [
+          //     {required: true, message: '企业介绍不能为空', trigger: 'blur'}
+          //   ],
+          //   entFoundingTime: [
+          //     {required: true, message: '成立时间不能为空', trigger: 'blur'}
+          //   ],
+          //   entRegister: [
+          //     { required: true, type: 'number', message: '只能输入数字', trigger: 'blur' }
+          //   ],
+          //   entCode: [
+          //     {required: true, message: '统一信用代码', trigger: 'blur'}
+          //   ],
+          //   entCorporate: [
+          //     {required: true, message: '法人代表不能为空', trigger: 'blur'}
+          //   ],
+          //   entName: [
+          //     {required: true, message: '企业名称不能为空', trigger: 'blur'}
+          //   ]
+          // },
           username: [
             {required: true, message: '账号不能为空', trigger: 'blur'}
           ],
           name: [
             {required: true, message: '姓名不能为空', trigger: 'blur'}
           ],
-          userEmail: [
-            {required: true, message: '邮箱不能为空', trigger: 'blur'},
-            {validator: validateEmail, trigger: 'blur'}
-          ],
+          // userEmail: [
+          //   {required: true, message: '邮箱不能为空', trigger: 'blur'},
+          //   {validator: validateEmail, trigger: 'blur'}
+          // ],
           instituteId: [
             {required: true, message: '所属部门不能为空', trigger: 'blur'}
           ],
