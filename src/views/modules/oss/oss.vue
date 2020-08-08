@@ -4,6 +4,8 @@
       <el-form-item>
         <el-button type="primary" @click="configHandle()">云存储配置</el-button>
         <el-button type="primary" @click="uploadHandle()">上传文件</el-button>
+        <el-button type="primary" @click="downloadServerHandle()">下载服务器全部文件</el-button>
+        <el-button type="danger" @click="deleteServerHandle()">删除服务器全部文件</el-button>
         <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -170,6 +172,51 @@
             }
           })
         }).catch(() => {})
+      },
+      // 下载服务器全部文件
+      downloadServerHandle () {
+        this.$httpFile({
+          url: this.$httpFile.adornUrl(`/sys/oss/download`),
+          method: 'post',
+          params: this.$httpFile.adornParams()
+        }).then(response => {
+          if (!response) {
+            this.downloadLoading = false
+            return
+          }
+          let url = window.URL.createObjectURL(new Blob([response.data]))
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', '服务器备份文件')
+          document.body.appendChild(link)
+          link.click()
+          this.downloadLoading = false
+        }).catch(err => {
+          console.log(err)
+          this.downloadLoading = false
+        })
+      },
+      // 清空服务器全部文件
+      deleteServerHandle () {
+        this.$confirm(`请确保已经将所有文件备份、此操作将服务器所有文件删除且不可撤销是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/sys/oss/del'),
+            method: 'post',
+            params: this.$http.adornParams()
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message.success('操作成功')
+            } else {
+              this.$message.error('操作失败')
+            }
+            this.dataListLoading = false
+          })
+        })
       }
     }
   }
