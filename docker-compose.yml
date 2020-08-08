@@ -4,3 +4,4 @@ services:
     image: mikeyboom/innovate-admin-vue:latest
     ports:
       - 8001:8001
+    restart: always
